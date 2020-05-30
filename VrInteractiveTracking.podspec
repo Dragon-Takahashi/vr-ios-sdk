@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name         = "VrInteractiveTracking"
-  spec.version      = "5.2.0"
+  spec.version      = "5.2.3"
   spec.summary      = "VrInteractiveTracking"
 
   spec.description  = <<-DESC
@@ -20,6 +20,7 @@ Pod::Spec.new do |spec|
   spec.prefix_header_file = 'VrInteractiveTracking/Supporting Files/VrInteractiveTracking-Prefix.pch'
 
   spec.source_files  = "VrInteractiveTracking/**/*.{h,m}"
-  spec.public_header_files = "VrInteractiveTracking/**/*.h"
+  spec.public_header_files = "VrInteractiveTracking/**/{OptValues,VrInteractiveData,VrInteractiveTracking}.h"
+  spec.private_header_files = "VrInteractiveTracking/**/*.h"
 
 end

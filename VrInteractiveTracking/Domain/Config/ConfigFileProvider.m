@@ -173,94 +173,79 @@
     NSLog(@"parseXMLWithFilePath");
     
     XMLParser *xmlParser = [[XMLParser alloc] init];
-    [xmlParser parseXML:filePath identity:identity date:date isRemoteFile:isRemoteFile callback:^(NSMutableDictionary *result, NSString *identity, NSString *filePath, NSString *date, BOOL isRemoteFile) {
+    [xmlParser parseXML:filePath identity:identity date:date isRemoteFile:isRemoteFile callback:^(NSMutableArray *configFileArray, BOOL isRemoteFile) {
         
-        ConfigFile *configFile = [[ConfigFile alloc] initWithParams:[result copy]];
-        configFile.identity = identity;
-        configFile.filePath = filePath;
-        configFile.date = [self castStringToDate:date];
-        @try {
-            
-            // 正常ファイルか判断
-            ConfigValidator *validator = [[ConfigValidator alloc] initWithValidationHandler:[ConfigValidationHandler new] config:configFile];
-            configFile.isNormal = ![[validator handler] errors];
-            NSLog(@"Validate result = %@", configFile.isNormal?@"YES":@"NO");
-            
-            if (![[validator handler] errors]) {
-                // リストに存在しなければリストに追加、あれば上書き
-                [_configFileList setObject:configFile forKey:identity];
-            }else {
-                //            NSLog(@"XML parse error in parseXMLWithFilePath %@",[[validator handler] toString]);
-                @throw [VRIException exceptionWithMessage:[[validator handler] toString]];
-            }
-            
-            
-            // ローカル
-            if (!isRemoteFile) {
-                NSLog(@"End Local file");
-                // config_urlの値に値があれば取得する
-                if (![self isCheckedConfigUrl:configFile] || !configFile.isNormal) {
-                    NSLog(@"1");
-                    [self finish:identity];
-                } else {
-                    NSLog(@"2");
-                    // リモート設定ファイルを取得
-                    ConfigQueParams *param = [ConfigQueParams new];
-                    param.identity = configFile.getIdentity;
-                    if ([configFile.getIdentity isEqualToString:VR_LIB_DEFAULT_LOCAL_FILE_IDENTITY] && [_outsideConfigURL length] != 0) {
-                        param.filePath = _outsideConfigURL;
-                    }else {
-                        param.filePath = configFile.getConfig_Url;
-                    }
-                    NSLog(@"3");
-                    
-                    [self initConfig:param];
+        for (ConfigFile *configFile in configFileArray) {
+
+            @try {
+                // 正常ファイルか判断
+                ConfigValidator *validator = [[ConfigValidator alloc] initWithValidationHandler:[ConfigValidationHandler new] config:configFile];
+                configFile.isNormal = ![[validator handler] errors];
+                NSLog(@"Validate result = %@", configFile.isNormal?@"YES":@"NO");
+                
+                if (![[validator handler] errors]) {
+                    // リストに存在しなければリストに追加、あれば上書き
+                    [_configFileList setObject:configFile forKey:identity];
+                }else {
+                    //            NSLog(@"XML parse error in parseXMLWithFilePath %@",[[validator handler] toString]);
+                    @throw [VRIException exceptionWithMessage:[[validator handler] toString]];
                 }
+                
+                
+                // ローカル
+                if (!isRemoteFile) {
+                    NSLog(@"End Local file");
+                    // config_urlの値に値があれば取得する
+                    if (![self isCheckedConfigUrl:configFile] || !configFile.isNormal) {
+                        NSLog(@"1");
+                        [self callbackIdentity:identity];
+                    } else {
+                        NSLog(@"2");
+                        // リモート設定ファイルを取得
+                        ConfigQueParams *param = [ConfigQueParams new];
+                        param.identity = configFile.getIdentity;
+                        if ([configFile.getIdentity isEqualToString:VR_LIB_DEFAULT_LOCAL_FILE_IDENTITY] && [_outsideConfigURL length] != 0) {
+                            param.filePath = _outsideConfigURL;
+                        }else {
+                            param.filePath = configFile.getConfig_Url;
+                        }
+                        NSLog(@"3");
+                        
+                        [self initConfig:param];
+                    }
+                }
+                // リモート
+                else {
+                    [self callbackIdentity:identity];
+                }
+            } @catch (NSException *exception) {
+                DLog(@"%@", [exception reason]);
+                // 何もないと困るので、最低限isNormalがFalseの設定ファイルをセット
+                if (![_configFileList objectForKey:identity]) {
+                    configFile.isNormal = NO;
+                    [_configFileList setObject:configFile forKey:identity];
+                }
+                [self callbackIdentity:identity];
             }
-            // リモート
-            else {
-                [self finish:identity];
-            }
-        } @catch (NSException *exception) {
-            DLog(@"%@", [exception reason]);
-            // 何もないと困るので、最低限isNormalがFalseの設定ファイルをセット
-            if (![_configFileList objectForKey:identity]) {
-                configFile.isNormal = NO;
-                [_configFileList setObject:configFile forKey:identity];
-            }
-            [self finish:identity];
         }
+        
+        [self finish];
+        
     }];
 }
 
-- (void)finish:(NSString *)identity {
-    // 実行したキューを削除
-    [_configQue removeObjectAtIndex:0];
+- (void)callbackIdentity:(NSString *)identity {
     // コールバック
     _listener(NO, identity);
+}
+
+- (void)finish {
+    // 実行したキューを削除
+    [_configQue removeObjectAtIndex:0];
     // 作業フラグを下ろす
     _isRunning = NO;
     // 処理が終了したので、次のキューを実行
     [self pop];
-}
-
-/**
- * 日時のキャスト
- * 想定例：Wed, 10 Oct 2018 07:13:44 GMT
- *
- * @param dateStr キャスト前の日時
- *
- * @return キャスト後の日時
- */
-- (NSDate*) castStringToDate:(NSString*) dateStr {
-    
-    NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"E, d MMM yyyy HH:mm:ss Z"];
-    //タイムゾーンの指定
-    [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-    
-    NSDate *date = [formatter dateFromString:dateStr];
-    return date;
 }
 
 /**
@@ -311,7 +296,8 @@
             
             if ([configFilePath length] == 0) {
                 NSLog(@"Cloud config file is nil");
-                [self finish:identity];
+                [self callbackIdentity:identity];
+                [self finish];
                 return;
             }else {
                 

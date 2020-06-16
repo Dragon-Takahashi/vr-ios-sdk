@@ -9,6 +9,9 @@
 #import <XCTest/XCTest.h>
 
 #import "XMLParser.h"
+#import "ConfigFile.h"
+//#import "../../VrInteractiveTracking/Common/XMLParser.h"
+//#import "../../VrInteractiveTracking/Domain/Config/ConfigFile.h"
 
 @interface XMLParserTests : XCTestCase
 
@@ -39,18 +42,65 @@
 
 /**
  パースの正常系テスト
- ConfigFileProviderクラスの正常系UTブランチとマージ後に実施（ConfigFileの競合を回避するため、）
  */
-//- (void)testParseXMLParseNormal {
-//    // 初期化
-//    XMLParser *parser = [XMLParser new];
-//    // パース処理
-//    [parser parseXML:[self getTestConfigFilePath:@"vrTrackingConfig"] identity:@"test_default" date:nil isRemoteFile:NO callback:^(NSMutableDictionary *result, NSString *identity, NSString *filePath, NSString *date, BOOL isRemoteFile) {
-//        // テスト
-//        XCTAssertTrue([identity isEqualToString:@"test_default"]);
-//    }];
-//}
+- (void)testParseXMLParseNormal {
+    // 初期化
+    XMLParser *parser = [XMLParser new];
+    // パース処理
+    [parser parseXML:[self getTestConfigFilePath:@"TestVrTrackingConfig"] identity:@"test_config" date:nil isRemoteFile:NO callback:^(NSMutableArray *configFileArray, BOOL isRemoteFile) {
+        
+        // テスト
+        XCTAssertTrue([[configFileArray[0] getIdentity] isEqualToString:@"test_config"]);
+    }];
+}
 
+/**
+ identity=Defaultテスト
+ */
+- (void)testParseXMLParseIdentityDefault {
+    // 初期化
+    XMLParser *parser = [XMLParser new];
+    // パース処理
+    [parser parseXML:[self getTestConfigFilePath:@"TestVrTrackingConfig"] identity:@"default" date:nil isRemoteFile:NO callback:^(NSMutableArray *configFileArray, BOOL isRemoteFile) {
+        
+        // テスト
+        XCTAssertTrue([configFileArray count] == 1);
+        XCTAssertTrue([[configFileArray[0] getIdentity] isEqualToString:@"default"]);
+    }];
+}
+
+/**
+ identity設定テスト
+ */
+- (void)testParseXMLParseIdentityMissmatch {
+    // 初期化
+    XMLParser *parser = [XMLParser new];
+    // パース処理
+    [parser parseXML:[self getTestConfigFilePath:@"TestVrTrackingConfig"] identity:@"test_default" date:nil isRemoteFile:NO callback:^(NSMutableArray *configFileArray, BOOL isRemoteFile) {
+        
+        // テスト
+        XCTAssertTrue([configFileArray count] == 1);
+        XCTAssertTrue([[configFileArray[0] getIdentity] isEqualToString:@"test_default"]);
+    }];
+}
+
+
+/**
+ 複数設定テスト
+ */
+- (void)testParseXMLParseMultipulConfig {
+    // 初期化
+    XMLParser *parser = [XMLParser new];
+    // パース処理
+    [parser parseXML:[self getTestConfigFilePath:@"SeriesVrTrackingConfig"] identity:@"test_default" date:nil isRemoteFile:NO callback:^(NSMutableArray *configFileArray, BOOL isRemoteFile) {
+        
+        // テスト
+        XCTAssertTrue([configFileArray count] == 3);
+        XCTAssertTrue([[configFileArray[0] getIdentity] isEqualToString:@"default"]);
+        XCTAssertTrue([[configFileArray[1] getIdentity] isEqualToString:@"test1"]);
+        XCTAssertTrue([[configFileArray[2] getIdentity] isEqualToString:@"test2"]);
+    }];
+}
 
 /**
  テスト用のローカル設定ファイルを取得
@@ -71,7 +121,11 @@
     return configPath;
 }
 
-
-
+- (NSString *)testConfigPath:(NSString *)fileName {
+    NSString *configPath = [[NSBundle bundleForClass:self.class] pathForResource:fileName ofType:@"xml"];
+    
+    NSLog(@"Test local config file path = %@", configPath);
+    return configPath;
+}
 
 @end

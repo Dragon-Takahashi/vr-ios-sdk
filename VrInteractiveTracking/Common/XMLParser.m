@@ -16,6 +16,7 @@
     __block NSString *parseElement;
     __block NSDictionary *parseDict;
     __block NSString *parseIdentity;
+    __block BOOL isMultipulConfig;
     
     __block NSString *filePath;
     __block NSString *identity;
@@ -86,6 +87,7 @@
 //デリゲートメソッド(解析開始時)
 -(void) parserDidStartDocument:(NSXMLParser *)parser{
     DLog(@"解析開始");
+    isMultipulConfig = NO;
 }
 
 //デリゲートメソッド(要素の開始タグを読み込んだ時)
@@ -98,7 +100,10 @@ didStartElement:(NSString *)elementName
 //    DLog(@"要素の開始タグを読み込んだ:%@",elementName);
     
     // config(s)タグは読み込まない
-    if ([elementName isEqualToString:@"configs"] ) { return; }
+    if ([elementName isEqualToString:@"configs"] ) {
+        isMultipulConfig = YES;
+        return;
+    }
     if ([elementName isEqualToString:@"config"]) {
         parseElementDic = NSMutableDictionary.new;
         parseIdentity = nil;
@@ -112,6 +117,8 @@ didStartElement:(NSString *)elementName
 
 //デリゲートメソッド(タグ以外のテキストを読み込んだ時)
 - (void) parser:(NSXMLParser *)parser foundCharacters:(NSString *)string{
+    
+//    DLog(@"要素のテキストを読み込んだ:%@",string);
     
     // 開始タグ~終了タグの文字列以外は弾く
     if (parseElement.length == 0) {
@@ -137,21 +144,20 @@ didStartElement:(NSString *)elementName
     
 //    DLog(@"要素の終了タグを読み込んだ:%@",elementName);
     
-    parseElement = nil;
-    parseDict = nil;
-    
-    if ([elementName isEqualToString:@"config"] && parseIdentity != nil) {
-        [parseResult addObject:[self elementToConfigFileWithIdentity:parseIdentity filePath:filePath elements:parseElementDic]];
+    if ([elementName isEqualToString:@"config"]) {
+        if (!isMultipulConfig) {
+            [parseResult addObject:[self elementToConfigFileWithIdentity:identity filePath:filePath elements:parseElementDic]];
+        }else if (parseIdentity.length != 0){
+            [parseResult addObject:[self elementToConfigFileWithIdentity:parseIdentity filePath:filePath elements:parseElementDic]];
+        }
     }
     
+    parseElement = nil;
+    parseDict = nil;
 }
 
 //デリゲートメソッド(解析終了時)
 -(void) parserDidEndDocument:(NSXMLParser *)parser{
-
-    if ([parseResult count] == 1) {
-        [parseResult[0] setIdentity:identity];
-    }
     
     // 確認用
     DLog(@"parse result : %@", [parseResult description]);
@@ -174,10 +180,14 @@ didStartElement:(NSString *)elementName
 
 
 - (ConfigFile *)elementToConfigFileWithIdentity:(NSString *)identity filePath:(NSString *)filePath elements:(NSMutableDictionary *)elements {
+    NSLog(@"identity=%@",identity);
+    NSLog(@"filePath=%@",filePath);
+    NSLog(@"elements=%@",[elements description]);
     ConfigFile *configFile = [[ConfigFile alloc] initWithParams:[elements copy]];
     configFile.identity = identity;
     configFile.filePath = filePath;
     configFile.date = [self castStringToDate:date];
+    NSLog([configFile description]);
     return configFile;
 }
 

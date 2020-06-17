@@ -2138,7 +2138,7 @@
     __block VrInteractiveTracking *tracking;
     tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
         
-        [tracking loadConfig:@"test" fileName:@"TestVrTrackingConfig" finishBlock:^(BOOL result) {
+        [tracking loadConfig:@"test" fileName:@"vrTrackingConfig" finishBlock:^(BOOL result) {
             NSLog(@"isCheckedLoadConfigRunning result : %@", result?@"YES":@"NO");
             // 前提：ユーザーがオプトアウトしている。"test"というidentityで設定ファイルを読みが完了している
             // 想定：読み込みが完了しているので、isCheckedLoadConfigRunning=falseなのを確認

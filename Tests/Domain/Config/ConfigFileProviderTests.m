@@ -9,6 +9,7 @@
 #import <XCTest/XCTest.h>
 
 #import "ConfigFileProviderStub.h"
+//#import "ConfigFileProvider.h"
 #import "../../../VrInteractiveTracking/Domain/Config/ConfigFileProvider.h"
 
 NSString *const VR_LIB_DEFAULT_LOCAL_FILE_IDENTITY = @"default";

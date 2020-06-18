@@ -180,14 +180,10 @@ didStartElement:(NSString *)elementName
 
 
 - (ConfigFile *)elementToConfigFileWithIdentity:(NSString *)identity filePath:(NSString *)filePath elements:(NSMutableDictionary *)elements {
-    NSLog(@"identity=%@",identity);
-    NSLog(@"filePath=%@",filePath);
-    NSLog(@"elements=%@",[elements description]);
     ConfigFile *configFile = [[ConfigFile alloc] initWithParams:[elements copy]];
     configFile.identity = identity;
     configFile.filePath = filePath;
     configFile.date = [self castStringToDate:date];
-    NSLog([configFile description]);
     return configFile;
 }
 

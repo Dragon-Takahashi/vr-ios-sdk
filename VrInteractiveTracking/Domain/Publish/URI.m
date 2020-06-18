@@ -55,10 +55,6 @@
 - (instancetype) initWithDirectURL:(NSString*) directUrl configFile:(ConfigFile *)config finishBlock:(FinishSendBeaconBlock )finishBlock {
     if((self = [super init])){
         _directUrl = directUrl;
-//        NSMutableDictionary *dic = [@{@"disabled":@"false",
-//                                     @"beacon_timeout":@"15"}
-//                                    mutableCopy];
-//        _configFile = [[ConfigFile alloc] initWithParams:dic];
         _configFile = config;
         _configFile.isNormal = YES;
         _finishBlock = finishBlock;

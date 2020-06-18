@@ -69,13 +69,15 @@
     
     // 送信
     [_sendType send:event callback:^(NSString *url) {
-        // TODO キューの削除
-        [_sendQueue removeObjectAtIndex:0];
+        // キューの削除
+        if ([_sendQueue count] != 0) {
+            [_sendQueue removeObjectAtIndex:0];
+        }
         
         // 作業フラグを下ろす
         _isRunning = NO;
         
-        // TODO 次の送信キューを実行
+        // 次の送信キューを実行
         [self publish];
     }];
 }

@@ -106,7 +106,8 @@
  *
  */
 - (void) addConfigWithIdentity:(NSString*) identity fileName:(NSString *)fileName{
-    @synchronized (self) {
+    NSLog(@"wait...");
+//    @synchronized (self) {
         NSLog(@"addConfigWithIdentity identity = %@, file name = %@",identity, fileName);
         
         // 設定ファイルのキューに追加
@@ -119,7 +120,7 @@
         
         // 設定ファイルを解析
         [self pop];
-    }
+//    }
 }
 
 /**
@@ -174,7 +175,8 @@
     
     XMLParser *xmlParser = [[XMLParser alloc] init];
     [xmlParser parseXML:filePath identity:identity date:date isRemoteFile:isRemoteFile callback:^(NSMutableArray *configFileArray, BOOL isRemoteFile) {
-        
+
+        BOOL hasRemote = NO;
         for (ConfigFile *configFile in configFileArray) {
 
             @try {
@@ -185,7 +187,7 @@
                 
                 if (![[validator handler] errors]) {
                     // リストに存在しなければリストに追加、あれば上書き
-                    [_configFileList setObject:configFile forKey:identity];
+                    [_configFileList setObject:configFile forKey:[configFile getIdentity]];
                 }else {
                     //            NSLog(@"XML parse error in parseXMLWithFilePath %@",[[validator handler] toString]);
                     @throw [VRIException exceptionWithMessage:[[validator handler] toString]];
@@ -198,13 +200,14 @@
                     // config_urlの値に値があれば取得する
                     if (![self isCheckedConfigUrl:configFile] || !configFile.isNormal) {
                         NSLog(@"1");
-                        [self callbackIdentity:identity];
+                        [self callbackIdentity:[configFile getIdentity]];
                     } else {
                         NSLog(@"2");
+                        hasRemote = YES;
                         // リモート設定ファイルを取得
                         ConfigQueParams *param = [ConfigQueParams new];
-                        param.identity = configFile.getIdentity;
-                        if ([configFile.getIdentity isEqualToString:VR_LIB_DEFAULT_LOCAL_FILE_IDENTITY] && [_outsideConfigURL length] != 0) {
+                        param.identity = identity;
+                        if ([identity isEqualToString:VR_LIB_DEFAULT_LOCAL_FILE_IDENTITY] && [_outsideConfigURL length] != 0) {
                             param.filePath = _outsideConfigURL;
                         }else {
                             param.filePath = configFile.getConfig_Url;
@@ -216,19 +219,22 @@
                 }
                 // リモート
                 else {
-                    [self callbackIdentity:identity];
+                    [self callbackIdentity:[configFile getIdentity]];
                 }
             } @catch (NSException *exception) {
                 DLog(@"%@", [exception reason]);
                 // 何もないと困るので、最低限isNormalがFalseの設定ファイルをセット
-                if (![_configFileList objectForKey:identity]) {
+                if (![_configFileList objectForKey:[configFile getIdentity]]) {
                     configFile.isNormal = NO;
-                    [_configFileList setObject:configFile forKey:identity];
+                    [_configFileList setObject:configFile forKey:[configFile getIdentity]];
                 }
-                [self callbackIdentity:identity];
+                [self callbackIdentity:[configFile getIdentity]];
             }
         }
         
+        if (!hasRemote) {
+            [self callbackIdentity:identity];
+        }
         [self finish];
         
     }];

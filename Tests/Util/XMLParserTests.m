@@ -29,19 +29,20 @@
 
 
 /**
- 初期化の正常系テスト
+ 目的：インスタンス化できるか
  */
 - (void)testParseXMLInitNormal {
-    // 初期化
     XMLParser *parser = [XMLParser new];
-    // テスト
+    
+    // 前提：なし
+    // 想定：インスタンスがnilでない
     XCTAssertNotNil(parser);
 }
 
 #pragma mark parseXML
 
 /**
- パースの正常系テスト
+ 目的：正常にパースが行えるかを確認する
  */
 - (void)testParseXMLParseNormal {
     // 初期化
@@ -49,44 +50,29 @@
     // パース処理
     [parser parseXML:[self getTestConfigFilePath:@"TestVrTrackingConfig"] identity:@"test_config" date:nil isRemoteFile:NO callback:^(NSMutableArray *configFileArray, BOOL isRemoteFile) {
         
-        // テスト
+        // 前提：インスタンス化し、パース処理を行なっている
+        // 想定：設定ファイルを読み込み、必須設定項目のIdentityが設定できている
         XCTAssertTrue([[configFileArray[0] getIdentity] isEqualToString:@"test_config"]);
     }];
 }
 
 /**
- identity=Defaultテスト
+ 目的：引数のIdentityを設定ファイルに記載されているIdentityより優先して設定できているかを確認する
  */
-- (void)testParseXMLParseIdentityDefault {
+- (void)testParseXMLParsePriority {
     // 初期化
     XMLParser *parser = [XMLParser new];
     // パース処理
-    [parser parseXML:[self getTestConfigFilePath:@"TestVrTrackingConfig"] identity:@"default" date:nil isRemoteFile:NO callback:^(NSMutableArray *configFileArray, BOOL isRemoteFile) {
+    [parser parseXML:[self getTestConfigFilePath:@"TestVrTrackingConfig"] identity:@"test_config_A" date:nil isRemoteFile:NO callback:^(NSMutableArray *configFileArray, BOOL isRemoteFile) {
         
-        // テスト
-        XCTAssertTrue([configFileArray count] == 1);
-        XCTAssertTrue([[configFileArray[0] getIdentity] isEqualToString:@"default"]);
+        // 前提：インスタンス化し、パース処理を行なっている
+        // 想定：設定ファイルを読み込み、Identityが引数の値になっている
+        XCTAssertTrue([[configFileArray[0] getIdentity] isEqualToString:@"test_config_A"]);
     }];
 }
 
 /**
- identity設定テスト
- */
-- (void)testParseXMLParseIdentityMissmatch {
-    // 初期化
-    XMLParser *parser = [XMLParser new];
-    // パース処理
-    [parser parseXML:[self getTestConfigFilePath:@"TestVrTrackingConfig"] identity:@"test_default" date:nil isRemoteFile:NO callback:^(NSMutableArray *configFileArray, BOOL isRemoteFile) {
-        
-        // テスト
-        XCTAssertTrue([configFileArray count] == 1);
-        XCTAssertTrue([[configFileArray[0] getIdentity] isEqualToString:@"test_default"]);
-    }];
-}
-
-
-/**
- 複数設定テスト
+ 目的：複数の設定が含まれている設定ファイルの場合に全ての設定が正しくパースできているかを確認する
  */
 - (void)testParseXMLParseMultipulConfig {
     // 初期化
@@ -94,8 +80,12 @@
     // パース処理
     [parser parseXML:[self getTestConfigFilePath:@"SeriesVrTrackingConfig"] identity:@"test_default" date:nil isRemoteFile:NO callback:^(NSMutableArray *configFileArray, BOOL isRemoteFile) {
         
-        // テスト
+        // 前提：インスタンス化し、複数の設定が含まれている設定ファイルのパース処理を行なっている
+        // 想定１：Identityが無視されている
+        XCTAssertFalse([[configFileArray[0] getIdentity] isEqualToString:@"test_default"]);
+        // 想定２：設定ファイルに含まれている個数がパースされている
         XCTAssertTrue([configFileArray count] == 3);
+        // 想定３：設定ファイルに含まれているIdentityが正しくConfigクラスに設定されている
         XCTAssertTrue([[configFileArray[0] getIdentity] isEqualToString:@"default"]);
         XCTAssertTrue([[configFileArray[1] getIdentity] isEqualToString:@"test1"]);
         XCTAssertTrue([[configFileArray[2] getIdentity] isEqualToString:@"test2"]);

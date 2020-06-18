@@ -364,6 +364,9 @@ NSString *const VR_LIB_DEFAULT_FILE_NAME = @"vrTrackingConfig";
  */
 - (void)loadConfig:(NSString *)identity fileName:(NSString *)fileName finishBlock:(FinishLoadBlock)finishBlock {
     NSLog(@"loadConfig is start %@, instance is %@",identity, finishBlock);
+    if ([identity length] == 0 || [fileName length] == 0) {
+        @throw [[NSException alloc] initWithName:@"NullException" reason:@"Invalid argument value." userInfo:nil];
+    }
     [_loadBlockManager addBlock:identity finishBlock:finishBlock];
     [_acceptor updateWithIdentity:identity state:NO];
     [_configFileProvider addConfigWithIdentity:identity fileName:fileName];

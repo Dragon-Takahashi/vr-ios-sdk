@@ -214,7 +214,6 @@
                         }
                         NSLog(@"3");
                         // 仮のConfigを仕込んでおく（リモートファイルを取得後は上書きする）
-                        configFile.isNormal = NO;
                         [_configFileList setObject:configFile forKey:identity];
                         
                         [self initConfig:param];

@@ -6,8 +6,11 @@
 //  Copyright © 2018 VideoResearch. All rights reserved.
 //
 
-#import "ConfigFileProvider.h"
+//#import "ConfigFileProvider.h"
+#import "../../../VrInteractiveTracking/Domain/Config/ConfigFileProvider.h"
 
 @interface ConfigFileProviderStub : ConfigFileProvider
 + (void)initConfig;
+- (NSString *)getLocalConfigFilePath:(NSString *)fileName;
+- (ConfigFile*) loadConfig:(NSString*) identity;
 @end

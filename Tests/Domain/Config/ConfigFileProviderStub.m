@@ -118,4 +118,23 @@
     return configPath;
 }
 
+
+/**
+ ローカル設定ファイルを取得
+ 
+ @param fileName ファイル名
+ @return ファイルパス
+ */
+- (NSString *)getLocalConfigFilePath:(NSString *)fileName {
+    // Documentsディレクトリパス
+    NSString *configPath = [[NSBundle bundleForClass:self.class] pathForResource:fileName ofType:@"xml"];
+    // Documents配下に設定ファイルがあるかを判定
+    if ([[NSFileManager defaultManager] fileExistsAtPath:configPath] == NO) {
+        configPath = [[NSBundle mainBundle] pathForResource:fileName ofType:@"xml"];
+    }
+    NSLog(@"Local config6 file path = %@", configPath);
+    return configPath;
+}
+
+
 @end

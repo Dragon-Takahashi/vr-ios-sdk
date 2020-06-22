@@ -107,7 +107,7 @@
  */
 - (void) addConfigWithIdentity:(NSString*) identity fileName:(NSString *)fileName{
     NSLog(@"wait...");
-//    @synchronized (self) {
+    @synchronized (self) {
         NSLog(@"addConfigWithIdentity identity = %@, file name = %@",identity, fileName);
         
         // 設定ファイルのキューに追加
@@ -120,7 +120,7 @@
         
         // 設定ファイルを解析
         [self pop];
-//    }
+    }
 }
 
 /**
@@ -200,7 +200,6 @@
                     // config_urlの値に値があれば取得する
                     if (![self isCheckedConfigUrl:configFile] || !configFile.isNormal) {
                         NSLog(@"1");
-                        [self callbackIdentity:[configFile getIdentity]];
                     } else {
                         NSLog(@"2");
                         hasRemote = YES;
@@ -213,15 +212,15 @@
                             param.filePath = configFile.getConfig_Url;
                         }
                         NSLog(@"3");
-                        // 仮のConfigを仕込んでおく（リモートファイルを取得後は上書きする）
-                        [_configFileList setObject:configFile forKey:identity];
+                        
+                        [_configFileList setObject:configFile forKey:[configFile getIdentity]];
                         
                         [self initConfig:param];
                     }
                 }
                 // リモート
                 else {
-                    [self callbackIdentity:[configFile getIdentity]];
+                    [_configFileList setObject:configFile forKey:[configFile getIdentity]];
                 }
             } @catch (NSException *exception) {
                 DLog(@"%@", [exception reason]);
@@ -230,26 +229,20 @@
                     configFile.isNormal = NO;
                     [_configFileList setObject:configFile forKey:[configFile getIdentity]];
                 }
-                [self callbackIdentity:[configFile getIdentity]];
             }
         }
         
         if (!hasRemote) {
-            [self callbackIdentity:identity];
+            [self finish:identity];
         }
-        [self finish];
-        
     }];
 }
 
-- (void)callbackIdentity:(NSString *)identity {
-    // コールバック
-    _listener(NO, identity);
-}
-
-- (void)finish {
+- (void)finish:(NSString *)identity {
     // 実行したキューを削除
     [_configQue removeObjectAtIndex:0];
+    // コールバック
+    _listener(NO, identity);
     // 作業フラグを下ろす
     _isRunning = NO;
     // 処理が終了したので、次のキューを実行
@@ -304,8 +297,7 @@
             
             if ([configFilePath length] == 0) {
                 NSLog(@"Cloud config file is nil");
-                [self callbackIdentity:identity];
-                [self finish];
+                [self finish:identity];
                 return;
             }else {
                 

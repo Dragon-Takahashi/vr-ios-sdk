@@ -471,6 +471,8 @@
     }];
 }
 
+
+
 /**
  目的：不正なURLを引数に入れた場合、初期化コールバックでNOが返ってくることを確認する。
  */
@@ -495,6 +497,116 @@
     [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
         XCTAssertNil(error, @"has error.");
     }];
+}
+
+
+/**
+ 目的：複数設定ファイルの場合、全て設定されることを確認する。
+ */
+- (void)testInitWithTrackerMultiSettigWithoutIdentity {
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testInitWithTrackerMultiSettigWithoutIdentityEmoty"];
+    VrInteractiveData *data = [VrInteractiveData sharedInstance];
+    __block VrInteractiveTracking *tracking;
+    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
+        
+        // 前提："test"というidentityで設定ファイルを読み込んでいる
+        // 想定：エラーがスローされずに読み込めるかを確認
+//        XCTAssertNoThrow([tracking loadConfig:@"test" fileName:@"vrTrackingConfigMulti"]);
+        
+        [tracking loadConfig:@"test1" fileName:@"vrTrackingConfigMulti" finishBlock:^(BOOL result) {
+
+            sleep(1);
+            // 前提：読み込みが完了している
+            // 想定：全ての設定ファイルがnullではない
+            XCTAssertTrue(result);
+            XCTAssertNotNil([tracking configParams:@"default"]);
+            XCTAssertNotNil([tracking configParams:@"test1"]);
+            XCTAssertNotNil([tracking configParams:@"test2"]);
+            
+            [expectation fulfill];
+        }];
+        
+        
+    } withOptFlg:YES withOutsideConfigURL:nil];
+    
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error, @"has error.");
+    }];
+    
+    
+}
+
+
+
+/**
+ 目的：複数設定ファイルにIdentityが含まれていない場合、Identityを除外して設定されることを確認する。
+ */
+- (void)testInitWithTrackerMultiSettigWithoutIdentityEmpty {
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testInitWithTrackerMultiSettigWithoutIdentityEmoty"];
+    VrInteractiveData *data = [VrInteractiveData sharedInstance];
+    __block VrInteractiveTracking *tracking;
+    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
+        
+        // 前提："test"というidentityで設定ファイルを読み込んでいる
+        // 想定：エラーがスローされずに読み込めるかを確認
+        XCTAssertNoThrow([tracking loadConfig:@"test" fileName:@"TestVrTrackingConfig"]);
+        
+        [tracking loadConfig:@"test" fileName:@"vrTrackingConfigMulti2" finishBlock:^(BOOL result) {
+
+            // 前提：読み込みが完了している
+            // 想定：Identity = test2だけがnullになっている
+            XCTAssertTrue(result);
+            XCTAssertNotNil([tracking configParams:@"default"]);
+            XCTAssertNotNil([tracking configParams:@"test"]);
+            XCTAssertNil([tracking configParams:@"test2"]);
+            
+            [expectation fulfill];
+        }];
+        
+        
+    } withOptFlg:YES withOutsideConfigURL:nil];
+    
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error, @"has error.");
+    }];
+    
+    
+}
+
+
+/**
+ 目的：複数設定ファイルにIdentityが含まれていない場合、Identityを除外して設定されることを確認する。
+ */
+- (void)testInitWithTrackerMultiSettigWithoutIdentityNull {
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testInitWithTrackerMultiSettigWithoutIdentityNull"];
+    VrInteractiveData *data = [VrInteractiveData sharedInstance];
+    __block VrInteractiveTracking *tracking;
+    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
+        
+        // 前提："test"というidentityで設定ファイルを読み込んでいる
+        // 想定：エラーがスローされずに読み込めるかを確認
+        XCTAssertNoThrow([tracking loadConfig:@"test" fileName:@"TestVrTrackingConfig"]);
+        
+        [tracking loadConfig:@"test" fileName:@"vrTrackingConfigMulti3" finishBlock:^(BOOL result) {
+
+            // 前提：読み込みが完了している
+            // 想定：Identity = test2だけがnullになっていることを確認
+            XCTAssertTrue(result);
+            XCTAssertNotNil([tracking configParams:@"default"]);
+            XCTAssertNotNil([tracking configParams:@"test"]);
+            XCTAssertNil([tracking configParams:@"test2"]);
+            
+            [expectation fulfill];
+        }];
+        
+        
+    } withOptFlg:YES withOutsideConfigURL:nil];
+    
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error, @"has error.");
+    }];
+    
+    
 }
 
 

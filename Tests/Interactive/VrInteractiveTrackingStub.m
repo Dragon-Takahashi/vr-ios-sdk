@@ -18,6 +18,10 @@
     
     [self testConfig];
     
+    [self multiConfig1];
+    [self multiConfig2];
+    [self multiConfig3];
+    
 }
 
 + (void)common {
@@ -82,6 +86,76 @@
         NSLog(@"Config file copy is miss");
     }
 }
+
++ (void)multiConfig1 {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *filePathComponent = @"Config";
+    NSString *fileName = @"vrTrackingConfigMulti";
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentationDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirPath = [paths objectAtIndex:0];
+    
+//    NSString *configPath = [[documentsDirPath stringByAppendingPathComponent:filePathComponent] stringByAppendingPathComponent:@"vrTrackingConfig.xml"];
+    NSString *configPath = [[documentsDirPath stringByAppendingPathComponent:filePathComponent] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.xml",fileName]];
+    
+    BOOL isDeleted = [fileManager removeItemAtPath:[self mainConfigPath:fileName] error:nil];
+    if (isDeleted) {
+        NSLog(@"file is deleted");
+    }else {
+        NSLog(@"file is not deleted...");
+    }
+    if ([fileManager copyItemAtPath:[self testConfigPath:fileName] toPath:configPath error:nil]) {
+        NSLog(@"Config file copy is success");
+    }else {
+        NSLog(@"Config file copy is miss");
+    }
+}
+
++ (void)multiConfig2 {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *filePathComponent = @"Config";
+    NSString *fileName = @"vrTrackingConfigMulti2";
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentationDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirPath = [paths objectAtIndex:0];
+    
+//    NSString *configPath = [[documentsDirPath stringByAppendingPathComponent:filePathComponent] stringByAppendingPathComponent:@"vrTrackingConfig.xml"];
+    NSString *configPath = [[documentsDirPath stringByAppendingPathComponent:filePathComponent] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.xml",fileName]];
+    
+    BOOL isDeleted = [fileManager removeItemAtPath:[self mainConfigPath:fileName] error:nil];
+    if (isDeleted) {
+        NSLog(@"file is deleted");
+    }else {
+        NSLog(@"file is not deleted...");
+    }
+    if ([fileManager copyItemAtPath:[self testConfigPath:fileName] toPath:configPath error:nil]) {
+        NSLog(@"Config file copy is success");
+    }else {
+        NSLog(@"Config file copy is miss");
+    }
+}
+
++ (void)multiConfig3 {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *filePathComponent = @"Config";
+    NSString *fileName = @"vrTrackingConfigMulti3";
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentationDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirPath = [paths objectAtIndex:0];
+    
+//    NSString *configPath = [[documentsDirPath stringByAppendingPathComponent:filePathComponent] stringByAppendingPathComponent:@"vrTrackingConfig.xml"];
+    NSString *configPath = [[documentsDirPath stringByAppendingPathComponent:filePathComponent] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.xml",fileName]];
+    
+    BOOL isDeleted = [fileManager removeItemAtPath:[self mainConfigPath:fileName] error:nil];
+    if (isDeleted) {
+        NSLog(@"file is deleted");
+    }else {
+        NSLog(@"file is not deleted...");
+    }
+    if ([fileManager copyItemAtPath:[self testConfigPath:fileName] toPath:configPath error:nil]) {
+        NSLog(@"Config file copy is success");
+    }else {
+        NSLog(@"Config file copy is miss");
+    }
+}
+
 
 + (NSString *)testConfigPath:(NSString *)fileName {
     NSString *configPath = [[NSBundle bundleForClass:self.class] pathForResource:fileName ofType:@"xml"];

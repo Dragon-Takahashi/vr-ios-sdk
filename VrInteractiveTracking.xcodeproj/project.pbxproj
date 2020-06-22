@@ -89,6 +89,11 @@
 		504B2D44218B4E8600CE0752 /* ConfigFileProviderStub.m in Sources */ = {isa = PBXBuildFile; fileRef = 504B2D43218B4E8600CE0752 /* ConfigFileProviderStub.m */; };
 		504B2D46218B50C500CE0752 /* vrTrackingConfig.xml in Resources */ = {isa = PBXBuildFile; fileRef = 504B2D45218B50C400CE0752 /* vrTrackingConfig.xml */; };
 		5071B985249763D200236B24 /* SeriesVrTrackingConfig.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5071B984249763D100236B24 /* SeriesVrTrackingConfig.xml */; };
+		5071B98E24A05EA900236B24 /* SeriesVrTrackingConfig3.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5071B98C24A05EA800236B24 /* SeriesVrTrackingConfig3.xml */; };
+		5071B98F24A05EA900236B24 /* SeriesVrTrackingConfig2.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5071B98D24A05EA800236B24 /* SeriesVrTrackingConfig2.xml */; };
+		5071B99324A064D000236B24 /* vrTrackingConfigMulti.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5071B99024A064C900236B24 /* vrTrackingConfigMulti.xml */; };
+		5071B99424A064D000236B24 /* vrTrackingConfigMulti2.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5071B99124A064C900236B24 /* vrTrackingConfigMulti2.xml */; };
+		5071B99524A064D000236B24 /* vrTrackingConfigMulti3.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5071B99224A064C900236B24 /* vrTrackingConfigMulti3.xml */; };
 		507F0C8E21E77A9300F3B6DD /* URLValidatorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 507F0C8D21E77A9300F3B6DD /* URLValidatorTests.m */; };
 		509915B1214B60A500E2AF83 /* VrInteractiveTracking.m in Sources */ = {isa = PBXBuildFile; fileRef = 509915B0214B60A500E2AF83 /* VrInteractiveTracking.m */; };
 		509915B2214B60A500E2AF83 /* VrInteractiveTracking.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 509915AF214B60A500E2AF83 /* VrInteractiveTracking.h */; };
@@ -274,6 +279,11 @@
 		504B2D43218B4E8600CE0752 /* ConfigFileProviderStub.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConfigFileProviderStub.m; sourceTree = "<group>"; };
 		504B2D45218B50C400CE0752 /* vrTrackingConfig.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingConfig.xml; sourceTree = "<group>"; };
 		5071B984249763D100236B24 /* SeriesVrTrackingConfig.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = SeriesVrTrackingConfig.xml; sourceTree = "<group>"; };
+		5071B98C24A05EA800236B24 /* SeriesVrTrackingConfig3.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = SeriesVrTrackingConfig3.xml; sourceTree = "<group>"; };
+		5071B98D24A05EA800236B24 /* SeriesVrTrackingConfig2.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = SeriesVrTrackingConfig2.xml; sourceTree = "<group>"; };
+		5071B99024A064C900236B24 /* vrTrackingConfigMulti.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingConfigMulti.xml; sourceTree = "<group>"; };
+		5071B99124A064C900236B24 /* vrTrackingConfigMulti2.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingConfigMulti2.xml; sourceTree = "<group>"; };
+		5071B99224A064C900236B24 /* vrTrackingConfigMulti3.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingConfigMulti3.xml; sourceTree = "<group>"; };
 		507F0C8D21E77A9300F3B6DD /* URLValidatorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = URLValidatorTests.m; sourceTree = "<group>"; };
 		509915AC214B60A500E2AF83 /* libVrInteractiveDataV5.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libVrInteractiveDataV5.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		509915AF214B60A500E2AF83 /* VrInteractiveTracking.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VrInteractiveTracking.h; sourceTree = "<group>"; };
@@ -608,6 +618,11 @@
 		504B2D3F218AFA1C00CE0752 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				5071B99024A064C900236B24 /* vrTrackingConfigMulti.xml */,
+				5071B99124A064C900236B24 /* vrTrackingConfigMulti2.xml */,
+				5071B99224A064C900236B24 /* vrTrackingConfigMulti3.xml */,
+				5071B98D24A05EA800236B24 /* SeriesVrTrackingConfig2.xml */,
+				5071B98C24A05EA800236B24 /* SeriesVrTrackingConfig3.xml */,
 				5071B984249763D100236B24 /* SeriesVrTrackingConfig.xml */,
 				504B2D45218B50C400CE0752 /* vrTrackingConfig.xml */,
 				504B2D40218AFA5400CE0752 /* TestVrTrackingConfig.xml */,
@@ -760,9 +775,14 @@
 			files = (
 				504B2D46218B50C500CE0752 /* vrTrackingConfig.xml in Resources */,
 				501D4E7B21A7B9CC00E3688E /* TestIrregularOverflowVrTrackingConfig.xml in Resources */,
+				5071B99324A064D000236B24 /* vrTrackingConfigMulti.xml in Resources */,
+				5071B99424A064D000236B24 /* vrTrackingConfigMulti2.xml in Resources */,
 				504B2D41218AFA5400CE0752 /* TestVrTrackingConfig.xml in Resources */,
+				5071B98E24A05EA900236B24 /* SeriesVrTrackingConfig3.xml in Resources */,
 				50F82B4B219951EF007B2281 /* TestIrregularVrTrackingConfig.xml in Resources */,
 				501D4E7721A7B7EB00E3688E /* TestIrregularUpperBoolVrTrackingConfig.xml in Resources */,
+				5071B98F24A05EA900236B24 /* SeriesVrTrackingConfig2.xml in Resources */,
+				5071B99524A064D000236B24 /* vrTrackingConfigMulti3.xml in Resources */,
 				5071B985249763D200236B24 /* SeriesVrTrackingConfig.xml in Resources */,
 				501D4E7821A7B7EB00E3688E /* TestIrregularWrongURLVrTrackingConfig.xml in Resources */,
 				501D4E7921A7B7EB00E3688E /* TestIrregularUnderZeroVrTrackingConfig.xml in Resources */,

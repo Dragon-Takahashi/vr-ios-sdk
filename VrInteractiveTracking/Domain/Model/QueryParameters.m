@@ -38,14 +38,21 @@
     }
     
     // 値の重複チェック
-    @try {
-        QueryParameter *qp = [self getValue:key];
-        [qp setValue:value];
-        NSLog(@"値を上書き key=%@",key);
-    } @catch (NSException *exception) {
+    BOOL isNewItem = YES;
+    for (QueryParameter *param in _params) {
+        if ([param.key isEqualToString:key]) {
+            isNewItem = NO;
+        }
+    }
+    
+    if (isNewItem) {
         QueryParameter *qp = [[QueryParameter alloc] initWithParameter:key value:value];
         [_params addObject:qp];
         NSLog(@"値を新規追加 key=%@",key);
+    }else {
+        QueryParameter *qp = [self getValue:key];
+        [qp setValue:value];
+        NSLog(@"値を上書き key=%@",key);
     }
     
     if ([[_params[_params.count-1] key] isEqualToString:key]) {

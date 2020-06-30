@@ -419,6 +419,14 @@
     }
 }
 
+- (BOOL)hasConfigFileWithIdentity:(NSString *)identity {
+    NSString *fixedIdentity = identity;
+    if (!identity) {
+        fixedIdentity = VR_LIB_DEFAULT_LOCAL_FILE_IDENTITY;
+    }
+    return [_configFileList objectForKey:fixedIdentity];
+}
+
 /**
  ローカル設定ファイルを取得
  

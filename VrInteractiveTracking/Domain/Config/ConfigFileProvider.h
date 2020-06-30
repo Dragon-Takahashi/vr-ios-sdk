@@ -61,4 +61,12 @@ typedef void (^ConfigStatusCallback) (BOOL isRunning, NSString *identity);
  */
 - (void) setConfig:(NSDictionary*) configFileValue identity:(NSString *)identity;
 
+/**
+ 設定ファイルの有無
+
+ @param identity Identity
+ @return 有無
+ */
+- (BOOL)hasConfigFileWithIdentity:(NSString *)identity;
+
 @end

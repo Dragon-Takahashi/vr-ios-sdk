@@ -282,13 +282,17 @@ NSString *const VR_LIB_DEFAULT_FILE_NAME = @"vrTrackingConfig";
         [[_querySpec getQueryParameters] addAllWithQueryParameters:[_vrParameter toQueryParametersWithVrInteractiveTrackingSpec:_trackingSpec beaconSpec:_beaconSpec]];
         
         // キューに登録
-        [_beaconProvider addWithQuerySpec:beaconSpec.url
-                                     spec:_querySpec
-                               configFile:[_configFileProvider loadConfig:beaconSpec.identity]
-                               forceValue:_forceValue
-                                    state:[_acceptor isOkWithIdentity:beaconSpec.identity]
-                              finishBlock:beaconSpec.finishSendBeaconBlock];
-        
+        if ([_configFileProvider hasConfigFileWithIdentity:beaconSpec.identity]) {
+            [_beaconProvider addWithQuerySpec:beaconSpec.url
+                   spec:_querySpec
+             configFile:[_configFileProvider loadConfig:beaconSpec.identity]
+             forceValue:_forceValue
+                  state:[_acceptor isOkWithIdentity:beaconSpec.identity]
+            finishBlock:beaconSpec.finishSendBeaconBlock];
+        }else if(beaconSpec.finishSendBeaconBlock){
+            beaconSpec.finishSendBeaconBlock(NO);
+        }
+
     } @catch (NSException *exception) {
         @throw exception;
     } @finally {

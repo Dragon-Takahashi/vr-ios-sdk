@@ -1667,6 +1667,32 @@
         XCTAssertNil(error, @"has error.");
     }];
 }
+/**
+ 目的：アプリ名・イベント名・モニターID・URLを設定するsendBeaconでExceptionErrorを投げないかを確認
+ */
+- (void)testSendBeaconUrlCallbackNoException {
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSendBeaconUrlCallbackNoException"];
+    VrInteractiveData *data = [VrInteractiveData sharedInstance];
+    __block VrInteractiveTracking *tracking;
+    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
+
+        // 前提：SDKの初期化が完了している
+        // 想定：送信が成功し、Exceptionが発生しない（Exception Breakpoint を設定したのちも発生しないことを確認）
+        XCTAssertNoThrowSpecific([tracking sendBeaconWithEventName:@"testSendBeaconNormal" monitorId:@"test_monitor_id" url:@"https://panelstg.interactive-circle.jp/ver01/measure" finishBlock:^(BOOL result) {
+            XCTAssertTrue(result == YES);
+            
+            [expectation fulfill];
+        }], NSException);
+        
+    } withOptFlg:YES withOutsideConfigURL:nil];
+    XCTAssertNoThrow([tracking sendBeaconWithEventName:@"testSendBeaconNormal" monitorId:@"test_monitor_id" url:@"https://panelstg.interactive-circle.jp/ver01/measure" finishBlock:^(BOOL result) {
+    }]);
+    
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error, @"has error.");
+    }];
+}
+
 
 /**
  目的：アプリ名・イベント名・モニターID・URLを設定するsendBeaconで、引数がnullでもエラーが起きないかを確認する

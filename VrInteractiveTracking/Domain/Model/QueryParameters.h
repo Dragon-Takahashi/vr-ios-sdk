@@ -58,4 +58,12 @@
  */
 - (QueryParameter *)getValue:(NSString *)key;
 
+/**
+ 要素確認
+
+ @param key 要素key
+ @return 結果
+ */
+- (BOOL)containKey:(NSString *)key;
+
 @end

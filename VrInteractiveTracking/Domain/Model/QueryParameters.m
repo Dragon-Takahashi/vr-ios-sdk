@@ -137,4 +137,19 @@
     @throw [VRIException exceptionWithMessage:[NSString stringWithFormat:@"key is not found : %@", key]];
 }
 
+/**
+ * キーを検索
+ *
+ * @return キーの有無
+ */
+- (BOOL)containKey:(NSString *)key {
+    for (QueryParameter *param in _params) {
+        if ([param.key isEqualToString:key]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+
 @end

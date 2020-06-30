@@ -131,9 +131,9 @@
  */
 - (NSString *)getBaseURL {
     // 強制値に値が入っているか判断
-    @try {
+    if (_forceValue && [_forceValue containKey:@"beacon_url"]) {
         return [_forceValue getValue:@"beacon_url"].value;
-    } @catch (NSException *exception) {}
+    }
     // sendBeaconの引数に値が入っているか判断
     if ([_baseUrl length] != 0) {
         return _baseUrl;

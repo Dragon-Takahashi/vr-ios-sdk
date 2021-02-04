@@ -17,9 +17,9 @@ typedef void (^FinishLoadCustomConfigBlock) (NSString *param, int result);
  */
 @protocol ConfigProvider <NSObject>
 @required
-- (ConfigFile*) loadConfig:(NSString*) identity;
+- (id <Config>) loadConfig:(NSString*) identity;
 - (void) addConfigWithIdentity:(NSString*) identity fileName:(NSString *)fileName;
-- (ConfigFile*) loadConfig;
+- (id <Config>) loadConfig;
 
 @end
 

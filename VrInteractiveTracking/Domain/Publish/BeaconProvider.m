@@ -39,10 +39,10 @@
  @param config 設定ファイル情報
  @return 結果（YES = 成功, NO = 失敗）
  */
-- (BOOL) addWithQuerySpec:(NSString *)baseUrl spec:(QuerySpec *)spec configFile:(ConfigFile *)config forceValue:(QueryParameters *)forceValue state:(BOOL)isOK finishBlock:(FinishSendBeaconBlock )finishBlock {
+- (BOOL) addWithQuerySpec:(NSString *)baseUrl spec:(QuerySpec *)spec configFile:(id <Config>)config state:(BOOL)isOK finishBlock:(FinishSendBeaconBlock )finishBlock {
     
     // URI生成
-    URI *uri = [[URI alloc] initWithQuerySpec:baseUrl spec:spec configFile:config forceValue:forceValue finishBlock:finishBlock];
+    URI *uri = [[URI alloc] initWithQuerySpec:baseUrl spec:spec configFile:config finishBlock:finishBlock];
     
     // 設定ファイルのステータス判断
     if (isOK) {
@@ -58,38 +58,13 @@
     return YES;
     
 }
-- (BOOL) addDirect:(NSString*) directUrl configFile:(ConfigFile *)config state:(BOOL)isOK finishBlock:(FinishSendBeaconBlock )finishBlock {
-    
-    // URI生成
-    URI *uri = [[URI alloc] initWithDirectURL:directUrl configFile:config finishBlock:finishBlock];
-    
-    // URLが生成出来ているか判断
-    if (![[uri toURI] absoluteString]) {
-        NSLog(@"URI is not prepared");
-        return NO;
-    }
-    
-    // 設定ファイルのステータス判断
-    if (isOK) {
-        NSLog(@"Add send queue for direct");
-        // キューを実行
-        [self pop:[uri copy]];
-    }else {
-        NSLog(@"Add config queue for direct");
-        // キューに追加
-        [_queue addObject:[uri copy]];
-    }
-    
-    return YES;
-}
 
-- (void) sendQueue:(ConfigFile *)configFile {
+- (void) sendQueue:(id <Config>)configFile {
     
     // キューの数を判断
     if ([_queue count] == 0) {
         return;
     }
-    
     // 該当のidentityのキューのみを実行
     NSMutableArray *discards = [NSMutableArray array];
     for (int i = 0; i < [_queue count]; i++) {

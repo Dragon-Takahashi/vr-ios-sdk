@@ -15,6 +15,7 @@
     [self common];
     
     [self defaultConfig];
+    [self defaultVConfig];
     
     [self testConfig];
     
@@ -57,7 +58,28 @@
 //    }else {
 //        NSLog(@"File is exist");
 //    }
-    if ([fileManager copyItemAtPath:[self testConfigPath:@"vrTrackingConfig"] toPath:configPath error:nil]) {
+    if ([fileManager copyItemAtPath:[self testConfigPath:fileName] toPath:configPath error:nil]) {
+        NSLog(@"Config file copy is success");
+    }else {
+        NSLog(@"Config file copy is miss");
+    }
+}
+
++ (void)defaultVConfig {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *filePathComponent = @"Config";
+    NSString *fileName = @"vrTrackingVConfig";
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentationDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirPath = [paths objectAtIndex:0];
+    NSString *configPath = [[documentsDirPath stringByAppendingPathComponent:filePathComponent] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.xml",fileName]];
+    
+    BOOL isDeleted = [fileManager removeItemAtPath:[self mainConfigPath:fileName] error:nil];
+    if (isDeleted) {
+        NSLog(@"file is deleted");
+    }else {
+        NSLog(@"file is not deleted...");
+    }
+    if ([fileManager copyItemAtPath:[self testConfigPath:fileName] toPath:configPath error:nil]) {
         NSLog(@"Config file copy is success");
     }else {
         NSLog(@"Config file copy is miss");

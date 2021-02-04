@@ -811,6 +811,475 @@
     }];
 }
 
+#pragma mark (void)clearAllVValue;
+
+/**
+ 目的：設定した拡張フィールドがクリアされるか確認する
+ */
+- (void)testClearAllVValueNormal {
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testClearAllVValueNormal"];
+    VrInteractiveData *data = [VrInteractiveData sharedInstance];
+    __block VrInteractiveTracking *tracking;
+    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
+        
+        if (!result) {
+            
+            [tracking setVValue:^(VValues *builder) {
+                builder.c = @"c";
+            }];
+            
+            // 前提：拡張フィールドを設定している
+            // 想定：エラーを吐かない
+            XCTAssertNoThrow([tracking clearAllVValue:@"test"]);
+            
+            // 前提：拡張フィールドを設定している
+            // 想定：拡張フィールドが全てnilになっている
+            XCTAssertNil([tracking getVValue:@"c"]);
+            
+            [expectation fulfill];
+        }
+        
+    } withOptFlg:NO withOutsideConfigURL:nil];
+    
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error, @"has error.");
+    }];
+}
+/**
+ 目的：設定した拡張フィールドがクリアされるか確認する（空文字）
+ */
+- (void)testClearAllVValueEmpty {
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testClearAllVValueEmpty"];
+    VrInteractiveData *data = [VrInteractiveData sharedInstance];
+    __block VrInteractiveTracking *tracking;
+    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
+        
+        if (!result) {
+            
+            [tracking setVValue:^(VValues *builder) {
+                builder.c = @"c";
+            }];
+            
+            // 前提：拡張フィールドを設定している
+            // 想定：エラーを吐かない
+            XCTAssertNoThrow([tracking clearAllVValue:@""]);
+            
+            // 前提：拡張フィールドを設定している
+            // 想定：拡張フィールドが全てnilになっている
+            XCTAssertNil([tracking getVValue:@"c"]);
+            
+            [expectation fulfill];
+        }
+        
+    } withOptFlg:NO withOutsideConfigURL:nil];
+    
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error, @"has error.");
+    }];
+}
+
+/**
+ 目的：設定した拡張フィールドがクリアされるか確認する（nil）
+ */
+- (void)testClearAllVValueNil {
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testClearAllVValueNil"];
+    VrInteractiveData *data = [VrInteractiveData sharedInstance];
+    __block VrInteractiveTracking *tracking;
+    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
+        
+        if (!result) {
+            
+            [tracking setVValue:^(VValues *builder) {
+                builder.c = @"c";
+            }];
+            
+            // 前提：拡張フィールドを設定している
+            // 想定：エラーを吐かない
+            XCTAssertNoThrow([tracking clearAllVValue:nil]);
+            
+            // 前提：拡張フィールドを設定している
+            // 想定：拡張フィールドが全てnilになっている
+            XCTAssertNil([tracking getVValue:@"c"]);
+            
+            [expectation fulfill];
+        }
+        
+    } withOptFlg:NO withOutsideConfigURL:nil];
+    
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error, @"has error.");
+    }];
+}
+
+
+#pragma mark (void)setVValue:(void (^)(VValues *))vValues;
+#pragma mark (NSString *)getVValue:(NSString *)fieldName;
+
+/**
+ 目的：設定した拡張フィールドが取得できるか確認する
+ */
+- (void)testSetVValueAndGetVValueNormal {
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSetVValueAndGetVValueNormal"];
+    VrInteractiveData *data = [VrInteractiveData sharedInstance];
+    __block VrInteractiveTracking *tracking;
+    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
+        
+        if (!result) {
+            
+            [tracking setVValue:^(VValues *builder) {
+                builder.c = @"c";
+                builder.r = @"r";
+                builder.t = @"t";
+                builder.appid = @"appid";
+                builder.dcid = @"dcid";
+                builder.dnt = @"dnt";
+                builder.dctype = @"dctype";
+                builder.ref = @"ref";
+                builder.url = @"url";
+                builder.pf = @"pf";
+                builder.pcf = @"pcf";
+                builder.pcs = @"pcs";
+                builder.pct = @"pct";
+                builder.etime = @"etime";
+                builder.event = @"event";
+                builder.player = @"player";
+                builder.ad = @"ad";
+                builder.roll = @"roll";
+                builder.pod = @"pod";
+                builder.adev = @"adev";
+                builder.metrics = @"metrics";
+                builder.senderid = @"senderid";
+                builder.senderuuid = @"senderuuid";
+                builder.snederdcos = @"snederdcos";
+                builder.speed = @"speed";
+                builder.screen = @"screen";
+                builder.p = @"p";
+                builder.appver = @"appver";
+                builder.projectid = @"projectid";
+                builder.snsflg = @"snsflg";
+                builder.u1 = @"u1";
+                builder.u2 = @"u2";
+                builder.u3 = @"u3";
+                builder.u4 = @"u4";
+                builder.u5 = @"u5";
+                builder.u6 = @"u6";
+                builder.u7 = @"u7";
+                builder.u8 = @"u8";
+                builder.u9 = @"u9";
+                builder.ptag = @"ptag";
+                builder.hci = @"hci";
+                builder.hca = @"hca";
+                builder.hce = @"hce";
+                builder.hpc = @"hpc";
+                builder.hcr = @"hcr";
+                builder.hld = @"hld";
+            }];
+            
+            NSLog(@"%@",[tracking getVValue:@"c"]);
+            
+            // 前提：拡張フィールドを設定している
+            // 想定：全ての変数が入っていない（nilである）
+            XCTAssertNil([tracking getVValue:@"c"]);
+            XCTAssertNil([tracking getVValue:@"r"]);
+            XCTAssertNil([tracking getVValue:@"t"]);
+            XCTAssertNil([tracking getVValue:@"appid"]);
+            XCTAssertNil([tracking getVValue:@"dcid"]);
+            XCTAssertNil([tracking getVValue:@"dnt"]);
+            XCTAssertNil([tracking getVValue:@"dctype"]);
+            XCTAssertNil([tracking getVValue:@"ref"]);
+            XCTAssertNil([tracking getVValue:@"url"]);
+            XCTAssertNil([tracking getVValue:@"pf"]);
+            XCTAssertNil([tracking getVValue:@"pcf"]);
+            XCTAssertNil([tracking getVValue:@"pcs"]);
+            XCTAssertNil([tracking getVValue:@"pct"]);
+            XCTAssertNil([tracking getVValue:@"etime"]);
+            XCTAssertNil([tracking getVValue:@"event"]);
+            XCTAssertNil([tracking getVValue:@"player"]);
+            XCTAssertNil([tracking getVValue:@"ad"]);
+            XCTAssertNil([tracking getVValue:@"roll"]);
+            XCTAssertNil([tracking getVValue:@"pod"]);
+            XCTAssertNil([tracking getVValue:@"adev"]);
+            XCTAssertNil([tracking getVValue:@"metrics"]);
+            XCTAssertNil([tracking getVValue:@"senderid"]);
+            XCTAssertNil([tracking getVValue:@"senderuuid"]);
+            XCTAssertNil([tracking getVValue:@"snederdcos"]);
+            XCTAssertNil([tracking getVValue:@"speed"]);
+            XCTAssertNil([tracking getVValue:@"screen"]);
+            XCTAssertNil([tracking getVValue:@"p"]);
+            XCTAssertNil([tracking getVValue:@"appver"]);
+            XCTAssertNil([tracking getVValue:@"projectid"]);
+            XCTAssertNil([tracking getVValue:@"snsflg"]);
+            XCTAssertNil([tracking getVValue:@"u1"]);
+            XCTAssertNil([tracking getVValue:@"u2"]);
+            XCTAssertNil([tracking getVValue:@"u3"]);
+            XCTAssertNil([tracking getVValue:@"u4"]);
+            XCTAssertNil([tracking getVValue:@"u5"]);
+            XCTAssertNil([tracking getVValue:@"u6"]);
+            XCTAssertNil([tracking getVValue:@"u7"]);
+            XCTAssertNil([tracking getVValue:@"u8"]);
+            XCTAssertNil([tracking getVValue:@"u9"]);
+            XCTAssertNil([tracking getVValue:@"ptag"]);
+            XCTAssertNil([tracking getVValue:@"hci"]);
+            XCTAssertNil([tracking getVValue:@"hca"]);
+            XCTAssertNil([tracking getVValue:@"hce"]);
+            XCTAssertNil([tracking getVValue:@"hpc"]);
+            XCTAssertNil([tracking getVValue:@"hcr"]);
+            XCTAssertNil([tracking getVValue:@"hld"]);
+            
+            [expectation fulfill];
+        }
+        
+    } withOptFlg:NO withOutsideConfigURL:nil];
+    
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error, @"has error.");
+    }];
+}
+
+/**
+ 目的：設定した拡張フィールドが取得できるか確認する（空文字）
+ */
+- (void)testSetVValueAndGetVValueEmpty {
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSetVValueAndGetVValueEmpty"];
+    VrInteractiveData *data = [VrInteractiveData sharedInstance];
+    __block VrInteractiveTracking *tracking;
+    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
+        
+        if (!result) {
+            
+            [tracking setVValue:^(VValues *builder) {
+                builder.c = @"";
+                builder.r = @"";
+                builder.t = @"";
+                builder.appid = @"";
+                builder.dcid = @"";
+                builder.dnt = @"";
+                builder.dctype = @"";
+                builder.ref = @"";
+                builder.url = @"";
+                builder.pf = @"";
+                builder.pcf = @"";
+                builder.pcs = @"";
+                builder.pct = @"";
+                builder.etime = @"";
+                builder.event = @"";
+                builder.player = @"";
+                builder.ad = @"";
+                builder.roll = @"";
+                builder.pod = @"";
+                builder.adev = @"";
+                builder.metrics = @"";
+                builder.senderid = @"";
+                builder.senderuuid = @"";
+                builder.snederdcos = @"";
+                builder.speed = @"";
+                builder.screen = @"";
+                builder.p = @"";
+                builder.appver = @"";
+                builder.projectid = @"";
+                builder.snsflg = @"";
+                builder.u1 = @"";
+                builder.u2 = @"";
+                builder.u3 = @"";
+                builder.u4 = @"";
+                builder.u5 = @"";
+                builder.u6 = @"";
+                builder.u7 = @"";
+                builder.u8 = @"";
+                builder.u9 = @"";
+                builder.ptag = @"";
+                builder.hci = @"";
+                builder.hca = @"";
+                builder.hce = @"";
+                builder.hpc = @"";
+                builder.hcr = @"";
+                builder.hld = @"";
+            }];
+            
+            NSLog(@"%@",[tracking getVValue:@"c"]);
+            
+            // 前提：拡張フィールドを空文字で設定している
+            // 想定：全ての変数が入っていない（nilである）
+            XCTAssertNil([tracking getVValue:@"c"]);
+            XCTAssertNil([tracking getVValue:@"r"]);
+            XCTAssertNil([tracking getVValue:@"t"]);
+            XCTAssertNil([tracking getVValue:@"appid"]);
+            XCTAssertNil([tracking getVValue:@"dcid"]);
+            XCTAssertNil([tracking getVValue:@"dnt"]);
+            XCTAssertNil([tracking getVValue:@"dctype"]);
+            XCTAssertNil([tracking getVValue:@"ref"]);
+            XCTAssertNil([tracking getVValue:@"url"]);
+            XCTAssertNil([tracking getVValue:@"pf"]);
+            XCTAssertNil([tracking getVValue:@"pcf"]);
+            XCTAssertNil([tracking getVValue:@"pcs"]);
+            XCTAssertNil([tracking getVValue:@"pct"]);
+            XCTAssertNil([tracking getVValue:@"etime"]);
+            XCTAssertNil([tracking getVValue:@"event"]);
+            XCTAssertNil([tracking getVValue:@"player"]);
+            XCTAssertNil([tracking getVValue:@"ad"]);
+            XCTAssertNil([tracking getVValue:@"roll"]);
+            XCTAssertNil([tracking getVValue:@"pod"]);
+            XCTAssertNil([tracking getVValue:@"adev"]);
+            XCTAssertNil([tracking getVValue:@"metrics"]);
+            XCTAssertNil([tracking getVValue:@"senderid"]);
+            XCTAssertNil([tracking getVValue:@"senderuuid"]);
+            XCTAssertNil([tracking getVValue:@"snederdcos"]);
+            XCTAssertNil([tracking getVValue:@"speed"]);
+            XCTAssertNil([tracking getVValue:@"screen"]);
+            XCTAssertNil([tracking getVValue:@"p"]);
+            XCTAssertNil([tracking getVValue:@"appver"]);
+            XCTAssertNil([tracking getVValue:@"projectid"]);
+            XCTAssertNil([tracking getVValue:@"snsflg"]);
+            XCTAssertNil([tracking getVValue:@"u1"]);
+            XCTAssertNil([tracking getVValue:@"u2"]);
+            XCTAssertNil([tracking getVValue:@"u3"]);
+            XCTAssertNil([tracking getVValue:@"u4"]);
+            XCTAssertNil([tracking getVValue:@"u5"]);
+            XCTAssertNil([tracking getVValue:@"u6"]);
+            XCTAssertNil([tracking getVValue:@"u7"]);
+            XCTAssertNil([tracking getVValue:@"u8"]);
+            XCTAssertNil([tracking getVValue:@"u9"]);
+            XCTAssertNil([tracking getVValue:@"ptag"]);
+            XCTAssertNil([tracking getVValue:@"hci"]);
+            XCTAssertNil([tracking getVValue:@"hca"]);
+            XCTAssertNil([tracking getVValue:@"hce"]);
+            XCTAssertNil([tracking getVValue:@"hpc"]);
+            XCTAssertNil([tracking getVValue:@"hcr"]);
+            XCTAssertNil([tracking getVValue:@"hld"]);
+            
+            [expectation fulfill];
+        }
+        
+    } withOptFlg:NO withOutsideConfigURL:nil];
+    
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error, @"has error.");
+    }];
+}
+
+/**
+ 目的：設定した拡張フィールドが取得できるか確認する（nil）
+ */
+- (void)testSetVValueAndGetVValueNil {
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSetVValueAndGetVValueNil"];
+    VrInteractiveData *data = [VrInteractiveData sharedInstance];
+    __block VrInteractiveTracking *tracking;
+    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
+        
+        if (!result) {
+            
+            [tracking setVValue:^(VValues *builder) {
+                builder.c = nil;
+                builder.r = nil;
+                builder.t = nil;
+                builder.appid = nil;
+                builder.dcid = nil;
+                builder.dnt = nil;
+                builder.dctype = nil;
+                builder.ref = nil;
+                builder.url = nil;
+                builder.pf = nil;
+                builder.pcf = nil;
+                builder.pcs = nil;
+                builder.pct = nil;
+                builder.etime = nil;
+                builder.event = nil;
+                builder.player = nil;
+                builder.ad = nil;
+                builder.roll = nil;
+                builder.pod = nil;
+                builder.adev = nil;
+                builder.metrics = nil;
+                builder.senderid = nil;
+                builder.senderuuid = nil;
+                builder.snederdcos = nil;
+                builder.speed = nil;
+                builder.screen = nil;
+                builder.p = nil;
+                builder.appver = nil;
+                builder.projectid = nil;
+                builder.snsflg = nil;
+                builder.u1 = nil;
+                builder.u2 = nil;
+                builder.u3 = nil;
+                builder.u4 = nil;
+                builder.u5 = nil;
+                builder.u6 = nil;
+                builder.u7 = nil;
+                builder.u8 = nil;
+                builder.u9 = nil;
+                builder.ptag = nil;
+                builder.hci = nil;
+                builder.hca = nil;
+                builder.hce = nil;
+                builder.hpc = nil;
+                builder.hcr = nil;
+                builder.hld = nil;
+            }];
+            
+            NSLog(@"%@",[tracking getVValue:@"c"]);
+            
+            // 前提：拡張フィールドをnilで設定している
+            // 想定：全ての変数が入っていない（nilである）
+            XCTAssertNil([tracking getVValue:@"c"]);
+            XCTAssertNil([tracking getVValue:@"r"]);
+            XCTAssertNil([tracking getVValue:@"t"]);
+            XCTAssertNil([tracking getVValue:@"appid"]);
+            XCTAssertNil([tracking getVValue:@"dcid"]);
+            XCTAssertNil([tracking getVValue:@"dnt"]);
+            XCTAssertNil([tracking getVValue:@"dctype"]);
+            XCTAssertNil([tracking getVValue:@"ref"]);
+            XCTAssertNil([tracking getVValue:@"url"]);
+            XCTAssertNil([tracking getVValue:@"pf"]);
+            XCTAssertNil([tracking getVValue:@"pcf"]);
+            XCTAssertNil([tracking getVValue:@"pcs"]);
+            XCTAssertNil([tracking getVValue:@"pct"]);
+            XCTAssertNil([tracking getVValue:@"etime"]);
+            XCTAssertNil([tracking getVValue:@"event"]);
+            XCTAssertNil([tracking getVValue:@"player"]);
+            XCTAssertNil([tracking getVValue:@"ad"]);
+            XCTAssertNil([tracking getVValue:@"roll"]);
+            XCTAssertNil([tracking getVValue:@"pod"]);
+            XCTAssertNil([tracking getVValue:@"adev"]);
+            XCTAssertNil([tracking getVValue:@"metrics"]);
+            XCTAssertNil([tracking getVValue:@"senderid"]);
+            XCTAssertNil([tracking getVValue:@"senderuuid"]);
+            XCTAssertNil([tracking getVValue:@"snederdcos"]);
+            XCTAssertNil([tracking getVValue:@"speed"]);
+            XCTAssertNil([tracking getVValue:@"screen"]);
+            XCTAssertNil([tracking getVValue:@"p"]);
+            XCTAssertNil([tracking getVValue:@"appver"]);
+            XCTAssertNil([tracking getVValue:@"projectid"]);
+            XCTAssertNil([tracking getVValue:@"snsflg"]);
+            XCTAssertNil([tracking getVValue:@"u1"]);
+            XCTAssertNil([tracking getVValue:@"u2"]);
+            XCTAssertNil([tracking getVValue:@"u3"]);
+            XCTAssertNil([tracking getVValue:@"u4"]);
+            XCTAssertNil([tracking getVValue:@"u5"]);
+            XCTAssertNil([tracking getVValue:@"u6"]);
+            XCTAssertNil([tracking getVValue:@"u7"]);
+            XCTAssertNil([tracking getVValue:@"u8"]);
+            XCTAssertNil([tracking getVValue:@"u9"]);
+            XCTAssertNil([tracking getVValue:@"ptag"]);
+            XCTAssertNil([tracking getVValue:@"hci"]);
+            XCTAssertNil([tracking getVValue:@"hca"]);
+            XCTAssertNil([tracking getVValue:@"hce"]);
+            XCTAssertNil([tracking getVValue:@"hpc"]);
+            XCTAssertNil([tracking getVValue:@"hcr"]);
+            XCTAssertNil([tracking getVValue:@"hld"]);
+            
+            [expectation fulfill];
+        }
+        
+    } withOptFlg:NO withOutsideConfigURL:nil];
+    
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error, @"has error.");
+    }];
+}
+
+
+
 
 #pragma mark - SendBeacon
 
@@ -1350,265 +1819,6 @@
     tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
         
         [tracking sendBeaconWithEventName:@"" monitorId:@"" url:@"" identity:@"" finishBlock:^(BOOL result) {
-            // 前提：ユーザーがオプトアウトしている。ビーコンを送信している
-            // 想定：送信が成功したことを示すresult=falseであることを確認
-            XCTAssertTrue(result == NO);
-            
-            [expectation fulfill];
-        }];
-    } withOptFlg:NO withOutsideConfigURL:nil];
-    
-    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
-        XCTAssertNil(error, @"has error.");
-    }];
-}
-
-#pragma mark (void)sendBeaconDirect:(NSString *)directUrl;
-
-/**
- 目的：直接URLを設定するsendBeaconで送信が完了したかを確認する
- */
-- (void)testSendBeaconDirectNormal {
-    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSendBeaconNormal"];
-    VrInteractiveData *data = [VrInteractiveData sharedInstance];
-    __block VrInteractiveTracking *tracking;
-    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
-        
-        // 前提：ユーザーがオプトアウトしている。SDKの初期化がを成功している
-        // 想定：送信時にエラーが吐き出されないことを確認
-        XCTAssertNoThrow([tracking sendBeaconDirect:@"https://panelstg.interactive-circle.jp/ver01/measure?vr_tagid1=9997&vr_tagid2=1001&vr_opt1=direct_test"]);
-        
-        [expectation fulfill];
-    } withOptFlg:NO withOutsideConfigURL:nil];
-    
-    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
-        XCTAssertNil(error, @"has error.");
-    }];
-}
-
-/**
- 目的：直接URLを設定するsendBeaconで、引数がnullでも送信が完了したかを確認する
- */
-- (void)testSendBeaconDirectIrregularNull {
-    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSendBeaconNormal"];
-    VrInteractiveData *data = [VrInteractiveData sharedInstance];
-    __block VrInteractiveTracking *tracking;
-    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
-        
-        // 前提：ユーザーがオプトアウトしている。SDKの初期化がを成功している
-        // 想定：送信時にエラーが吐き出されないことを確認
-        XCTAssertNoThrow([tracking sendBeaconDirect:nil]);
-        
-        [expectation fulfill];
-    } withOptFlg:NO withOutsideConfigURL:nil];
-    
-    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
-        XCTAssertNil(error, @"has error.");
-    }];
-}
-
-/**
- 目的：直接URLを設定するsendBeaconで、引数が空文字でも送信が完了したかを確認する
- */
-- (void)testSendBeaconDirectIrregularEmpty {
-    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSendBeaconNormal"];
-    VrInteractiveData *data = [VrInteractiveData sharedInstance];
-    __block VrInteractiveTracking *tracking;
-    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
-        
-        // 前提：ユーザーがオプトアウトしている。SDKの初期化がを成功している
-        // 想定：送信時にエラーが吐き出されないことを確認
-        XCTAssertNoThrow([tracking sendBeaconDirect:@""]);
-        
-        [expectation fulfill];
-    } withOptFlg:NO withOutsideConfigURL:nil];
-    
-    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
-        XCTAssertNil(error, @"has error.");
-    }];
-}
-
-#pragma mark (void)sendBeaconDirect:(NSString *)directUrl finishBlock:(FinishSendBeaconBlock)finishBlock;
-
-/**
- 目的：直接URLを設定するsendBeaconで送信が完了したかを確認する
- */
-- (void)testSendBeaconDirectCallbackNormal {
-    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSendBeaconNormal"];
-    VrInteractiveData *data = [VrInteractiveData sharedInstance];
-    __block VrInteractiveTracking *tracking;
-    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
-        
-        [tracking sendBeaconDirect:@"https://panelstg.interactive-circle.jp/ver01/measure?vr_tagid1=9997&vr_tagid2=1001&vr_opt1=direct_test" finishBlock:^(BOOL result) {
-            // 前提：ユーザーがオプトアウトしている。ビーコンを送信している
-            // 想定：送信が成功したことを示すresult=falseであることを確認
-            XCTAssertTrue(result == NO);
-            
-            [expectation fulfill];
-        }];
-        
-    } withOptFlg:NO withOutsideConfigURL:nil];
-    
-    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
-        XCTAssertNil(error, @"has error.");
-    }];
-}
-
-/**
- 目的：直接URLを設定するsendBeaconで、引数がnullでも送信が失敗したかを確認する
- */
-- (void)testSendBeaconDirectCallbackIrregularNull {
-    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSendBeaconNormal"];
-    VrInteractiveData *data = [VrInteractiveData sharedInstance];
-    __block VrInteractiveTracking *tracking;
-    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
-        
-        [tracking sendBeaconDirect:nil finishBlock:^(BOOL result) {
-            // 前提：ユーザーがオプトアウトしている。ビーコンを送信している
-            // 想定：送信が失敗したことを示すresult=falseであることを確認
-            XCTAssertTrue(result == NO);
-            
-            [expectation fulfill];
-        }];
-        
-    } withOptFlg:NO withOutsideConfigURL:nil];
-    
-    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
-        XCTAssertNil(error, @"has error.");
-    }];
-}
-
-
-/**
- 目的：直接URLを設定するsendBeaconで、引数が空文字でも送信が失敗したかを確認する
- */
-- (void)testSendBeaconDirectCallbackIrregularEmpty {
-    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSendBeaconNormal"];
-    VrInteractiveData *data = [VrInteractiveData sharedInstance];
-    __block VrInteractiveTracking *tracking;
-    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
-        
-        [tracking sendBeaconDirect:@"" finishBlock:^(BOOL result) {
-            // 前提：ユーザーがオプトアウトしている。ビーコンを送信している
-            // 想定：送信が失敗したことを示すresult=falseであることを確認
-            XCTAssertTrue(result == NO);
-            
-            [expectation fulfill];
-        }];
-        
-    } withOptFlg:NO withOutsideConfigURL:nil];
-    
-    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
-        XCTAssertNil(error, @"has error.");
-    }];
-}
-
-
-#pragma mark (void)setForceBeaconURLStringOnce:(NSDictionary*) forceValue;
-
-/**
- 目的：設定したsendBeaconの内容を強制的に上書きできているかを確認する
- */
-- (void)testSetForceBeaconURLStringOnceNormal {
-    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSendBeaconNormal"];
-    VrInteractiveData *data = [VrInteractiveData sharedInstance];
-    __block VrInteractiveTracking *tracking;
-    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
-        
-        NSDictionary *dic = @{@"vr_opt1":@"force_value_opt1",
-                              @"vr_tid":@"forced_tid"
-                              };
-        [tracking setForceBeaconURLStringOnce:dic];
-        
-        [tracking sendBeaconWithEventName:@"testSendBeaconNormal" monitorId:@"test_monitor_id" finishBlock:^(BOOL result) {
-            // 前提：ユーザーがオプトアウトしている。ビーコンを送信している
-            // 想定：送信が成功したことを示すresult=falseであることを確認
-            XCTAssertTrue(result == NO);
-            
-            [expectation fulfill];
-        }];
-    } withOptFlg:NO withOutsideConfigURL:nil];
-    
-    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
-        XCTAssertNil(error, @"has error.");
-    }];
-}
-
-// TODO 要検討項目
-/**
- 目的：パラメータの値にnullが含まれている場合では、送信できないことを確認する
- */
-- (void)testSetForceBeaconURLStringOnceIrregularValueNull {
-    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSendBeaconNormal"];
-    VrInteractiveData *data = [VrInteractiveData sharedInstance];
-    __block VrInteractiveTracking *tracking;
-    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
-        
-        NSDictionary *dic = @{@"vr_opt1":@"force_value_opt1",
-                              @"vr_tid":@"forced_tid",
-                              @"uid":[NSNull null]
-                              };
-        [tracking setForceBeaconURLStringOnce:dic];
-        
-        [tracking sendBeaconWithEventName:@"testSendBeaconNormal" monitorId:@"test_monitor_id" finishBlock:^(BOOL result) {
-            // 前提：ユーザーがオプトアウトしている。ビーコンを送信している
-            // 想定：送信が失敗したことを示すresult=falseであることを確認
-            XCTAssertTrue(result == NO);
-            
-            [expectation fulfill];
-        }];
-    } withOptFlg:NO withOutsideConfigURL:nil];
-    
-    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
-        XCTAssertNil(error, @"has error.");
-    }];
-}
-
-/**
- 目的：パラメータのキーが空文字の場合でも、エラーが発生せずに送信できるかを確認する（キーは空文字のまま。ex:"https://xxx.xxx?vr_tagid1=0000&=force_value"）
- */
-- (void)testSetForceBeaconURLStringOnceIrregularKeyEmpty {
-    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSendBeaconNormal"];
-    VrInteractiveData *data = [VrInteractiveData sharedInstance];
-    __block VrInteractiveTracking *tracking;
-    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
-        
-        NSDictionary *dic = @{@"vr_opt1":@"force_value_opt1",
-                              @"vr_tid":@"force_tid",
-                              @"":@"force_value"
-                              };
-        [tracking setForceBeaconURLStringOnce:dic];
-        
-        [tracking sendBeaconWithEventName:@"testSendBeaconNormal" monitorId:@"test_monitor_id" finishBlock:^(BOOL result) {
-            // 前提：ユーザーがオプトアウトしている。ビーコンを送信している
-            // 想定：送信が成功したことを示すresult=falseであることを確認
-            XCTAssertTrue(result == NO);
-            
-            [expectation fulfill];
-        }];
-    } withOptFlg:NO withOutsideConfigURL:nil];
-    
-    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
-        XCTAssertNil(error, @"has error.");
-    }];
-}
-
-/**
- 目的：パラメータの値が空文字の場合でも、設定したsendBeaconの内容を強制的に上書きできているかを確認する
- */
-- (void)testSetForceBeaconURLStringOnceIrregular {
-    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSendBeaconNormal"];
-    VrInteractiveData *data = [VrInteractiveData sharedInstance];
-    __block VrInteractiveTracking *tracking;
-    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
-        
-        NSDictionary *dic = @{@"vr_opt1":@"force_value_opt1",
-                              @"vr_tid":@"forced_tid",
-                              @"test_key":@""
-                              };
-        [tracking setForceBeaconURLStringOnce:dic];
-        
-        [tracking sendBeaconWithEventName:@"testSendBeaconNormal" monitorId:@"test_monitor_id" finishBlock:^(BOOL result) {
             // 前提：ユーザーがオプトアウトしている。ビーコンを送信している
             // 想定：送信が成功したことを示すresult=falseであることを確認
             XCTAssertTrue(result == NO);

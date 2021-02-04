@@ -94,10 +94,48 @@
 		5071B99324A064D000236B24 /* vrTrackingConfigMulti.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5071B99024A064C900236B24 /* vrTrackingConfigMulti.xml */; };
 		5071B99424A064D000236B24 /* vrTrackingConfigMulti2.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5071B99124A064C900236B24 /* vrTrackingConfigMulti2.xml */; };
 		5071B99524A064D000236B24 /* vrTrackingConfigMulti3.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5071B99224A064C900236B24 /* vrTrackingConfigMulti3.xml */; };
+		507A914A25C455750092F432 /* ConfigValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 507A914925C455750092F432 /* ConfigValidator.m */; };
+		507A915225C461AF0092F432 /* VrConfigValidatorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 507A915125C461AF0092F432 /* VrConfigValidatorTests.m */; };
+		507A916525C4628B0092F432 /* vrTrackingConfig_validateNotTag.xml in Resources */ = {isa = PBXBuildFile; fileRef = 507A915525C4628A0092F432 /* vrTrackingConfig_validateNotTag.xml */; };
+		507A916625C4628B0092F432 /* vrTrackingConfig3.xml in Resources */ = {isa = PBXBuildFile; fileRef = 507A915625C4628A0092F432 /* vrTrackingConfig3.xml */; };
+		507A916725C4628B0092F432 /* vrTrackingConfigSendTestDisabledTrue.xml in Resources */ = {isa = PBXBuildFile; fileRef = 507A915725C4628B0092F432 /* vrTrackingConfigSendTestDisabledTrue.xml */; };
+		507A916825C4628B0092F432 /* vrTrackingConfigFIFA.xml in Resources */ = {isa = PBXBuildFile; fileRef = 507A915825C4628B0092F432 /* vrTrackingConfigFIFA.xml */; };
+		507A916925C4628B0092F432 /* vrTrackingConfigSendTestDisabledFalse.xml in Resources */ = {isa = PBXBuildFile; fileRef = 507A915925C4628B0092F432 /* vrTrackingConfigSendTestDisabledFalse.xml */; };
+		507A916A25C4628B0092F432 /* vrTrackingConfig2.xml in Resources */ = {isa = PBXBuildFile; fileRef = 507A915A25C4628B0092F432 /* vrTrackingConfig2.xml */; };
+		507A916B25C4628B0092F432 /* vrTrackingConfig6.xml in Resources */ = {isa = PBXBuildFile; fileRef = 507A915B25C4628B0092F432 /* vrTrackingConfig6.xml */; };
+		507A916C25C4628B0092F432 /* vrTrackingConfig_validateNomal.xml in Resources */ = {isa = PBXBuildFile; fileRef = 507A915C25C4628B0092F432 /* vrTrackingConfig_validateNomal.xml */; };
+		507A916D25C4628B0092F432 /* vrTrackingConfigGORIN.xml in Resources */ = {isa = PBXBuildFile; fileRef = 507A915D25C4628B0092F432 /* vrTrackingConfigGORIN.xml */; };
+		507A916E25C4628B0092F432 /* vrTrackingConfigDEFAULT.xml in Resources */ = {isa = PBXBuildFile; fileRef = 507A915E25C4628B0092F432 /* vrTrackingConfigDEFAULT.xml */; };
+		507A916F25C4628B0092F432 /* vrTrackingConfig4.xml in Resources */ = {isa = PBXBuildFile; fileRef = 507A915F25C4628B0092F432 /* vrTrackingConfig4.xml */; };
+		507A917025C4628B0092F432 /* vrTrackingConfig_validateNotValue.xml in Resources */ = {isa = PBXBuildFile; fileRef = 507A916025C4628B0092F432 /* vrTrackingConfig_validateNotValue.xml */; };
+		507A917125C4628B0092F432 /* vrTrackingConfigDEFAULT_UPDATE.xml in Resources */ = {isa = PBXBuildFile; fileRef = 507A916125C4628B0092F432 /* vrTrackingConfigDEFAULT_UPDATE.xml */; };
+		507A917225C4628B0092F432 /* vrTrackingConfig5.xml in Resources */ = {isa = PBXBuildFile; fileRef = 507A916225C4628B0092F432 /* vrTrackingConfig5.xml */; };
+		507A917325C4628B0092F432 /* vrTrackingConfig_validateAbnomal.xml in Resources */ = {isa = PBXBuildFile; fileRef = 507A916325C4628B0092F432 /* vrTrackingConfig_validateAbnomal.xml */; };
+		507A917425C4628B0092F432 /* vrTrackingConfig_Abnomal.xml in Resources */ = {isa = PBXBuildFile; fileRef = 507A916425C4628B0092F432 /* vrTrackingConfig_Abnomal.xml */; };
+		507A918425C4751C0092F432 /* VConfigValidatorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 507A918325C4751C0092F432 /* VConfigValidatorTests.m */; };
+		507A919225C4E2780092F432 /* TagTypeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 507A919125C4E2780092F432 /* TagTypeTests.m */; };
 		507F0C8E21E77A9300F3B6DD /* URLValidatorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 507F0C8D21E77A9300F3B6DD /* URLValidatorTests.m */; };
 		509915B1214B60A500E2AF83 /* VrInteractiveTracking.m in Sources */ = {isa = PBXBuildFile; fileRef = 509915B0214B60A500E2AF83 /* VrInteractiveTracking.m */; };
 		509915B2214B60A500E2AF83 /* VrInteractiveTracking.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 509915AF214B60A500E2AF83 /* VrInteractiveTracking.h */; };
 		509915BA214BAA9A00E2AF83 /* VrInteractiveData.m in Sources */ = {isa = PBXBuildFile; fileRef = 509915B9214BAA9A00E2AF83 /* VrInteractiveData.m */; };
+		50A8654725C3061600A01461 /* TagType.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A8654625C3061600A01461 /* TagType.m */; };
+		50A8655225C30D7F00A01461 /* vrTrackingVConfig.xml in Resources */ = {isa = PBXBuildFile; fileRef = 50A8654C25C30D7E00A01461 /* vrTrackingVConfig.xml */; };
+		50A8655325C30D7F00A01461 /* vrTrackingVConfig4.xml in Resources */ = {isa = PBXBuildFile; fileRef = 50A8654D25C30D7E00A01461 /* vrTrackingVConfig4.xml */; };
+		50A8655425C30D7F00A01461 /* vrTrackingVConfig2.xml in Resources */ = {isa = PBXBuildFile; fileRef = 50A8654E25C30D7E00A01461 /* vrTrackingVConfig2.xml */; };
+		50A8655525C30D7F00A01461 /* vrTrackingVConfig3.xml in Resources */ = {isa = PBXBuildFile; fileRef = 50A8654F25C30D7F00A01461 /* vrTrackingVConfig3.xml */; };
+		50A8655625C30D7F00A01461 /* vrTrackingVConfig5.xml in Resources */ = {isa = PBXBuildFile; fileRef = 50A8655025C30D7F00A01461 /* vrTrackingVConfig5.xml */; };
+		50A8655725C30D7F00A01461 /* vrTrackingVConfig6.xml in Resources */ = {isa = PBXBuildFile; fileRef = 50A8655125C30D7F00A01461 /* vrTrackingVConfig6.xml */; };
+		50A8656625C30EBA00A01461 /* vrTrackingVConfig_validateNomal.xml in Resources */ = {isa = PBXBuildFile; fileRef = 50A8655C25C30EBA00A01461 /* vrTrackingVConfig_validateNomal.xml */; };
+		50A8656725C30EBA00A01461 /* vrTrackingVConfigSendTestDisabledTrue.xml in Resources */ = {isa = PBXBuildFile; fileRef = 50A8655D25C30EBA00A01461 /* vrTrackingVConfigSendTestDisabledTrue.xml */; };
+		50A8656825C30EBA00A01461 /* vrTrackingVConfigDEFAULT_UPDATE.xml in Resources */ = {isa = PBXBuildFile; fileRef = 50A8655E25C30EBA00A01461 /* vrTrackingVConfigDEFAULT_UPDATE.xml */; };
+		50A8656925C30EBA00A01461 /* vrTrackingVConfigDEFAULT.xml in Resources */ = {isa = PBXBuildFile; fileRef = 50A8655F25C30EBA00A01461 /* vrTrackingVConfigDEFAULT.xml */; };
+		50A8656A25C30EBA00A01461 /* vrTrackingVConfigGORIN.xml in Resources */ = {isa = PBXBuildFile; fileRef = 50A8656025C30EBA00A01461 /* vrTrackingVConfigGORIN.xml */; };
+		50A8656B25C30EBA00A01461 /* vrTrackingVConfigSendTestDisabledFalse.xml in Resources */ = {isa = PBXBuildFile; fileRef = 50A8656125C30EBA00A01461 /* vrTrackingVConfigSendTestDisabledFalse.xml */; };
+		50A8656C25C30EBA00A01461 /* vrTrackingVConfigFIFA.xml in Resources */ = {isa = PBXBuildFile; fileRef = 50A8656225C30EBA00A01461 /* vrTrackingVConfigFIFA.xml */; };
+		50A8656D25C30EBA00A01461 /* vrTrackingVConfig_validateNotValue.xml in Resources */ = {isa = PBXBuildFile; fileRef = 50A8656325C30EBA00A01461 /* vrTrackingVConfig_validateNotValue.xml */; };
+		50A8656E25C30EBA00A01461 /* vrTrackingVConfig_validateAbnomal.xml in Resources */ = {isa = PBXBuildFile; fileRef = 50A8656425C30EBA00A01461 /* vrTrackingVConfig_validateAbnomal.xml */; };
+		50A8656F25C30EBA00A01461 /* vrTrackingVConfig_validateNotTag.xml in Resources */ = {isa = PBXBuildFile; fileRef = 50A8656525C30EBA00A01461 /* vrTrackingVConfig_validateNotTag.xml */; };
+		50A8657C25C3910400A01461 /* VConfigValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A8657B25C3910400A01461 /* VConfigValidator.m */; };
 		50A9424F21AEEAB800E8D31B /* ConfigLoadBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A9424E21AEEAB800E8D31B /* ConfigLoadBlock.m */; };
 		50A9425221AEEC1800E8D31B /* ConfigMediator.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A9425121AEEC1800E8D31B /* ConfigMediator.m */; };
 		50AB88F321509ABF0047CC22 /* VrInteractiveData.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 509915B8214BAA9A00E2AF83 /* VrInteractiveData.h */; };
@@ -105,10 +143,15 @@
 		50CDCC5B21C68AFA004D7950 /* VrInteractiveTrackingForDisabled.m in Sources */ = {isa = PBXBuildFile; fileRef = 50CDCC5A21C68AFA004D7950 /* VrInteractiveTrackingForDisabled.m */; };
 		50CDCC6221C7745D004D7950 /* SendAcceptorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 50CDCC6121C7745D004D7950 /* SendAcceptorTests.m */; };
 		50D444D321C662E000C52281 /* VrInteractiveTrackingTestsForOptOut.m in Sources */ = {isa = PBXBuildFile; fileRef = 50D444D221C662E000C52281 /* VrInteractiveTrackingTestsForOptOut.m */; };
+		50F5207025C9B53000763D10 /* VQueryParameter.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F5206F25C9B53000763D10 /* VQueryParameter.m */; };
+		50F5207A25C9C3BB00763D10 /* VrQueryParameterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F5207925C9C3BB00763D10 /* VrQueryParameterTests.m */; };
+		50F5207E25C9CD5D00763D10 /* VQueryParameterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F5207D25C9CD5D00763D10 /* VQueryParameterTests.m */; };
+		50F5208B25CA428200763D10 /* VValues.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F5208A25CA428200763D10 /* VValues.m */; };
+		50F5208F25CA44AE00763D10 /* VValueTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F5208E25CA44AE00763D10 /* VValueTests.m */; };
 		50F5FEBE22257B5C007B3832 /* StateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F5FEBD22257B5C007B3832 /* StateTests.m */; };
 		50F82B3721971EB4007B2281 /* ValidationError.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F82B3621971EB4007B2281 /* ValidationError.m */; };
 		50F82B3F219732D1007B2281 /* ConfigValidationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F82B3E219732D1007B2281 /* ConfigValidationHandler.m */; };
-		50F82B4621973E2C007B2281 /* ConfigValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F82B4521973E2C007B2281 /* ConfigValidator.m */; };
+		50F82B4621973E2C007B2281 /* VrConfigValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F82B4521973E2C007B2281 /* VrConfigValidator.m */; };
 		50F82B4921994BCC007B2281 /* VRIException.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F82B4821994BCC007B2281 /* VRIException.m */; };
 		50F82B4B219951EF007B2281 /* TestIrregularVrTrackingConfig.xml in Resources */ = {isa = PBXBuildFile; fileRef = 50F82B4A219951EF007B2281 /* TestIrregularVrTrackingConfig.xml */; };
 		50F82B4E2199F3B2007B2281 /* VrInteractiveTrackingSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F82B4D2199F3B2007B2281 /* VrInteractiveTrackingSpec.m */; };
@@ -284,12 +327,53 @@
 		5071B99024A064C900236B24 /* vrTrackingConfigMulti.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingConfigMulti.xml; sourceTree = "<group>"; };
 		5071B99124A064C900236B24 /* vrTrackingConfigMulti2.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingConfigMulti2.xml; sourceTree = "<group>"; };
 		5071B99224A064C900236B24 /* vrTrackingConfigMulti3.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingConfigMulti3.xml; sourceTree = "<group>"; };
+		507A914825C455750092F432 /* ConfigValidator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigValidator.h; sourceTree = "<group>"; };
+		507A914925C455750092F432 /* ConfigValidator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConfigValidator.m; sourceTree = "<group>"; };
+		507A915125C461AF0092F432 /* VrConfigValidatorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VrConfigValidatorTests.m; sourceTree = "<group>"; };
+		507A915525C4628A0092F432 /* vrTrackingConfig_validateNotTag.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingConfig_validateNotTag.xml; sourceTree = "<group>"; };
+		507A915625C4628A0092F432 /* vrTrackingConfig3.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingConfig3.xml; sourceTree = "<group>"; };
+		507A915725C4628B0092F432 /* vrTrackingConfigSendTestDisabledTrue.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingConfigSendTestDisabledTrue.xml; sourceTree = "<group>"; };
+		507A915825C4628B0092F432 /* vrTrackingConfigFIFA.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingConfigFIFA.xml; sourceTree = "<group>"; };
+		507A915925C4628B0092F432 /* vrTrackingConfigSendTestDisabledFalse.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingConfigSendTestDisabledFalse.xml; sourceTree = "<group>"; };
+		507A915A25C4628B0092F432 /* vrTrackingConfig2.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingConfig2.xml; sourceTree = "<group>"; };
+		507A915B25C4628B0092F432 /* vrTrackingConfig6.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingConfig6.xml; sourceTree = "<group>"; };
+		507A915C25C4628B0092F432 /* vrTrackingConfig_validateNomal.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingConfig_validateNomal.xml; sourceTree = "<group>"; };
+		507A915D25C4628B0092F432 /* vrTrackingConfigGORIN.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingConfigGORIN.xml; sourceTree = "<group>"; };
+		507A915E25C4628B0092F432 /* vrTrackingConfigDEFAULT.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingConfigDEFAULT.xml; sourceTree = "<group>"; };
+		507A915F25C4628B0092F432 /* vrTrackingConfig4.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingConfig4.xml; sourceTree = "<group>"; };
+		507A916025C4628B0092F432 /* vrTrackingConfig_validateNotValue.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingConfig_validateNotValue.xml; sourceTree = "<group>"; };
+		507A916125C4628B0092F432 /* vrTrackingConfigDEFAULT_UPDATE.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingConfigDEFAULT_UPDATE.xml; sourceTree = "<group>"; };
+		507A916225C4628B0092F432 /* vrTrackingConfig5.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingConfig5.xml; sourceTree = "<group>"; };
+		507A916325C4628B0092F432 /* vrTrackingConfig_validateAbnomal.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingConfig_validateAbnomal.xml; sourceTree = "<group>"; };
+		507A916425C4628B0092F432 /* vrTrackingConfig_Abnomal.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingConfig_Abnomal.xml; sourceTree = "<group>"; };
+		507A918325C4751C0092F432 /* VConfigValidatorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VConfigValidatorTests.m; sourceTree = "<group>"; };
+		507A919125C4E2780092F432 /* TagTypeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TagTypeTests.m; sourceTree = "<group>"; };
 		507F0C8D21E77A9300F3B6DD /* URLValidatorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = URLValidatorTests.m; sourceTree = "<group>"; };
 		509915AC214B60A500E2AF83 /* libVrInteractiveDataV5.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libVrInteractiveDataV5.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		509915AF214B60A500E2AF83 /* VrInteractiveTracking.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VrInteractiveTracking.h; sourceTree = "<group>"; };
 		509915B0214B60A500E2AF83 /* VrInteractiveTracking.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VrInteractiveTracking.m; sourceTree = "<group>"; };
 		509915B8214BAA9A00E2AF83 /* VrInteractiveData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VrInteractiveData.h; sourceTree = "<group>"; };
 		509915B9214BAA9A00E2AF83 /* VrInteractiveData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VrInteractiveData.m; sourceTree = "<group>"; };
+		50A8654525C3061600A01461 /* TagType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TagType.h; sourceTree = "<group>"; };
+		50A8654625C3061600A01461 /* TagType.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TagType.m; sourceTree = "<group>"; };
+		50A8654C25C30D7E00A01461 /* vrTrackingVConfig.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingVConfig.xml; sourceTree = "<group>"; };
+		50A8654D25C30D7E00A01461 /* vrTrackingVConfig4.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingVConfig4.xml; sourceTree = "<group>"; };
+		50A8654E25C30D7E00A01461 /* vrTrackingVConfig2.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingVConfig2.xml; sourceTree = "<group>"; };
+		50A8654F25C30D7F00A01461 /* vrTrackingVConfig3.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingVConfig3.xml; sourceTree = "<group>"; };
+		50A8655025C30D7F00A01461 /* vrTrackingVConfig5.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingVConfig5.xml; sourceTree = "<group>"; };
+		50A8655125C30D7F00A01461 /* vrTrackingVConfig6.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingVConfig6.xml; sourceTree = "<group>"; };
+		50A8655C25C30EBA00A01461 /* vrTrackingVConfig_validateNomal.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingVConfig_validateNomal.xml; sourceTree = "<group>"; };
+		50A8655D25C30EBA00A01461 /* vrTrackingVConfigSendTestDisabledTrue.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingVConfigSendTestDisabledTrue.xml; sourceTree = "<group>"; };
+		50A8655E25C30EBA00A01461 /* vrTrackingVConfigDEFAULT_UPDATE.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingVConfigDEFAULT_UPDATE.xml; sourceTree = "<group>"; };
+		50A8655F25C30EBA00A01461 /* vrTrackingVConfigDEFAULT.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingVConfigDEFAULT.xml; sourceTree = "<group>"; };
+		50A8656025C30EBA00A01461 /* vrTrackingVConfigGORIN.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingVConfigGORIN.xml; sourceTree = "<group>"; };
+		50A8656125C30EBA00A01461 /* vrTrackingVConfigSendTestDisabledFalse.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingVConfigSendTestDisabledFalse.xml; sourceTree = "<group>"; };
+		50A8656225C30EBA00A01461 /* vrTrackingVConfigFIFA.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingVConfigFIFA.xml; sourceTree = "<group>"; };
+		50A8656325C30EBA00A01461 /* vrTrackingVConfig_validateNotValue.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingVConfig_validateNotValue.xml; sourceTree = "<group>"; };
+		50A8656425C30EBA00A01461 /* vrTrackingVConfig_validateAbnomal.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingVConfig_validateAbnomal.xml; sourceTree = "<group>"; };
+		50A8656525C30EBA00A01461 /* vrTrackingVConfig_validateNotTag.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = vrTrackingVConfig_validateNotTag.xml; sourceTree = "<group>"; };
+		50A8657A25C3910400A01461 /* VConfigValidator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VConfigValidator.h; sourceTree = "<group>"; };
+		50A8657B25C3910400A01461 /* VConfigValidator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VConfigValidator.m; sourceTree = "<group>"; };
 		50A9424D21AEEAB800E8D31B /* ConfigLoadBlock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigLoadBlock.h; sourceTree = "<group>"; };
 		50A9424E21AEEAB800E8D31B /* ConfigLoadBlock.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConfigLoadBlock.m; sourceTree = "<group>"; };
 		50A9425021AEEC1800E8D31B /* ConfigMediator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigMediator.h; sourceTree = "<group>"; };
@@ -300,6 +384,13 @@
 		50CDCC5A21C68AFA004D7950 /* VrInteractiveTrackingForDisabled.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VrInteractiveTrackingForDisabled.m; sourceTree = "<group>"; };
 		50CDCC6121C7745D004D7950 /* SendAcceptorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SendAcceptorTests.m; sourceTree = "<group>"; };
 		50D444D221C662E000C52281 /* VrInteractiveTrackingTestsForOptOut.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VrInteractiveTrackingTestsForOptOut.m; sourceTree = "<group>"; };
+		50F5206E25C9B53000763D10 /* VQueryParameter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VQueryParameter.h; sourceTree = "<group>"; };
+		50F5206F25C9B53000763D10 /* VQueryParameter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VQueryParameter.m; sourceTree = "<group>"; };
+		50F5207925C9C3BB00763D10 /* VrQueryParameterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VrQueryParameterTests.m; sourceTree = "<group>"; };
+		50F5207D25C9CD5D00763D10 /* VQueryParameterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VQueryParameterTests.m; sourceTree = "<group>"; };
+		50F5208925CA428200763D10 /* VValues.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VValues.h; sourceTree = "<group>"; };
+		50F5208A25CA428200763D10 /* VValues.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VValues.m; sourceTree = "<group>"; };
+		50F5208E25CA44AE00763D10 /* VValueTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VValueTests.m; sourceTree = "<group>"; };
 		50F5FEBD22257B5C007B3832 /* StateTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StateTests.m; sourceTree = "<group>"; };
 		50F82B3521971EB4007B2281 /* ValidationError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ValidationError.h; sourceTree = "<group>"; };
 		50F82B3621971EB4007B2281 /* ValidationError.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ValidationError.m; sourceTree = "<group>"; };
@@ -307,8 +398,8 @@
 		50F82B3D219732D1007B2281 /* ConfigValidationHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigValidationHandler.h; sourceTree = "<group>"; };
 		50F82B3E219732D1007B2281 /* ConfigValidationHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConfigValidationHandler.m; sourceTree = "<group>"; };
 		50F82B402197391C007B2281 /* Validator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Validator.h; sourceTree = "<group>"; };
-		50F82B4421973E2C007B2281 /* ConfigValidator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigValidator.h; sourceTree = "<group>"; };
-		50F82B4521973E2C007B2281 /* ConfigValidator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConfigValidator.m; sourceTree = "<group>"; };
+		50F82B4421973E2C007B2281 /* VrConfigValidator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VrConfigValidator.h; sourceTree = "<group>"; };
+		50F82B4521973E2C007B2281 /* VrConfigValidator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VrConfigValidator.m; sourceTree = "<group>"; };
 		50F82B4721994BCC007B2281 /* VRIException.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VRIException.h; sourceTree = "<group>"; };
 		50F82B4821994BCC007B2281 /* VRIException.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VRIException.m; sourceTree = "<group>"; };
 		50F82B4A219951EF007B2281 /* TestIrregularVrTrackingConfig.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = TestIrregularVrTrackingConfig.xml; sourceTree = "<group>"; };
@@ -372,6 +463,8 @@
 				50F82B3621971EB4007B2281 /* ValidationError.m */,
 				50F82B3C2197317E007B2281 /* ValidationHandler.h */,
 				50F82B402197391C007B2281 /* Validator.h */,
+				50F5208925CA428200763D10 /* VValues.h */,
+				50F5208A25CA428200763D10 /* VValues.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -389,8 +482,6 @@
 				5042FE30216BD123001FFA72 /* ConfigQueParams.m */,
 				50F82B3D219732D1007B2281 /* ConfigValidationHandler.h */,
 				50F82B3E219732D1007B2281 /* ConfigValidationHandler.m */,
-				50F82B4421973E2C007B2281 /* ConfigValidator.h */,
-				50F82B4521973E2C007B2281 /* ConfigValidator.m */,
 				501D4E6E21A6691900E3688E /* ConfigValueAdapter.h */,
 				501D4E6F21A6691900E3688E /* ConfigValueAdapter.m */,
 				501D4E7121A6E41600E3688E /* ConfigSetterValidator.h */,
@@ -399,6 +490,14 @@
 				50A9424E21AEEAB800E8D31B /* ConfigLoadBlock.m */,
 				50A9425021AEEC1800E8D31B /* ConfigMediator.h */,
 				50A9425121AEEC1800E8D31B /* ConfigMediator.m */,
+				50A8654525C3061600A01461 /* TagType.h */,
+				50A8654625C3061600A01461 /* TagType.m */,
+				507A914825C455750092F432 /* ConfigValidator.h */,
+				507A914925C455750092F432 /* ConfigValidator.m */,
+				50F82B4421973E2C007B2281 /* VrConfigValidator.h */,
+				50F82B4521973E2C007B2281 /* VrConfigValidator.m */,
+				50A8657A25C3910400A01461 /* VConfigValidator.h */,
+				50A8657B25C3910400A01461 /* VConfigValidator.m */,
 			);
 			path = Config;
 			sourceTree = "<group>";
@@ -565,6 +664,8 @@
 				501D4E1F21A00EB300E3688E /* TrackingEnableStrategy.m */,
 				5045701F21B92C6D003511D1 /* VrQueryParameter.h */,
 				5045702021B92C6D003511D1 /* VrQueryParameter.m */,
+				50F5206E25C9B53000763D10 /* VQueryParameter.h */,
+				50F5206F25C9B53000763D10 /* VQueryParameter.m */,
 				50175452219C60340026CFCC /* VrOptValidator.h */,
 				50175453219C60340026CFCC /* VrOptValidator.m */,
 				50175455219C61120026CFCC /* VrOptValidatoionHandler.h */,
@@ -600,6 +701,7 @@
 				504B2D3821882A1B00CE0752 /* QuerySpecTest.m */,
 				50175450219C5AAA0026CFCC /* RangeTests.m */,
 				507F0C8D21E77A9300F3B6DD /* URLValidatorTests.m */,
+				50F5208E25CA44AE00763D10 /* VValueTests.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -611,6 +713,9 @@
 				504B2D3D218AA8C700CE0752 /* ConfigFileProviderTests.m */,
 				504B2D42218B4E8600CE0752 /* ConfigFileProviderStub.h */,
 				504B2D43218B4E8600CE0752 /* ConfigFileProviderStub.m */,
+				507A915125C461AF0092F432 /* VrConfigValidatorTests.m */,
+				507A918325C4751C0092F432 /* VConfigValidatorTests.m */,
+				507A919125C4E2780092F432 /* TagTypeTests.m */,
 			);
 			path = Config;
 			sourceTree = "<group>";
@@ -618,6 +723,38 @@
 		504B2D3F218AFA1C00CE0752 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				507A916425C4628B0092F432 /* vrTrackingConfig_Abnomal.xml */,
+				507A916325C4628B0092F432 /* vrTrackingConfig_validateAbnomal.xml */,
+				507A915C25C4628B0092F432 /* vrTrackingConfig_validateNomal.xml */,
+				507A915525C4628A0092F432 /* vrTrackingConfig_validateNotTag.xml */,
+				507A916025C4628B0092F432 /* vrTrackingConfig_validateNotValue.xml */,
+				507A915A25C4628B0092F432 /* vrTrackingConfig2.xml */,
+				507A915625C4628A0092F432 /* vrTrackingConfig3.xml */,
+				507A915F25C4628B0092F432 /* vrTrackingConfig4.xml */,
+				507A916225C4628B0092F432 /* vrTrackingConfig5.xml */,
+				507A915B25C4628B0092F432 /* vrTrackingConfig6.xml */,
+				507A916125C4628B0092F432 /* vrTrackingConfigDEFAULT_UPDATE.xml */,
+				507A915E25C4628B0092F432 /* vrTrackingConfigDEFAULT.xml */,
+				507A915825C4628B0092F432 /* vrTrackingConfigFIFA.xml */,
+				507A915D25C4628B0092F432 /* vrTrackingConfigGORIN.xml */,
+				507A915925C4628B0092F432 /* vrTrackingConfigSendTestDisabledFalse.xml */,
+				507A915725C4628B0092F432 /* vrTrackingConfigSendTestDisabledTrue.xml */,
+				50A8656425C30EBA00A01461 /* vrTrackingVConfig_validateAbnomal.xml */,
+				50A8655C25C30EBA00A01461 /* vrTrackingVConfig_validateNomal.xml */,
+				50A8656525C30EBA00A01461 /* vrTrackingVConfig_validateNotTag.xml */,
+				50A8656325C30EBA00A01461 /* vrTrackingVConfig_validateNotValue.xml */,
+				50A8655E25C30EBA00A01461 /* vrTrackingVConfigDEFAULT_UPDATE.xml */,
+				50A8655F25C30EBA00A01461 /* vrTrackingVConfigDEFAULT.xml */,
+				50A8656225C30EBA00A01461 /* vrTrackingVConfigFIFA.xml */,
+				50A8656025C30EBA00A01461 /* vrTrackingVConfigGORIN.xml */,
+				50A8656125C30EBA00A01461 /* vrTrackingVConfigSendTestDisabledFalse.xml */,
+				50A8655D25C30EBA00A01461 /* vrTrackingVConfigSendTestDisabledTrue.xml */,
+				50A8654C25C30D7E00A01461 /* vrTrackingVConfig.xml */,
+				50A8654E25C30D7E00A01461 /* vrTrackingVConfig2.xml */,
+				50A8654F25C30D7F00A01461 /* vrTrackingVConfig3.xml */,
+				50A8654D25C30D7E00A01461 /* vrTrackingVConfig4.xml */,
+				50A8655025C30D7F00A01461 /* vrTrackingVConfig5.xml */,
+				50A8655125C30D7F00A01461 /* vrTrackingVConfig6.xml */,
 				5071B99024A064C900236B24 /* vrTrackingConfigMulti.xml */,
 				5071B99124A064C900236B24 /* vrTrackingConfigMulti2.xml */,
 				5071B99224A064C900236B24 /* vrTrackingConfigMulti3.xml */,
@@ -689,6 +826,8 @@
 			children = (
 				50CDCC6121C7745D004D7950 /* SendAcceptorTests.m */,
 				50F5FEBD22257B5C007B3832 /* StateTests.m */,
+				50F5207925C9C3BB00763D10 /* VrQueryParameterTests.m */,
+				50F5207D25C9CD5D00763D10 /* VQueryParameterTests.m */,
 			);
 			path = Logic;
 			sourceTree = "<group>";
@@ -773,18 +912,50 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				50A8656825C30EBA00A01461 /* vrTrackingVConfigDEFAULT_UPDATE.xml in Resources */,
+				507A917425C4628B0092F432 /* vrTrackingConfig_Abnomal.xml in Resources */,
 				504B2D46218B50C500CE0752 /* vrTrackingConfig.xml in Resources */,
+				50A8656F25C30EBA00A01461 /* vrTrackingVConfig_validateNotTag.xml in Resources */,
+				50A8656E25C30EBA00A01461 /* vrTrackingVConfig_validateAbnomal.xml in Resources */,
+				507A916D25C4628B0092F432 /* vrTrackingConfigGORIN.xml in Resources */,
+				50A8656D25C30EBA00A01461 /* vrTrackingVConfig_validateNotValue.xml in Resources */,
+				50A8656625C30EBA00A01461 /* vrTrackingVConfig_validateNomal.xml in Resources */,
 				501D4E7B21A7B9CC00E3688E /* TestIrregularOverflowVrTrackingConfig.xml in Resources */,
+				507A916C25C4628B0092F432 /* vrTrackingConfig_validateNomal.xml in Resources */,
 				5071B99324A064D000236B24 /* vrTrackingConfigMulti.xml in Resources */,
 				5071B99424A064D000236B24 /* vrTrackingConfigMulti2.xml in Resources */,
+				50A8656925C30EBA00A01461 /* vrTrackingVConfigDEFAULT.xml in Resources */,
+				507A916925C4628B0092F432 /* vrTrackingConfigSendTestDisabledFalse.xml in Resources */,
+				507A916B25C4628B0092F432 /* vrTrackingConfig6.xml in Resources */,
+				507A917025C4628B0092F432 /* vrTrackingConfig_validateNotValue.xml in Resources */,
+				50A8656A25C30EBA00A01461 /* vrTrackingVConfigGORIN.xml in Resources */,
+				507A916525C4628B0092F432 /* vrTrackingConfig_validateNotTag.xml in Resources */,
+				507A917125C4628B0092F432 /* vrTrackingConfigDEFAULT_UPDATE.xml in Resources */,
+				50A8656725C30EBA00A01461 /* vrTrackingVConfigSendTestDisabledTrue.xml in Resources */,
+				507A917325C4628B0092F432 /* vrTrackingConfig_validateAbnomal.xml in Resources */,
+				507A916F25C4628B0092F432 /* vrTrackingConfig4.xml in Resources */,
 				504B2D41218AFA5400CE0752 /* TestVrTrackingConfig.xml in Resources */,
+				50A8655625C30D7F00A01461 /* vrTrackingVConfig5.xml in Resources */,
+				507A916A25C4628B0092F432 /* vrTrackingConfig2.xml in Resources */,
 				5071B98E24A05EA900236B24 /* SeriesVrTrackingConfig3.xml in Resources */,
 				50F82B4B219951EF007B2281 /* TestIrregularVrTrackingConfig.xml in Resources */,
 				501D4E7721A7B7EB00E3688E /* TestIrregularUpperBoolVrTrackingConfig.xml in Resources */,
+				50A8656B25C30EBA00A01461 /* vrTrackingVConfigSendTestDisabledFalse.xml in Resources */,
 				5071B98F24A05EA900236B24 /* SeriesVrTrackingConfig2.xml in Resources */,
+				50A8655325C30D7F00A01461 /* vrTrackingVConfig4.xml in Resources */,
+				507A917225C4628B0092F432 /* vrTrackingConfig5.xml in Resources */,
+				507A916625C4628B0092F432 /* vrTrackingConfig3.xml in Resources */,
+				50A8656C25C30EBA00A01461 /* vrTrackingVConfigFIFA.xml in Resources */,
+				50A8655225C30D7F00A01461 /* vrTrackingVConfig.xml in Resources */,
 				5071B99524A064D000236B24 /* vrTrackingConfigMulti3.xml in Resources */,
+				50A8655525C30D7F00A01461 /* vrTrackingVConfig3.xml in Resources */,
+				507A916725C4628B0092F432 /* vrTrackingConfigSendTestDisabledTrue.xml in Resources */,
+				50A8655725C30D7F00A01461 /* vrTrackingVConfig6.xml in Resources */,
 				5071B985249763D200236B24 /* SeriesVrTrackingConfig.xml in Resources */,
 				501D4E7821A7B7EB00E3688E /* TestIrregularWrongURLVrTrackingConfig.xml in Resources */,
+				50A8655425C30D7F00A01461 /* vrTrackingVConfig2.xml in Resources */,
+				507A916825C4628B0092F432 /* vrTrackingConfigFIFA.xml in Resources */,
+				507A916E25C4628B0092F432 /* vrTrackingConfigDEFAULT.xml in Resources */,
 				501D4E7921A7B7EB00E3688E /* TestIrregularUnderZeroVrTrackingConfig.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -803,10 +974,12 @@
 				50160993217F16C50069A347 /* OptTests.m in Sources */,
 				504B2D3C2189A16500CE0752 /* ConfigFileTests.m in Sources */,
 				50163495218D892000229B04 /* SendTypeTests.m in Sources */,
+				507A915225C461AF0092F432 /* VrConfigValidatorTests.m in Sources */,
 				5016099F217F29BF0069A347 /* SendNullRepositoryTests.m in Sources */,
 				504B2D35218815FC00CE0752 /* QueryParameterTest.m in Sources */,
 				501634A221901C5500229B04 /* XMLParserTests.m in Sources */,
 				501609A1217F30110069A347 /* SendHttpRepositoryTests.m in Sources */,
+				507A919225C4E2780092F432 /* TagTypeTests.m in Sources */,
 				50175451219C5AAA0026CFCC /* RangeTests.m in Sources */,
 				504B2D3E218AA8C700CE0752 /* ConfigFileProviderTests.m in Sources */,
 				50160989217EB8380069A347 /* UUIDTests.m in Sources */,
@@ -815,16 +988,20 @@
 				5016348C218CB1C000229B04 /* UUID+refresh.m in Sources */,
 				5016349A218D96D900229B04 /* BeaconPublisherTests.m in Sources */,
 				501634A4219028D100229B04 /* XMLPullTests.m in Sources */,
+				50F5208F25CA44AE00763D10 /* VValueTests.m in Sources */,
 				50CDCC6221C7745D004D7950 /* SendAcceptorTests.m in Sources */,
 				50160996217F1D120069A347 /* OldTableRepositoryImpTests.m in Sources */,
 				50160998217F245D0069A347 /* TextTests.m in Sources */,
 				504B2D3921882A1B00CE0752 /* QuerySpecTest.m in Sources */,
 				501D4E8721A9C5DC00E3688E /* VrInteractiveTrackingStub.m in Sources */,
+				50F5207A25C9C3BB00763D10 /* VrQueryParameterTests.m in Sources */,
 				504B2D372188193500CE0752 /* QueryParametersTest.m in Sources */,
 				501D4E7E21A86E4F00E3688E /* VrInteractiveTrackingTests.m in Sources */,
 				507F0C8E21E77A9300F3B6DD /* URLValidatorTests.m in Sources */,
 				501F7CBE241E6ED000A9E618 /* VrInteractiveTrackingSessionIDTest.m in Sources */,
 				5016097E21795E450069A347 /* EventIdentityTests.m in Sources */,
+				507A918425C4751C0092F432 /* VConfigValidatorTests.m in Sources */,
+				50F5207E25C9CD5D00763D10 /* VQueryParameterTests.m in Sources */,
 				50F5FEBE22257B5C007B3832 /* StateTests.m in Sources */,
 				501F7CBC241E162200A9E618 /* SessionIDTests.m in Sources */,
 				5016099C217F26CF0069A347 /* ResponseTests.m in Sources */,
@@ -849,6 +1026,7 @@
 				50F82B58219A08C3007B2281 /* SendAcceptor.m in Sources */,
 				5042FE0921658AC0001FFA72 /* BeaconEvent.m in Sources */,
 				5042FE19216AF1AA001FFA72 /* SendHttpRepository.m in Sources */,
+				50F5208B25CA428200763D10 /* VValues.m in Sources */,
 				501D4E2321A0223000E3688E /* Internet.m in Sources */,
 				5042FD8D2159E4FB001FFA72 /* ConfigFileProvider.m in Sources */,
 				501D4E7321A6E41600E3688E /* ConfigSetterValidator.m in Sources */,
@@ -863,12 +1041,16 @@
 				5042FD642154D9B4001FFA72 /* OldTableRepositoryImpl.m in Sources */,
 				501D4E8121A9289700E3688E /* URLValidator.m in Sources */,
 				5042FDDD2161EE64001FFA72 /* XMLPull.m in Sources */,
+				50A8657C25C3910400A01461 /* VConfigValidator.m in Sources */,
+				507A914A25C455750092F432 /* ConfigValidator.m in Sources */,
 				5042FDDA215FDB02001FFA72 /* XMLParser.m in Sources */,
 				5042FDFF21650701001FFA72 /* Response.m in Sources */,
+				50F5207025C9B53000763D10 /* VQueryParameter.m in Sources */,
 				5042FE1F216B0798001FFA72 /* BeaconStrategy.m in Sources */,
 				5042FE34216F0079001FFA72 /* OptValues.m in Sources */,
 				501D4E1721A0069700E3688E /* TrackingFactory.m in Sources */,
-				50F82B4621973E2C007B2281 /* ConfigValidator.m in Sources */,
+				50A8654725C3061600A01461 /* TagType.m in Sources */,
+				50F82B4621973E2C007B2281 /* VrConfigValidator.m in Sources */,
 				501F7CB7241E04E700A9E618 /* SessionID.m in Sources */,
 				5042FDF0216450AE001FFA72 /* QuerySpec.m in Sources */,
 				5042FDE32162745B001FFA72 /* QueryParameters.m in Sources */,

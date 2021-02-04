@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "ConfigProvider.h"
 #import "ConfigFile.h"
+#import "TagType.h"
 
 
 typedef void (^ConfigStatusCallback) (BOOL isRunning, NSString *identity);
@@ -43,7 +44,7 @@ typedef void (^ConfigStatusCallback) (BOOL isRunning, NSString *identity);
 
  @return ConfigFile
  */
-- (ConfigFile*) loadConfig;
+- (id <Config>) loadConfig;
 
 /**
  設定ファイルの読み込み
@@ -51,7 +52,7 @@ typedef void (^ConfigStatusCallback) (BOOL isRunning, NSString *identity);
  @param identity Identity
  @return ConfigFile
  */
-- (ConfigFile*) loadConfig:(NSString*) identity;
+- (id <Config>) loadConfig:(NSString*) identity;
 
 /**
  設定ファイルの上書き

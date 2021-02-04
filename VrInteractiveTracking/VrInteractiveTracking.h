@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import "OptValues.h"
+#import "VValues.h"
 
 typedef void (^FinishInitBlock) (BOOL result);
 typedef void (^FinishReloadBlock) (BOOL result);
@@ -174,6 +175,28 @@ typedef void (^FinishLoadBlock) (BOOL result);
  */
 - (NSString *)optValueByString:(NSString *)optValue;
 
+/**
+ Vタグ拡張フィールド初期化
+ 
+ @param appName アプリ名
+ */
+- (void)clearAllVValue:(NSString *)appName;
+
+/**
+ Vタグ拡張フィールド一括設定
+ 
+ @param vValues 拡張フィールド用のビルダー
+ */
+- (void)setVValue:(void (^)(VValues *))vValues;
+
+/**
+ Vタグ拡張フィールド取得
+ 
+ @param fieldName 拡張フィールド名
+ @return 拡張フィールドの値
+ */
+- (NSString *)getVValue:(NSString *)fieldName;
+
 
 #pragma mark - SendBeacon
 
@@ -253,45 +276,6 @@ typedef void (^FinishLoadBlock) (BOOL result);
  */
 - (void)sendBeaconWithEventName:(NSString *)eventName monitorId:(NSString *)monitorId url:(NSString *)url identity:(NSString *)identity finishBlock:(FinishSendBeaconBlock)finishBlock;
 
-/**
- ビーコンを送信する（フルURL）
- 
- @param directUrl 送信する最終URL
- */
-- (void)sendBeaconDirect:(NSString *)directUrl;
-
-/**
- ビーコンを送信する（フルURL）（コールバック有）
- 
- @param directUrl 送信する最終URL
- @param finishBlock コールバック
- */
-- (void)sendBeaconDirect:(NSString *)directUrl finishBlock:(FinishSendBeaconBlock)finishBlock;
-
-/**
- ビーコンを送信する（フルURL）（identity有）
-
- @param directUrl 送信する最終URL
- @param identity Identity
- */
-- (void)sendBeaconDirect:(NSString *)directUrl identity:(NSString *)identity;
-
-/**
- ビーコンを送信する（フルURL）（identity有）（コールバック有）
-
- @param directUrl 送信する最終URL
- @param identity Identity
- @param finishBlock コールバック
- */
-- (void)sendBeaconDirect:(NSString *)directUrl identity:(NSString *)identity finishBlock:(FinishSendBeaconBlock)finishBlock;
-
-/**
- 強制的に適用するビーコンのパラメータを設定
-
- @param forceValue 次回実行するsendBeaconの値を上書きするパラメーター群
- */
-- (void)setForceBeaconURLStringOnce:(NSDictionary*) forceValue;
-
 
 #pragma mark - Opt
 
@@ -353,10 +337,16 @@ typedef void (^FinishLoadBlock) (BOOL result);
 - (BOOL)isCheckedLoadConfigRunning:(NSString *)identity;
 
 /**
- 設定ファイル取得（デフォルト）
+ VRタグ用の設定ファイル取得（デフォルト）
  @return 設定ファイル
  */
 - (NSDictionary *)configParams;
+
+/**
+ Vタグ用の設定ファイル取得（デフォルト）
+ @return 設定ファイル
+ */
+- (NSDictionary *)getVConfigParams;
 
 /**
  設定ファイル取得（identity指定）
@@ -366,10 +356,16 @@ typedef void (^FinishLoadBlock) (BOOL result);
 - (NSDictionary *)configParams:(NSString *)identity;
 
 /**
- 設定ファイル設定（デフォルト）
+ VRタグ用の設定ファイル設定（デフォルト）
  @param config config
  */
 - (void)setConfig:(NSDictionary *)config;
+
+/**
+ Vタグ用の設定ファイル設定（デフォルト）
+ @param config config
+ */
+- (void)setVConfig:(NSDictionary *)config;
 
 /**
  設定ファイル設定（ファイルパス指定）

@@ -15,6 +15,7 @@
 #import "OptValues.h"
 #import "VrInteractiveTrackingSpec.h"
 #import "VrInteractiveBeaconSpec.h"
+#import "VValues.h"
 
 typedef void (^FinishSetOptoutBlock) (BOOL result);
 typedef void (^FinishSetOptinBlock) (BOOL result);
@@ -97,6 +98,28 @@ typedef void (^FinishLoadBlock) (BOOL result);
  */
 - (NSString *)optValueByString:(NSString *)optValue;
 
+/**
+ Vタグ拡張フィールド初期化
+ */
+- (void)clearAllVValue;
+
+/**
+ Vタグ拡張フィールド一括設定
+ 
+ @param vValues 拡張フィールド用のビルダー
+ */
+- (void)setVValue:(void (^)(VValues *))vValues;
+
+/**
+ Vタグ拡張フィールド取得
+ 
+ @param fieldName 拡張フィールド名
+ @return 拡張フィールドの値
+ */
+- (NSString *)getVValue:(NSString *)fieldName;
+
+
+
 
 #pragma mark - SendBeacon
 
@@ -106,20 +129,6 @@ typedef void (^FinishLoadBlock) (BOOL result);
  @param beaconSpec BeaconSpec
  */
 - (void)sendBeaconWithEventName:(VrInteractiveBeaconSpec *)beaconSpec;
-
-/**
- ビーコンを送信する（フルURL）
- 
- @param directUrl 送信する最終URL
- */
-- (void)sendBeaconDirect:(NSString *)directUrl identity:(NSString *)identity finishBlock:(FinishSendBeaconBlock)finishBlock;
-
-/**
- 強制的に適用するビーコンのパラメータを設定
- 
- @param forceValue 次回実行するsendBeaconの値を上書きするパラメーター群
- */
-- (void)setForceBeaconURLStringOnce:(NSDictionary*) forceValue;
 
 
 #pragma mark - Opt

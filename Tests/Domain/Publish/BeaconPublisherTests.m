@@ -32,7 +32,7 @@
 //@property (nonatomic) SendType *sendType;
 
 - (URI *)normalURI {
-    return [[URI alloc] initWithQuerySpec:nil spec:[self emptyQuerySpec] configFile:[self normalConfig] forceValue:[self emptyForceValue] finishBlock:nil];
+    return [[URI alloc] initWithQuerySpec:nil spec:[self emptyQuerySpec] configFile:[self normalConfig] finishBlock:nil];
 }
 
 - (QuerySpec *)emptyQuerySpec {

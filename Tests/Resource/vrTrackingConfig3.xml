@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+    <vr_tagid1></vr_tagid1>
+    <vr_tagid2>test</vr_tagid2>
+    <config_url></config_url>
+    <disabled>false</disabled>
+    <config_timeout>5</config_timeout>
+    <beacon_timeout>5</beacon_timeout>
+    <beacon_url default="https://panelstg.interactive-circle.jp/ver01/measure"></beacon_url>
+</config>

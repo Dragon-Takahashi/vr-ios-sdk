@@ -38,7 +38,7 @@
     
     [self defaultConfig];
     
-    [self testConfig];
+    [self testConfig:@"TestVrTrackingConfig"];
     
 }
 
@@ -75,10 +75,9 @@
     }
 }
 
-+ (void)testConfig {
++ (void)testConfig:(NSString *)fileName {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *filePathComponent = @"Remote";
-    NSString *fileName = @"TestVrTrackingConfig";
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentationDirectory, NSUserDomainMask, YES);
     NSString *documentsDirPath = [paths objectAtIndex:0];
     

@@ -57,6 +57,7 @@
 #import "ConfigSetterValidator.h"
 #import "ConfigLoadBlock.h"
 #import "ConfigMediator.h"
+#import "TagType.h"
 
 /// Model
 #import "OptValues.h"

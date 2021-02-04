@@ -9,12 +9,28 @@
 #import <Foundation/Foundation.h>
 
 #import "TrackingStrategy.h"
-#import "VrInteractiveTrackingSpec.h"
+#import "../VrInteractiveTrackingSpec.h"
 #import "OptValues.h"
 #import "SessionID.h"
 
+#import "SendAcceptor.h"
+#import "VrQueryParameter.h"
+#import "VQueryParameter.h"
+#import "../HouseKeeper/HouseKeeper.h"
+#import "../Domain/Counter.h"
+#import "../Domain/UUID.h"
+#import "../Domain/Opt.h"
+#import "../Domain/Config/ConfigFileProvider.h"
+#import "../Domain/Config/ConfigMediator.h"
+#import "../Domain/Model/QuerySpec.h"
+#import "../Logic/VrOptValidator.h"
+#import "../Domain/Publish/BeaconProvider.h"
+#import "../Domain/ReplaceConfig.h"
+
 extern NSString *const VR_LIB_DEFAULT_LOCAL_FILE_IDENTITY;
+extern NSString *const VR_LIB_DEFAULT_LOCAL_V_FILE_IDENTITY;
 extern NSString *const VR_LIB_DEFAULT_FILE_NAME;
+extern NSString *const VR_LIB_DEFAULT_V_FILE_NAME;
 
 typedef void (^FinishSendBeaconBlock) (BOOL result);
 typedef void (^FinishSetOptoutBlock) (BOOL result);
@@ -93,6 +109,26 @@ typedef void (^FinishLoadBlock) (BOOL result);
  */
 - (NSString *)optValueByString:(NSString *)optValue;
 
+/**
+ Vタグ拡張フィールド初期化
+ */
+- (void)clearAllVValue;
+
+/**
+ Vタグ拡張フィールド一括設定
+ 
+ @param vValues 拡張フィールド用のビルダー
+ */
+- (void)setVValue:(void (^)(VValues *))vValues;
+
+/**
+ Vタグ拡張フィールド取得
+ 
+ @param fieldName 拡張フィールド名
+ @return 拡張フィールドの値
+ */
+- (NSString *)getVValue:(NSString *)fieldName;
+
 
 #pragma mark - SendBeacon
 
@@ -102,20 +138,6 @@ typedef void (^FinishLoadBlock) (BOOL result);
  @param beaconSpec BeaconSpec
  */
 - (void)sendBeaconWithEventName:(VrInteractiveBeaconSpec *)beaconSpec;
-
-/**
- ビーコンを送信する（フルURL）
- 
- @param directUrl 送信する最終URL
- */
-- (void)sendBeaconDirect:(NSString *)directUrl identity:(NSString *)identity finishBlock:(FinishSendBeaconBlock)finishBlock;
-
-/**
- 強制的に適用するビーコンのパラメータを設定
- 
- @param forceValue 次回実行するsendBeaconの値を上書きするパラメーター群
- */
-- (void)setForceBeaconURLStringOnce:(NSDictionary*) forceValue;
 
 
 #pragma mark - Opt

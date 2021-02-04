@@ -7,8 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ConfigFile.h"
-//#import "../Domain/Config/ConfigFile.h"
+#import "../Domain/Config/ConfigFile.h"
+#import "../Domain/Config/TagType.h"
 
 //typedef void (^XmlParseCallback) (NSMutableDictionary *result, NSString *identity, NSString *filePath, NSString *date, BOOL isRemoteFile);
 typedef void (^XmlParseCallback) (NSMutableArray *configFileArray, BOOL isRemoteFile);

@@ -62,6 +62,105 @@
 }
 
 /**
+ 目的：初期化が正常に行われることを確認する
+ */
+- (void)testInitVRNormal {
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    
+    [dic setObject:@"identity" forKey:@"identity"];
+    [dic setObject:@"vr" forKey:@"tag_type"];
+    [dic setObject:@"tagid1" forKey:@"vr_tagid1"];
+    [dic setObject:@"tagid2" forKey:@"vr_tagid2"];
+    [dic setObject:@"1111" forKey:@"max_que_recs"];
+    [dic setObject:@"http://config-url" forKey:@"config_url"];
+    [dic setObject:@"true" forKey:@"debug_log"];
+    [dic setObject:@"true" forKey:@"disabled"];
+    [dic setObject:@"false" forKey:@"polling"];
+    [dic setObject:@"false" forKey:@"polling_start"];
+    [dic setObject:@"2222" forKey:@"polling_interval"];
+    [dic setObject:@"3333" forKey:@"config_timeout"];
+    [dic setObject:@"4444" forKey:@"beacon_timeout"];
+    [dic setObject:@"2147483646" forKey:@"expired_time_beacon_log"];
+    NSMutableDictionary *beaconDic = [NSMutableDictionary dictionary];
+    [beaconDic setObject:@"https://beacon-url" forKey:@"default"];
+    [dic setObject:beaconDic forKey:@"beacon_url"];
+    ConfigFile *config = [[ConfigFile alloc] initWithParams:dic];
+    
+    // 前提：想定している正常な設定ファイルを読み込む
+    // 想定：設定値が全て正確に入っているかをを確認
+    XCTAssertTrue([config.getIdentity isEqualToString:@"identity"]);
+    XCTAssertTrue([config.getTagType isEqualToString:@"vr"]);
+    XCTAssertTrue([config.getVr_TagId1 isEqualToString:@"tagid1"]);
+    XCTAssertTrue([config.getVr_TagId2 isEqualToString:@"tagid2"]);
+    XCTAssertTrue([config.getConfig_Url isEqualToString:@"http://config-url"]);
+    XCTAssertTrue(config.getDisabled == true);
+    XCTAssertTrue([config.getConfig_timeout isEqualToString:@"3333"]);
+    XCTAssertTrue([config.getBeacon_timeout isEqualToString:@"4444"]);
+    XCTAssertTrue([config.getBeacon_url isEqualToString:@"https://beacon-url"]);
+}
+
+
+/**
+ 目的：初期化が正常に行われることを確認する
+ */
+- (void)testInitVConfigNormal {
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    [dic setObject:@"identity" forKey:@"identity"];
+    [dic setObject:@"v" forKey:@"tag_type"];
+    [dic setObject:@"accountId" forKey:@"a"];
+    [dic setObject:@"dcos" forKey:@"dcos"];
+    [dic setObject:@"http://config-url" forKey:@"config_url"];
+    [dic setObject:@"true" forKey:@"disabled"];
+    [dic setObject:@"3333" forKey:@"config_timeout"];
+    [dic setObject:@"4444" forKey:@"beacon_timeout"];
+    NSMutableDictionary *beaconDic = [NSMutableDictionary dictionary];
+    [beaconDic setObject:@"https://beacon-url" forKey:@"default"];
+    [dic setObject:beaconDic forKey:@"beacon_url"];
+    ConfigFile *config = [[ConfigFile alloc] initWithParams:dic];
+    
+    // 前提：想定している正常な設定ファイルを読み込む
+    // 想定：設定値が全て正確に入っているかをを確認
+    XCTAssertTrue([config.getIdentity isEqualToString:@"identity"]);
+    XCTAssertTrue([config.getTagType isEqualToString:@"v"]);
+    XCTAssertTrue([config.getA isEqualToString:@"accountId"]);
+    XCTAssertTrue([config.getDcos isEqualToString:@"dcos"]);
+    XCTAssertTrue([config.getConfig_Url isEqualToString:@"http://config-url"]);
+    XCTAssertTrue(config.getDisabled == true);
+    XCTAssertTrue([config.getConfig_timeout isEqualToString:@"3333"]);
+    XCTAssertTrue([config.getBeacon_timeout isEqualToString:@"4444"]);
+    XCTAssertTrue([config.getBeacon_url isEqualToString:@"https://beacon-url"]);
+}
+
+/**
+ 目的：TagTypeがない場合でもVR用のConfigFileが生成されるか初期化が正常に行われることを確認する
+ */
+- (void)testInitVRNotSetTagType {
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    
+    [dic setObject:@"identity" forKey:@"identity"];
+    [dic setObject:@"tagid1" forKey:@"vr_tagid1"];
+    [dic setObject:@"tagid2" forKey:@"vr_tagid2"];
+    [dic setObject:@"http://config-url" forKey:@"config_url"];
+    [dic setObject:@"true" forKey:@"debug_log"];
+    [dic setObject:@"true" forKey:@"disabled"];
+    [dic setObject:@"false" forKey:@"polling"];
+    [dic setObject:@"false" forKey:@"polling_start"];
+    [dic setObject:@"2222" forKey:@"polling_interval"];
+    [dic setObject:@"3333" forKey:@"config_timeout"];
+    [dic setObject:@"4444" forKey:@"beacon_timeout"];
+    [dic setObject:@"2147483646" forKey:@"expired_time_beacon_log"];
+    NSMutableDictionary *beaconDic = [NSMutableDictionary dictionary];
+    [beaconDic setObject:@"https://beacon-url" forKey:@"default"];
+    [dic setObject:beaconDic forKey:@"beacon_url"];
+    ConfigFile *config = [[ConfigFile alloc] initWithParams:dic];
+    
+    // 前提：想定している正常な設定ファイルを読み込む
+    // 想定：設定値が全て正確に入っているかをを確認
+    XCTAssertTrue([config.getTagType isEqualToString:@"vr"]);
+}
+
+
+/**
  目的：初期化時にnilが入っていた場合でも初期化が行われることを確認する
  */
 - (void)testInitIrregularNull {
@@ -73,6 +172,10 @@
     //      DebugLog = false
     //      Disabled = true
     //      それ以外　= null
+    XCTAssertNil(config.getIdentity);
+    XCTAssertNil(config.getTagType);
+    XCTAssertNil(config.getA);
+    XCTAssertNil(config.getDcos);
     XCTAssertNil(config.getVr_TagId1);
     XCTAssertNil(config.getVr_TagId2);
     XCTAssertNil(config.getConfig_Url);
@@ -93,6 +196,10 @@
     //      DebugLog = false
     //      Disabled = true
     //      それ以外　= null
+    XCTAssertNil(config.getIdentity);
+    XCTAssertNil(config.getTagType);
+    XCTAssertNil(config.getA);
+    XCTAssertNil(config.getDcos);
     XCTAssertNil(config.getVr_TagId1);
     XCTAssertNil(config.getVr_TagId2);
     XCTAssertNil(config.getConfig_Url);

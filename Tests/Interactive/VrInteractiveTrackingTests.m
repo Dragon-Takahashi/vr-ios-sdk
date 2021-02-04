@@ -610,6 +610,77 @@
 }
 
 
+/**
+ 目的：デフォルトの設定ファイルを正しく読み込んだことを確認する（VとVR）
+ */
+- (void)testInitWithTrackerDefaultConfigCheck {
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testInitWithTrackerDefaultConfigCheck"];
+    VrInteractiveData *data = [VrInteractiveData sharedInstance];
+    __block VrInteractiveTracking *tracking;
+    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
+        
+        if (result) {
+            // 前提：デフォルト設定ファイルを読み込んでいる
+            // 想定：エラーがスローされずに読み込めるかを確認
+            XCTAssertNotNil([tracking configParams:@"default"]);
+            XCTAssertNotNil([tracking configParams:@"default-v"]);
+
+            /* リモート設定ファイルの値
+             <vr_tagid1>9999</vr_tagid1>
+             <vr_tagid2>9997</vr_tagid2>
+             <config_url/>
+             <disabled>false</disabled>
+             <config_timeout>5</config_timeout>
+             <beacon_timeout>5</beacon_timeout>
+             <beacon_url default="https://panelstg.interactive-circle.jp/sdk-test01/measure">445</beacon_url>
+             */
+            NSDictionary *vr = [tracking configParams:@"default"];
+            NSLog(@"%@", [vr debugDescription]);
+            
+            NSLog(@"%@",[vr valueForKey:@"vr_tagid1"]);
+            XCTAssertTrue([@"vr" isEqual:[vr valueForKey:@"tag_type"]]);
+            XCTAssertTrue([@"9999" isEqual:[vr valueForKey:@"vr_tagid1"] ]);
+            XCTAssertTrue([@"9997" isEqual:[vr valueForKey:@"vr_tagid2"] ]);
+            XCTAssertNil([vr valueForKey:@"config_url"]);
+            XCTAssertTrue([@"false" isEqual:[vr valueForKey:@"disabled"] ]);
+            XCTAssertTrue([@"5" isEqual:[vr valueForKey:@"config_timeout"] ]);
+            XCTAssertTrue([@"5" isEqual:[vr valueForKey:@"beacon_timeout"] ]);
+            XCTAssertTrue([@"https://panelstg.interactive-circle.jp/sdk-test01/measure" isEqual:[vr objectForKey:@"beacon_url"] ]);
+            
+            
+            /* リモート設定ファイルの値
+             <tag_type>v</tag_type>
+             <a>10192881</a>
+             <dcos>androidtv</dcos>
+             <config_url/>
+             <disabled>false</disabled>
+             <config_timeout>5</config_timeout>
+             <beacon_timeout>5</beacon_timeout>
+             <beacon_url default="https://panelstg.interactive-circle.jp/sdk-test01/measure">445</beacon_url>
+             */
+            NSDictionary *v = [tracking configParams:@"default-v"];
+            NSLog(@"%@", [v debugDescription]);
+            XCTAssertTrue([@"v" isEqual:[v valueForKey:@"tag_type"] ]);
+            XCTAssertTrue([@"10192881" isEqual:[v valueForKey:@"a"] ]);
+            XCTAssertTrue([@"androidtv" isEqual:[v valueForKey:@"dcos"] ]);
+            XCTAssertNil([v valueForKey:@"config_url"]);
+            XCTAssertTrue([@"false" isEqual:[v valueForKey:@"disabled"] ]);
+            XCTAssertTrue([@"5" isEqual:[v valueForKey:@"config_timeout"] ]);
+            XCTAssertTrue([@"5" isEqual:[v valueForKey:@"beacon_timeout"] ]);
+            XCTAssertTrue([@"https://panelstg.interactive-circle.jp/sdk-test01/measure" isEqual:[v objectForKey:@"beacon_url"] ]);
+            
+            [expectation fulfill];
+        }
+        
+    } withOptFlg:YES withOutsideConfigURL:nil];
+    
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error, @"has error.");
+    }];
+    
+    
+}
+
 
  #pragma mark - UUID
 
@@ -1504,6 +1575,623 @@
 }
 
 
+#pragma mark (void)clearAllVValue;
+
+/**
+ 目的：設定した拡張フィールドがクリアされるか確認する
+ */
+- (void)testClearAllVValueNormal {
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testClearAllVValueNormal"];
+    VrInteractiveData *data = [VrInteractiveData sharedInstance];
+    __block VrInteractiveTracking *tracking;
+    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
+        
+        if (result) {
+            
+            [tracking setVValue:^(VValues *builder) {
+                builder.c = @"c";
+            }];
+            
+            [tracking clearAllVValue:@"test"];
+            
+            // 前提：拡張フィールドを設定している
+            // 想定：拡張フィールドが全てnilになっている
+            XCTAssertNil([tracking getVValue:@"c"]);
+            
+            [expectation fulfill];
+        }
+        
+    } withOptFlg:YES withOutsideConfigURL:nil];
+    
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error, @"has error.");
+    }];
+}
+/**
+ 目的：設定した拡張フィールドがクリアされるか確認する（空文字）
+ */
+- (void)testClearAllVValueEmpty {
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testClearAllVValueEmpty"];
+    VrInteractiveData *data = [VrInteractiveData sharedInstance];
+    __block VrInteractiveTracking *tracking;
+    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
+        
+        if (result) {
+            
+            [tracking setVValue:^(VValues *builder) {
+                builder.c = @"c";
+            }];
+            
+            [tracking clearAllVValue:@""];
+            
+            // 前提：拡張フィールドを設定している
+            // 想定：拡張フィールドが全てnilになっている
+            XCTAssertNil([tracking getVValue:@"c"]);
+            
+            [expectation fulfill];
+        }
+        
+    } withOptFlg:YES withOutsideConfigURL:nil];
+    
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error, @"has error.");
+    }];
+}
+
+/**
+ 目的：設定した拡張フィールドがクリアされるか確認する（nil）
+ */
+- (void)testClearAllVValueNil {
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testClearAllVValueNil"];
+    VrInteractiveData *data = [VrInteractiveData sharedInstance];
+    __block VrInteractiveTracking *tracking;
+    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
+        
+        if (result) {
+            
+            [tracking setVValue:^(VValues *builder) {
+                builder.c = @"c";
+            }];
+            
+            [tracking clearAllVValue:nil];
+            
+            // 前提：拡張フィールドを設定している
+            // 想定：拡張フィールドが全てnilになっている
+            XCTAssertNil([tracking getVValue:@"c"]);
+            
+            [expectation fulfill];
+        }
+        
+    } withOptFlg:YES withOutsideConfigURL:nil];
+    
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error, @"has error.");
+    }];
+}
+
+
+#pragma mark (void)setVValue:(void (^)(VValues *))vValues;
+#pragma mark (NSString *)getVValue:(NSString *)fieldName;
+
+/**
+ 目的：設定した拡張フィールドが取得できるか確認する
+ */
+- (void)testSetVValueAndGetVValueNormal {
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSetVValueAndGetVValueNormal"];
+    VrInteractiveData *data = [VrInteractiveData sharedInstance];
+    __block VrInteractiveTracking *tracking;
+    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
+        
+        if (result) {
+            
+            [tracking setVValue:^(VValues *builder) {
+                builder.c = @"c";
+                builder.r = @"r";
+                builder.t = @"t";
+                builder.appid = @"appid";
+                builder.dcid = @"dcid";
+                builder.dnt = @"dnt";
+                builder.dctype = @"dctype";
+                builder.ref = @"ref";
+                builder.url = @"url";
+                builder.pf = @"pf";
+                builder.pcf = @"pcf";
+                builder.pcs = @"pcs";
+                builder.pct = @"pct";
+                builder.etime = @"etime";
+                builder.event = @"event";
+                builder.player = @"player";
+                builder.ad = @"ad";
+                builder.roll = @"roll";
+                builder.pod = @"pod";
+                builder.adev = @"adev";
+                builder.metrics = @"metrics";
+                builder.senderid = @"senderid";
+                builder.senderuuid = @"senderuuid";
+                builder.snederdcos = @"snederdcos";
+                builder.speed = @"speed";
+                builder.screen = @"screen";
+                builder.p = @"p";
+                builder.appver = @"appver";
+                builder.projectid = @"projectid";
+                builder.snsflg = @"snsflg";
+                builder.u1 = @"u1";
+                builder.u2 = @"u2";
+                builder.u3 = @"u3";
+                builder.u4 = @"u4";
+                builder.u5 = @"u5";
+                builder.u6 = @"u6";
+                builder.u7 = @"u7";
+                builder.u8 = @"u8";
+                builder.u9 = @"u9";
+                builder.ptag = @"ptag";
+                builder.hci = @"hci";
+                builder.hca = @"hca";
+                builder.hce = @"hce";
+                builder.hpc = @"hpc";
+                builder.hcr = @"hcr";
+                builder.hld = @"hld";
+            }];
+            
+            NSLog(@"%@",[tracking getVValue:@"c"]);
+            
+            // 前提：拡張フィールドを設定している
+            // 想定：全ての変数に変数名が入っている
+            XCTAssertEqual([tracking getVValue:@"c"], @"c");
+            XCTAssertEqual([tracking getVValue:@"r"], @"r");
+            XCTAssertEqual([tracking getVValue:@"t"], @"t");
+            XCTAssertEqual([tracking getVValue:@"appid"], @"appid");
+            XCTAssertEqual([tracking getVValue:@"dcid"], @"dcid");
+            XCTAssertEqual([tracking getVValue:@"dnt"], @"dnt");
+            XCTAssertEqual([tracking getVValue:@"dctype"], @"dctype");
+            XCTAssertEqual([tracking getVValue:@"ref"], @"ref");
+            XCTAssertEqual([tracking getVValue:@"url"], @"url");
+            XCTAssertEqual([tracking getVValue:@"pf"], @"pf");
+            XCTAssertEqual([tracking getVValue:@"pcf"], @"pcf");
+            XCTAssertEqual([tracking getVValue:@"pcs"], @"pcs");
+            XCTAssertEqual([tracking getVValue:@"pct"], @"pct");
+            XCTAssertEqual([tracking getVValue:@"etime"], @"etime");
+            XCTAssertEqual([tracking getVValue:@"event"], @"event");
+            XCTAssertEqual([tracking getVValue:@"player"], @"player");
+            XCTAssertEqual([tracking getVValue:@"ad"], @"ad");
+            XCTAssertEqual([tracking getVValue:@"roll"], @"roll");
+            XCTAssertEqual([tracking getVValue:@"pod"], @"pod");
+            XCTAssertEqual([tracking getVValue:@"adev"], @"adev");
+            XCTAssertEqual([tracking getVValue:@"metrics"], @"metrics");
+            XCTAssertEqual([tracking getVValue:@"senderid"], @"senderid");
+            XCTAssertEqual([tracking getVValue:@"senderuuid"], @"senderuuid");
+            XCTAssertEqual([tracking getVValue:@"snederdcos"], @"snederdcos");
+            XCTAssertEqual([tracking getVValue:@"speed"], @"speed");
+            XCTAssertEqual([tracking getVValue:@"screen"], @"screen");
+            XCTAssertEqual([tracking getVValue:@"p"], @"p");
+            XCTAssertEqual([tracking getVValue:@"appver"], @"appver");
+            XCTAssertEqual([tracking getVValue:@"projectid"], @"projectid");
+            XCTAssertEqual([tracking getVValue:@"snsflg"], @"snsflg");
+            XCTAssertEqual([tracking getVValue:@"u1"], @"u1");
+            XCTAssertEqual([tracking getVValue:@"u2"], @"u2");
+            XCTAssertEqual([tracking getVValue:@"u3"], @"u3");
+            XCTAssertEqual([tracking getVValue:@"u4"], @"u4");
+            XCTAssertEqual([tracking getVValue:@"u5"], @"u5");
+            XCTAssertEqual([tracking getVValue:@"u6"], @"u6");
+            XCTAssertEqual([tracking getVValue:@"u7"], @"u7");
+            XCTAssertEqual([tracking getVValue:@"u8"], @"u8");
+            XCTAssertEqual([tracking getVValue:@"u9"], @"u9");
+            XCTAssertEqual([tracking getVValue:@"ptag"], @"ptag");
+            XCTAssertEqual([tracking getVValue:@"hci"], @"hci");
+            XCTAssertEqual([tracking getVValue:@"hca"], @"hca");
+            XCTAssertEqual([tracking getVValue:@"hce"], @"hce");
+            XCTAssertEqual([tracking getVValue:@"hpc"], @"hpc");
+            XCTAssertEqual([tracking getVValue:@"hcr"], @"hcr");
+            XCTAssertEqual([tracking getVValue:@"hld"], @"hld");
+            
+            [expectation fulfill];
+        }
+        
+    } withOptFlg:YES withOutsideConfigURL:nil];
+    
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error, @"has error.");
+    }];
+}
+
+/**
+ 目的：設定した拡張フィールドが取得できるか確認する（空文字）
+ */
+- (void)testSetVValueAndGetVValueEmpty {
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSetVValueAndGetVValueEmpty"];
+    VrInteractiveData *data = [VrInteractiveData sharedInstance];
+    __block VrInteractiveTracking *tracking;
+    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
+        
+        if (result) {
+            
+            [tracking setVValue:^(VValues *builder) {
+                builder.c = @"";
+                builder.r = @"";
+                builder.t = @"";
+                builder.appid = @"";
+                builder.dcid = @"";
+                builder.dnt = @"";
+                builder.dctype = @"";
+                builder.ref = @"";
+                builder.url = @"";
+                builder.pf = @"";
+                builder.pcf = @"";
+                builder.pcs = @"";
+                builder.pct = @"";
+                builder.etime = @"";
+                builder.event = @"";
+                builder.player = @"";
+                builder.ad = @"";
+                builder.roll = @"";
+                builder.pod = @"";
+                builder.adev = @"";
+                builder.metrics = @"";
+                builder.senderid = @"";
+                builder.senderuuid = @"";
+                builder.snederdcos = @"";
+                builder.speed = @"";
+                builder.screen = @"";
+                builder.p = @"";
+                builder.appver = @"";
+                builder.projectid = @"";
+                builder.snsflg = @"";
+                builder.u1 = @"";
+                builder.u2 = @"";
+                builder.u3 = @"";
+                builder.u4 = @"";
+                builder.u5 = @"";
+                builder.u6 = @"";
+                builder.u7 = @"";
+                builder.u8 = @"";
+                builder.u9 = @"";
+                builder.ptag = @"";
+                builder.hci = @"";
+                builder.hca = @"";
+                builder.hce = @"";
+                builder.hpc = @"";
+                builder.hcr = @"";
+                builder.hld = @"";
+            }];
+            
+            NSLog(@"%@",[tracking getVValue:@"c"]);
+            
+            // 前提：拡張フィールドを空文字で設定している
+            // 想定：全ての変数に空文字が入っている
+            XCTAssertEqual([tracking getVValue:@"c"], @"");
+            XCTAssertEqual([tracking getVValue:@"r"], @"");
+            XCTAssertEqual([tracking getVValue:@"t"], @"");
+            XCTAssertEqual([tracking getVValue:@"appid"], @"");
+            XCTAssertEqual([tracking getVValue:@"dcid"], @"");
+            XCTAssertEqual([tracking getVValue:@"dnt"], @"");
+            XCTAssertEqual([tracking getVValue:@"dctype"], @"");
+            XCTAssertEqual([tracking getVValue:@"ref"], @"");
+            XCTAssertEqual([tracking getVValue:@"url"], @"");
+            XCTAssertEqual([tracking getVValue:@"pf"], @"");
+            XCTAssertEqual([tracking getVValue:@"pcf"], @"");
+            XCTAssertEqual([tracking getVValue:@"pcs"], @"");
+            XCTAssertEqual([tracking getVValue:@"pct"], @"");
+            XCTAssertEqual([tracking getVValue:@"etime"], @"");
+            XCTAssertEqual([tracking getVValue:@"event"], @"");
+            XCTAssertEqual([tracking getVValue:@"player"], @"");
+            XCTAssertEqual([tracking getVValue:@"ad"], @"");
+            XCTAssertEqual([tracking getVValue:@"roll"], @"");
+            XCTAssertEqual([tracking getVValue:@"pod"], @"");
+            XCTAssertEqual([tracking getVValue:@"adev"], @"");
+            XCTAssertEqual([tracking getVValue:@"metrics"], @"");
+            XCTAssertEqual([tracking getVValue:@"senderid"], @"");
+            XCTAssertEqual([tracking getVValue:@"senderuuid"], @"");
+            XCTAssertEqual([tracking getVValue:@"snederdcos"], @"");
+            XCTAssertEqual([tracking getVValue:@"speed"], @"");
+            XCTAssertEqual([tracking getVValue:@"screen"], @"");
+            XCTAssertEqual([tracking getVValue:@"p"], @"");
+            XCTAssertEqual([tracking getVValue:@"appver"], @"");
+            XCTAssertEqual([tracking getVValue:@"projectid"], @"");
+            XCTAssertEqual([tracking getVValue:@"snsflg"], @"");
+            XCTAssertEqual([tracking getVValue:@"u1"], @"");
+            XCTAssertEqual([tracking getVValue:@"u2"], @"");
+            XCTAssertEqual([tracking getVValue:@"u3"], @"");
+            XCTAssertEqual([tracking getVValue:@"u4"], @"");
+            XCTAssertEqual([tracking getVValue:@"u5"], @"");
+            XCTAssertEqual([tracking getVValue:@"u6"], @"");
+            XCTAssertEqual([tracking getVValue:@"u7"], @"");
+            XCTAssertEqual([tracking getVValue:@"u8"], @"");
+            XCTAssertEqual([tracking getVValue:@"u9"], @"");
+            XCTAssertEqual([tracking getVValue:@"ptag"], @"");
+            XCTAssertEqual([tracking getVValue:@"hci"], @"");
+            XCTAssertEqual([tracking getVValue:@"hca"], @"");
+            XCTAssertEqual([tracking getVValue:@"hce"], @"");
+            XCTAssertEqual([tracking getVValue:@"hpc"], @"");
+            XCTAssertEqual([tracking getVValue:@"hcr"], @"");
+            XCTAssertEqual([tracking getVValue:@"hld"], @"");
+            
+            [expectation fulfill];
+        }
+        
+    } withOptFlg:YES withOutsideConfigURL:nil];
+    
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error, @"has error.");
+    }];
+}
+
+/**
+ 目的：設定した拡張フィールドが取得できるか確認する（nil）
+ */
+- (void)testSetVValueAndGetVValueNil {
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSetVValueAndGetVValueNil"];
+    VrInteractiveData *data = [VrInteractiveData sharedInstance];
+    __block VrInteractiveTracking *tracking;
+    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
+        
+        if (result) {
+            
+            [tracking setVValue:^(VValues *builder) {
+                builder.c = nil;
+                builder.r = nil;
+                builder.t = nil;
+                builder.appid = nil;
+                builder.dcid = nil;
+                builder.dnt = nil;
+                builder.dctype = nil;
+                builder.ref = nil;
+                builder.url = nil;
+                builder.pf = nil;
+                builder.pcf = nil;
+                builder.pcs = nil;
+                builder.pct = nil;
+                builder.etime = nil;
+                builder.event = nil;
+                builder.player = nil;
+                builder.ad = nil;
+                builder.roll = nil;
+                builder.pod = nil;
+                builder.adev = nil;
+                builder.metrics = nil;
+                builder.senderid = nil;
+                builder.senderuuid = nil;
+                builder.snederdcos = nil;
+                builder.speed = nil;
+                builder.screen = nil;
+                builder.p = nil;
+                builder.appver = nil;
+                builder.projectid = nil;
+                builder.snsflg = nil;
+                builder.u1 = nil;
+                builder.u2 = nil;
+                builder.u3 = nil;
+                builder.u4 = nil;
+                builder.u5 = nil;
+                builder.u6 = nil;
+                builder.u7 = nil;
+                builder.u8 = nil;
+                builder.u9 = nil;
+                builder.ptag = nil;
+                builder.hci = nil;
+                builder.hca = nil;
+                builder.hce = nil;
+                builder.hpc = nil;
+                builder.hcr = nil;
+                builder.hld = nil;
+            }];
+            
+            NSLog(@"%@",[tracking getVValue:@"c"]);
+            
+            // 前提：拡張フィールドをnilで設定している
+            // 想定：全ての変数が入っていない（nilである）
+            XCTAssertNil([tracking getVValue:@"c"]);
+            XCTAssertNil([tracking getVValue:@"r"]);
+            XCTAssertNil([tracking getVValue:@"t"]);
+            XCTAssertNil([tracking getVValue:@"appid"]);
+            XCTAssertNil([tracking getVValue:@"dcid"]);
+            XCTAssertNil([tracking getVValue:@"dnt"]);
+            XCTAssertNil([tracking getVValue:@"dctype"]);
+            XCTAssertNil([tracking getVValue:@"ref"]);
+            XCTAssertNil([tracking getVValue:@"url"]);
+            XCTAssertNil([tracking getVValue:@"pf"]);
+            XCTAssertNil([tracking getVValue:@"pcf"]);
+            XCTAssertNil([tracking getVValue:@"pcs"]);
+            XCTAssertNil([tracking getVValue:@"pct"]);
+            XCTAssertNil([tracking getVValue:@"etime"]);
+            XCTAssertNil([tracking getVValue:@"event"]);
+            XCTAssertNil([tracking getVValue:@"player"]);
+            XCTAssertNil([tracking getVValue:@"ad"]);
+            XCTAssertNil([tracking getVValue:@"roll"]);
+            XCTAssertNil([tracking getVValue:@"pod"]);
+            XCTAssertNil([tracking getVValue:@"adev"]);
+            XCTAssertNil([tracking getVValue:@"metrics"]);
+            XCTAssertNil([tracking getVValue:@"senderid"]);
+            XCTAssertNil([tracking getVValue:@"senderuuid"]);
+            XCTAssertNil([tracking getVValue:@"snederdcos"]);
+            XCTAssertNil([tracking getVValue:@"speed"]);
+            XCTAssertNil([tracking getVValue:@"screen"]);
+            XCTAssertNil([tracking getVValue:@"p"]);
+            XCTAssertNil([tracking getVValue:@"appver"]);
+            XCTAssertNil([tracking getVValue:@"projectid"]);
+            XCTAssertNil([tracking getVValue:@"snsflg"]);
+            XCTAssertNil([tracking getVValue:@"u1"]);
+            XCTAssertNil([tracking getVValue:@"u2"]);
+            XCTAssertNil([tracking getVValue:@"u3"]);
+            XCTAssertNil([tracking getVValue:@"u4"]);
+            XCTAssertNil([tracking getVValue:@"u5"]);
+            XCTAssertNil([tracking getVValue:@"u6"]);
+            XCTAssertNil([tracking getVValue:@"u7"]);
+            XCTAssertNil([tracking getVValue:@"u8"]);
+            XCTAssertNil([tracking getVValue:@"u9"]);
+            XCTAssertNil([tracking getVValue:@"ptag"]);
+            XCTAssertNil([tracking getVValue:@"hci"]);
+            XCTAssertNil([tracking getVValue:@"hca"]);
+            XCTAssertNil([tracking getVValue:@"hce"]);
+            XCTAssertNil([tracking getVValue:@"hpc"]);
+            XCTAssertNil([tracking getVValue:@"hcr"]);
+            XCTAssertNil([tracking getVValue:@"hld"]);
+            
+            [expectation fulfill];
+        }
+        
+    } withOptFlg:YES withOutsideConfigURL:nil];
+    
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error, @"has error.");
+    }];
+}
+
+/**
+ 目的：設定した拡張フィールドを使用してビーコンが送信できるか確認する（VRタグ）
+ */
+- (void)testSetVValueAndGetVValueSendBeaconVR {
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSetVValueAndGetVValueSendBeaconVR"];
+    VrInteractiveData *data = [VrInteractiveData sharedInstance];
+    __block VrInteractiveTracking *tracking;
+    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
+        
+        if (result) {
+            
+            [tracking setVValue:^(VValues *builder) {
+                builder.c = @"c";
+                builder.r = @"r";
+                builder.t = @"t";
+                builder.appid = @"appid";
+                builder.dcid = @"dcid";
+                builder.dnt = @"dnt";
+                builder.dctype = @"dctype";
+                builder.ref = @"ref";
+                builder.url = @"url";
+                builder.pf = @"pf";
+                builder.pcf = @"pcf";
+                builder.pcs = @"pcs";
+                builder.pct = @"pct";
+                builder.etime = @"etime";
+                builder.event = @"event";
+                builder.player = @"player";
+                builder.ad = @"ad";
+                builder.roll = @"roll";
+                builder.pod = @"pod";
+                builder.adev = @"adev";
+                builder.metrics = @"metrics";
+                builder.senderid = @"senderid";
+                builder.senderuuid = @"senderuuid";
+                builder.snederdcos = @"snederdcos";
+                builder.speed = @"speed";
+                builder.screen = @"screen";
+                builder.p = @"p";
+                builder.appver = @"appver";
+                builder.projectid = @"projectid";
+                builder.snsflg = @"snsflg";
+                builder.u1 = @"u1";
+                builder.u2 = @"u2";
+                builder.u3 = @"u3";
+                builder.u4 = @"u4";
+                builder.u5 = @"u5";
+                builder.u6 = @"u6";
+                builder.u7 = @"u7";
+                builder.u8 = @"u8";
+                builder.u9 = @"u9";
+                builder.ptag = @"ptag";
+                builder.hci = @"hci";
+                builder.hca = @"hca";
+                builder.hce = @"hce";
+                builder.hpc = @"hpc";
+                builder.hcr = @"hcr";
+                builder.hld = @"hld";
+            }];
+            
+            NSLog(@"%@",[tracking getVValue:@"c"]);
+            
+            // 前提：拡張フィールドを設定している
+            // 想定：送信時にエラーが吐き出されないことを確認
+            XCTAssertNoThrow([tracking sendBeaconWithEventName:@"testSendBeaconNormal" monitorId:@"test_monitor_id" finishBlock:^(BOOL result) {
+                [expectation fulfill];
+            }]);
+            
+        }
+        
+    } withOptFlg:YES withOutsideConfigURL:nil];
+    
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error, @"has error.");
+    }];
+}
+
+/**
+ 目的：設定した拡張フィールドを使用してビーコンが送信できるか確認する（VRタグ）
+ */
+- (void)testSetVValueAndGetVValueSendBeaconV {
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSetVValueAndGetVValueNormal"];
+    VrInteractiveData *data = [VrInteractiveData sharedInstance];
+    __block VrInteractiveTracking *tracking;
+    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
+        
+        if (result) {
+            
+            [tracking setVValue:^(VValues *builder) {
+                builder.c = @"c";
+                builder.r = @"r";
+                builder.t = @"t";
+                builder.appid = @"appid";
+                builder.dcid = @"dcid";
+                builder.dnt = @"dnt";
+                builder.dctype = @"dctype";
+                builder.ref = @"ref";
+                builder.url = @"url";
+                builder.pf = @"pf";
+                builder.pcf = @"pcf";
+                builder.pcs = @"pcs";
+                builder.pct = @"pct";
+                builder.etime = @"etime";
+                builder.event = @"event";
+                builder.player = @"player";
+                builder.ad = @"ad";
+                builder.roll = @"roll";
+                builder.pod = @"pod";
+                builder.adev = @"adev";
+                builder.metrics = @"metrics";
+                builder.senderid = @"senderid";
+                builder.senderuuid = @"senderuuid";
+                builder.snederdcos = @"snederdcos";
+                builder.speed = @"speed";
+                builder.screen = @"screen";
+                builder.p = @"p";
+                builder.appver = @"appver";
+                builder.projectid = @"projectid";
+                builder.snsflg = @"snsflg";
+                builder.u1 = @"u1";
+                builder.u2 = @"u2";
+                builder.u3 = @"u3";
+                builder.u4 = @"u4";
+                builder.u5 = @"u5";
+                builder.u6 = @"u6";
+                builder.u7 = @"u7";
+                builder.u8 = @"u8";
+                builder.u9 = @"u9";
+                builder.ptag = @"ptag";
+                builder.hci = @"hci";
+                builder.hca = @"hca";
+                builder.hce = @"hce";
+                builder.hpc = @"hpc";
+                builder.hcr = @"hcr";
+                builder.hld = @"hld";
+            }];
+            
+            NSLog(@"%@",[tracking getVValue:@"c"]);
+            
+            // 前提：拡張フィールドを設定している
+            // 想定：送信時にエラーが吐き出されないことを確認
+            XCTAssertNoThrow([tracking sendBeaconWithEventName:nil monitorId:nil identity:@"default-v" finishBlock:^(BOOL result) {
+                [expectation fulfill];
+            }]);
+            
+        }
+        
+    } withOptFlg:YES withOutsideConfigURL:nil];
+    
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error, @"has error.");
+    }];
+}
+
+
+
 #pragma mark - SendBeacon
 
 
@@ -1830,6 +2518,26 @@
         XCTAssertNil(error, @"has error.");
     }];
 }
+/**
+ 目的：アプリ名・イベント名・モニターID・Identityを設定するsendBeaconでエラーが起きないかを確認する（Vタグ）
+ */
+- (void)testSendBeaconidentityVConfigNormal {
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSendBeaconNormal"];
+    VrInteractiveData *data = [VrInteractiveData sharedInstance];
+    __block VrInteractiveTracking *tracking;
+    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
+        
+        // 前提：SDKの初期化がを成功している
+        // 想定：送信時にエラーが吐き出されないことを確認
+        XCTAssertNoThrow([tracking sendBeaconWithEventName:@"testSendBeaconNormal" monitorId:@"test_monitor_id" identity:@"default-v"]);
+        
+        [expectation fulfill];
+    } withOptFlg:YES withOutsideConfigURL:nil];
+    
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error, @"has error.");
+    }];
+}
 
 /**
  目的：アプリ名・イベント名・モニターID・Identityを設定するsendBeaconで、引数がnullでもエラーが起きないかを確認する
@@ -1886,6 +2594,52 @@
     tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
         
         [tracking sendBeaconWithEventName:@"testSendBeaconNormal" monitorId:@"test_monitor_id" identity:@"default" finishBlock:^(BOOL result) {
+            // 前提：ビーコンを送信している
+            // 想定：送信が成功したことを示すresult=trueであることを確認
+            XCTAssertTrue(result == YES);
+            
+            [expectation fulfill];
+        }];
+    } withOptFlg:YES withOutsideConfigURL:nil];
+    
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error, @"has error.");
+    }];
+}
+/**
+ 目的：アプリ名・イベント名・モニターID・Identityを設定するsendBeaconで送信が完了したかを確認する（Vタグ）
+ */
+- (void)testSendBeaconIdentityCallbackVConfigNormal {
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSendBeaconNormal"];
+    VrInteractiveData *data = [VrInteractiveData sharedInstance];
+    __block VrInteractiveTracking *tracking;
+    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
+        
+        [tracking sendBeaconWithEventName:@"testSendBeaconNormal" monitorId:@"test_monitor_id" identity:@"default-v" finishBlock:^(BOOL result) {
+            // 前提：ビーコンを送信している
+            // 想定：送信が成功したことを示すresult=trueであることを確認
+            XCTAssertTrue(result == YES);
+            
+            [expectation fulfill];
+        }];
+    } withOptFlg:YES withOutsideConfigURL:nil];
+    
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error, @"has error.");
+    }];
+}
+/**
+ 目的：VRタグ用のOptValueを追加しても、Vタグ用のビーコンに混ざらないで送信が完了したかを確認する
+ */
+- (void)testSendBeaconIdentityCallbackAddOptValueNormal {
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSendBeaconNormal"];
+    VrInteractiveData *data = [VrInteractiveData sharedInstance];
+    __block VrInteractiveTracking *tracking;
+    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
+        
+        [tracking setVrOptValue:@"test_1" forOptId:1];
+        
+        [tracking sendBeaconWithEventName:@"testSendBeaconNormal" monitorId:@"test_monitor_id" identity:@"default-v" finishBlock:^(BOOL result) {
             // 前提：ビーコンを送信している
             // 想定：送信が成功したことを示すresult=trueであることを確認
             XCTAssertTrue(result == YES);
@@ -2068,265 +2822,6 @@
     tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
         
         [tracking sendBeaconWithEventName:@"" monitorId:@"" url:@"" identity:@"" finishBlock:^(BOOL result) {
-            // 前提：ビーコンを送信している
-            // 想定：送信が成功したことを示すresult=trueであることを確認
-            XCTAssertTrue(result == YES);
-            
-            [expectation fulfill];
-        }];
-    } withOptFlg:YES withOutsideConfigURL:nil];
-    
-    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
-        XCTAssertNil(error, @"has error.");
-    }];
-}
-
-#pragma mark (void)sendBeaconDirect:(NSString *)directUrl;
-
-/**
- 目的：直接URLを設定するsendBeaconで送信が完了したかを確認する
- */
-- (void)testSendBeaconDirectNormal {
-    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSendBeaconNormal"];
-    VrInteractiveData *data = [VrInteractiveData sharedInstance];
-    __block VrInteractiveTracking *tracking;
-    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
-        
-        // 前提：SDKの初期化がを成功している
-        // 想定：送信時にエラーが吐き出されないことを確認
-        XCTAssertNoThrow([tracking sendBeaconDirect:@"https://panelstg.interactive-circle.jp/ver01/measure?vr_tagid1=9997&vr_tagid2=1001&vr_opt1=direct_test"]);
-        
-        [expectation fulfill];
-    } withOptFlg:YES withOutsideConfigURL:nil];
-    
-    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
-        XCTAssertNil(error, @"has error.");
-    }];
-}
-
-/**
- 目的：直接URLを設定するsendBeaconで、引数がnullでも送信が完了したかを確認する
- */
-- (void)testSendBeaconDirectIrregularNull {
-    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSendBeaconNormal"];
-    VrInteractiveData *data = [VrInteractiveData sharedInstance];
-    __block VrInteractiveTracking *tracking;
-    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
-        
-        // 前提：SDKの初期化がを成功している
-        // 想定：送信時にエラーが吐き出されないことを確認
-        XCTAssertNoThrow([tracking sendBeaconDirect:nil]);
-        
-        [expectation fulfill];
-    } withOptFlg:YES withOutsideConfigURL:nil];
-    
-    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
-        XCTAssertNil(error, @"has error.");
-    }];
-}
-
-/**
- 目的：直接URLを設定するsendBeaconで、引数が空文字でも送信が完了したかを確認する
- */
-- (void)testSendBeaconDirectIrregularEmpty {
-    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSendBeaconNormal"];
-    VrInteractiveData *data = [VrInteractiveData sharedInstance];
-    __block VrInteractiveTracking *tracking;
-    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
-        
-        // 前提：SDKの初期化がを成功している
-        // 想定：送信時にエラーが吐き出されないことを確認
-        XCTAssertNoThrow([tracking sendBeaconDirect:@""]);
-        
-        [expectation fulfill];
-    } withOptFlg:YES withOutsideConfigURL:nil];
-    
-    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
-        XCTAssertNil(error, @"has error.");
-    }];
-}
-
-#pragma mark (void)sendBeaconDirect:(NSString *)directUrl finishBlock:(FinishSendBeaconBlock)finishBlock;
-
-/**
- 目的：直接URLを設定するsendBeaconで送信が完了したかを確認する
- */
-- (void)testSendBeaconDirectCallbackNormal {
-    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSendBeaconNormal"];
-    VrInteractiveData *data = [VrInteractiveData sharedInstance];
-    __block VrInteractiveTracking *tracking;
-    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
-        
-        [tracking sendBeaconDirect:@"https://panelstg.interactive-circle.jp/ver01/measure?vr_tagid1=9997&vr_tagid2=1001&vr_opt1=direct_test" finishBlock:^(BOOL result) {
-            // 前提：ビーコンを送信している
-            // 想定：送信が成功したことを示すresult=trueであることを確認
-            XCTAssertTrue(result == YES);
-            
-            [expectation fulfill];
-        }];
-        
-    } withOptFlg:YES withOutsideConfigURL:nil];
-    
-    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
-        XCTAssertNil(error, @"has error.");
-    }];
-}
-
-/**
- 目的：直接URLを設定するsendBeaconで、引数がnullでも送信が失敗したかを確認する
- */
-- (void)testSendBeaconDirectCallbackIrregularNull {
-    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSendBeaconNormal"];
-    VrInteractiveData *data = [VrInteractiveData sharedInstance];
-    __block VrInteractiveTracking *tracking;
-    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
-        
-        [tracking sendBeaconDirect:nil finishBlock:^(BOOL result) {
-            // 前提：ビーコンを送信している
-            // 想定：送信が失敗したことを示すresult=falseであることを確認
-            XCTAssertTrue(result == NO);
-            
-            [expectation fulfill];
-        }];
-        
-    } withOptFlg:YES withOutsideConfigURL:nil];
-    
-    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
-        XCTAssertNil(error, @"has error.");
-    }];
-}
-
-
-/**
- 目的：直接URLを設定するsendBeaconで、引数が空文字でも送信が失敗したかを確認する
- */
-- (void)testSendBeaconDirectCallbackIrregularEmpty {
-    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSendBeaconNormal"];
-    VrInteractiveData *data = [VrInteractiveData sharedInstance];
-    __block VrInteractiveTracking *tracking;
-    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
-        
-        [tracking sendBeaconDirect:@"" finishBlock:^(BOOL result) {
-            // 前提：ビーコンを送信している
-            // 想定：送信が失敗したことを示すresult=falseであることを確認
-            XCTAssertTrue(result == NO);
-            
-            [expectation fulfill];
-        }];
-        
-    } withOptFlg:YES withOutsideConfigURL:nil];
-    
-    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
-        XCTAssertNil(error, @"has error.");
-    }];
-}
-
-
-#pragma mark (void)setForceBeaconURLStringOnce:(NSDictionary*) forceValue;
-
-/**
- 目的：設定したsendBeaconの内容を強制的に上書きできているかを確認する
- */
-- (void)testSetForceBeaconURLStringOnceNormal {
-    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSendBeaconNormal"];
-    VrInteractiveData *data = [VrInteractiveData sharedInstance];
-    __block VrInteractiveTracking *tracking;
-    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
-
-        NSDictionary *dic = @{@"vr_opt1":@"force_value_opt1",
-                              @"vr_tid":@"forced_tid"
-                              };
-        [tracking setForceBeaconURLStringOnce:dic];
-        
-        [tracking sendBeaconWithEventName:@"testSendBeaconNormal" monitorId:@"test_monitor_id" finishBlock:^(BOOL result) {
-            // 前提：ビーコンを送信している
-            // 想定：送信が成功したことを示すresult=trueであることを確認
-            XCTAssertTrue(result == YES);
-            
-            [expectation fulfill];
-        }];
-    } withOptFlg:YES withOutsideConfigURL:nil];
-    
-    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
-        XCTAssertNil(error, @"has error.");
-    }];
-}
-
-// TODO 要検討項目
-/**
- 目的：パラメータの値にnullが含まれている場合では、送信できないことを確認する
- */
-- (void)testSetForceBeaconURLStringOnceIrregularValueNull {
-    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSendBeaconNormal"];
-    VrInteractiveData *data = [VrInteractiveData sharedInstance];
-    __block VrInteractiveTracking *tracking;
-    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
-        
-        NSDictionary *dic = @{@"vr_opt1":@"force_value_opt1",
-                              @"vr_tid":@"forced_tid",
-                              @"uid":[NSNull null]
-                              };
-        [tracking setForceBeaconURLStringOnce:dic];
-        
-        [tracking sendBeaconWithEventName:@"testSendBeaconNormal" monitorId:@"test_monitor_id" finishBlock:^(BOOL result) {
-            // 前提：ビーコンを送信している
-            // 想定：送信が失敗したことを示すresult=falseであることを確認
-            XCTAssertTrue(result == NO);
-            
-            [expectation fulfill];
-        }];
-    } withOptFlg:YES withOutsideConfigURL:nil];
-    
-    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
-        XCTAssertNil(error, @"has error.");
-    }];
-}
-
-/**
- 目的：パラメータのキーが空文字の場合でも、エラーが発生せずに送信できるかを確認する（キーは空文字のまま。ex:"https://xxx.xxx?vr_tagid1=0000&=force_value"）
- */
-- (void)testSetForceBeaconURLStringOnceIrregularKeyEmpty {
-    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSendBeaconNormal"];
-    VrInteractiveData *data = [VrInteractiveData sharedInstance];
-    __block VrInteractiveTracking *tracking;
-    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
-        
-        NSDictionary *dic = @{@"vr_opt1":@"force_value_opt1",
-                              @"vr_tid":@"force_tid",
-                              @"":@"force_value"
-                              };
-        [tracking setForceBeaconURLStringOnce:dic];
-        
-        [tracking sendBeaconWithEventName:@"testSendBeaconNormal" monitorId:@"test_monitor_id" finishBlock:^(BOOL result) {
-            // 前提：ビーコンを送信している
-            // 想定：送信が成功したことを示すresult=trueであることを確認
-            XCTAssertTrue(result == YES);
-            
-            [expectation fulfill];
-        }];
-    } withOptFlg:YES withOutsideConfigURL:nil];
-    
-    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
-        XCTAssertNil(error, @"has error.");
-    }];
-}
-
-/**
- 目的：パラメータの値が空文字の場合でも、設定したsendBeaconの内容を強制的に上書きできているかを確認する
- */
-- (void)testSetForceBeaconURLStringOnceIrregular {
-    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSendBeaconNormal"];
-    VrInteractiveData *data = [VrInteractiveData sharedInstance];
-    __block VrInteractiveTracking *tracking;
-    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
-        
-        NSDictionary *dic = @{@"vr_opt1":@"force_value_opt1",
-                              @"vr_tid":@"forced_tid",
-                              @"test_key":@""
-                              };
-        [tracking setForceBeaconURLStringOnce:dic];
-        
-        [tracking sendBeaconWithEventName:@"testSendBeaconNormal" monitorId:@"test_monitor_id" finishBlock:^(BOOL result) {
             // 前提：ビーコンを送信している
             // 想定：送信が成功したことを示すresult=trueであることを確認
             XCTAssertTrue(result == YES);
@@ -2673,6 +3168,9 @@
         XCTAssertNil(error, @"has error.");
     }];
 }
+
+
+
 #pragma mark (NSDictionary *)configParams;
 
 
@@ -2686,22 +3184,17 @@
     tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
         
         NSDictionary *config = [tracking configParams];
+        NSLog(@"%@", [config debugDescription]);
         
         // 前提：デフォルトの設定ファイルの読みが完了している
         // 想定：設定値が全て正確に入っているかをを確認
-        XCTAssertTrue([[config objectForKey:@"vr_tagid1"] isEqualToString:@"9997"]);
-        XCTAssertTrue([[config objectForKey:@"vr_tagid2"] isEqualToString:@"1001"]);
-        XCTAssertTrue([[config objectForKey:@"max_que_recs"] isEqualToString:@"10000"]);
+        XCTAssertTrue([[config objectForKey:@"vr_tagid1"] isEqualToString:@"9999"]);
+        XCTAssertTrue([[config objectForKey:@"vr_tagid2"] isEqualToString:@"9997"]);
         XCTAssertNil([config objectForKey:@"config_url"]);
-        XCTAssertTrue([[config objectForKey:@"debug_log"] isEqualToString:@"true"]);
         XCTAssertTrue([[config objectForKey:@"disabled"] isEqualToString:@"false"]);
-        XCTAssertTrue([[config objectForKey:@"polling"] isEqualToString:@"true"]);
-        XCTAssertTrue([[config objectForKey:@"polling_start"] isEqualToString:@"true"]);
-        XCTAssertTrue([[config objectForKey:@"polling_interval"] isEqualToString:@"2"]);
         XCTAssertTrue([[config objectForKey:@"config_timeout"] isEqualToString:@"5"]);
         XCTAssertTrue([[config objectForKey:@"beacon_timeout"] isEqualToString:@"5"]);
-        XCTAssertTrue([[config objectForKey:@"expired_time_beacon_log"] isEqualToString:@"100"]);
-        XCTAssertTrue([[config objectForKey:@"beacon_url"] isEqualToString:@"https://panelstg.interactive-circle.jp/ver01/measure"]);
+        XCTAssertTrue([[config objectForKey:@"beacon_url"] isEqualToString:@"https://panelstg.interactive-circle.jp/sdk-test01/measure"]);
         
         [expectation fulfill];
         
@@ -2770,19 +3263,13 @@
             
             // 前提："test"というidentityで設定ファイルを読みが完了している
             // 想定：デフォルトの設定値が全て正確に入っているかをを確認
-            XCTAssertTrue([[config objectForKey:@"vr_tagid1"] isEqualToString:@"9997"]);
-            XCTAssertTrue([[config objectForKey:@"vr_tagid2"] isEqualToString:@"1001"]);
-            XCTAssertTrue([[config objectForKey:@"max_que_recs"] isEqualToString:@"10000"]);
+            XCTAssertTrue([[config objectForKey:@"vr_tagid1"] isEqualToString:@"9999"]);
+            XCTAssertTrue([[config objectForKey:@"vr_tagid2"] isEqualToString:@"9997"]);
             XCTAssertNil([config objectForKey:@"config_url"]);
-            XCTAssertTrue([[config objectForKey:@"debug_log"] isEqualToString:@"true"]);
             XCTAssertTrue([[config objectForKey:@"disabled"] isEqualToString:@"false"]);
-            XCTAssertTrue([[config objectForKey:@"polling"] isEqualToString:@"true"]);
-            XCTAssertTrue([[config objectForKey:@"polling_start"] isEqualToString:@"true"]);
-            XCTAssertTrue([[config objectForKey:@"polling_interval"] isEqualToString:@"2"]);
             XCTAssertTrue([[config objectForKey:@"config_timeout"] isEqualToString:@"5"]);
             XCTAssertTrue([[config objectForKey:@"beacon_timeout"] isEqualToString:@"5"]);
-            XCTAssertTrue([[config objectForKey:@"expired_time_beacon_log"] isEqualToString:@"100"]);
-            XCTAssertTrue([[config objectForKey:@"beacon_url"] isEqualToString:@"https://panelstg.interactive-circle.jp/ver01/measure"]);
+            XCTAssertTrue([[config objectForKey:@"beacon_url"] isEqualToString:@"https://panelstg.interactive-circle.jp/sdk-test01/measure"]);
             
             [expectation fulfill];
         }];
@@ -2807,21 +3294,17 @@
             NSLog(@"isCheckedLoadConfigRunning result : %@", result?@"YES":@"NO");
             NSDictionary *config = [tracking configParams:@""];
             
+            NSLog(@"%@", [config debugDescription]);
+            
             // 前提："test"というidentityで設定ファイルを読みが完了している
             // 想定：デフォルト設定値が全て正確に入っているかをを確認
-            XCTAssertTrue([[config objectForKey:@"vr_tagid1"] isEqualToString:@"9997"]);
-            XCTAssertTrue([[config objectForKey:@"vr_tagid2"] isEqualToString:@"1001"]);
-            XCTAssertTrue([[config objectForKey:@"max_que_recs"] isEqualToString:@"10000"]);
+            XCTAssertTrue([[config objectForKey:@"vr_tagid1"] isEqualToString:@"9999"]);
+            XCTAssertTrue([[config objectForKey:@"vr_tagid2"] isEqualToString:@"9997"]);
             XCTAssertNil([config objectForKey:@"config_url"]);
-            XCTAssertTrue([[config objectForKey:@"debug_log"] isEqualToString:@"true"]);
             XCTAssertTrue([[config objectForKey:@"disabled"] isEqualToString:@"false"]);
-            XCTAssertTrue([[config objectForKey:@"polling"] isEqualToString:@"true"]);
-            XCTAssertTrue([[config objectForKey:@"polling_start"] isEqualToString:@"true"]);
-            XCTAssertTrue([[config objectForKey:@"polling_interval"] isEqualToString:@"2"]);
             XCTAssertTrue([[config objectForKey:@"config_timeout"] isEqualToString:@"5"]);
             XCTAssertTrue([[config objectForKey:@"beacon_timeout"] isEqualToString:@"5"]);
-            XCTAssertTrue([[config objectForKey:@"expired_time_beacon_log"] isEqualToString:@"100"]);
-            XCTAssertTrue([[config objectForKey:@"beacon_url"] isEqualToString:@"https://panelstg.interactive-circle.jp/ver01/measure"]);
+            XCTAssertTrue([[config objectForKey:@"beacon_url"] isEqualToString:@"https://panelstg.interactive-circle.jp/sdk-test01/measure"]);
             
             [expectation fulfill];
         }];
@@ -2834,7 +3317,78 @@
 }
 
 
-#pragma mark (void)setConfig:(NSDictionary *)config; TODO 間違ったURL、存在しないidentity、dictionary自体がempty
+#pragma mark (NSDictionary *)getVConfigParams;
+
+/**
+ 目的：デフォルトの設定ファイルを正しく読み込んだことを確認する（VとVR）
+ */
+- (void)testConfigParamsDefaultConfigCheck {
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testInitWithTrackerDefaultConfigCheck"];
+    VrInteractiveData *data = [VrInteractiveData sharedInstance];
+    __block VrInteractiveTracking *tracking;
+    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
+        
+        if (result) {
+            // 前提：デフォルト設定ファイルを読み込んでいる
+            // 想定：エラーがスローされずに読み込めるかを確認
+            XCTAssertNotNil([tracking configParams]);
+            XCTAssertNotNil([tracking getVConfigParams]);
+
+            /* リモート設定ファイルの値
+             <vr_tagid1>9999</vr_tagid1>
+             <vr_tagid2>9997</vr_tagid2>
+             <config_url/>
+             <disabled>false</disabled>
+             <config_timeout>5</config_timeout>
+             <beacon_timeout>5</beacon_timeout>
+             <beacon_url default="https://panelstg.interactive-circle.jp/sdk-test01/measure">445</beacon_url>
+             */
+            NSDictionary *vr = [tracking configParams];
+            NSLog(@"%@", [vr debugDescription]);
+            
+            NSLog(@"%@",[vr valueForKey:@"vr_tagid1"]);
+            XCTAssertTrue([@"vr" isEqual:[vr valueForKey:@"tag_type"]]);
+            XCTAssertTrue([@"9999" isEqual:[vr valueForKey:@"vr_tagid1"] ]);
+            XCTAssertTrue([@"9997" isEqual:[vr valueForKey:@"vr_tagid2"] ]);
+            XCTAssertNil([vr valueForKey:@"config_url"]);
+            XCTAssertTrue([@"false" isEqual:[vr valueForKey:@"disabled"] ]);
+            XCTAssertTrue([@"5" isEqual:[vr valueForKey:@"config_timeout"] ]);
+            XCTAssertTrue([@"5" isEqual:[vr valueForKey:@"beacon_timeout"] ]);
+            XCTAssertTrue([@"https://panelstg.interactive-circle.jp/sdk-test01/measure" isEqual:[vr objectForKey:@"beacon_url"] ]);
+            
+            
+            /* リモート設定ファイルの値
+             <tag_type>v</tag_type>
+             <a>10192881</a>
+             <dcos>androidtv</dcos>
+             <config_url/>
+             <disabled>false</disabled>
+             <config_timeout>5</config_timeout>
+             <beacon_timeout>5</beacon_timeout>
+             <beacon_url default="https://panelstg.interactive-circle.jp/sdk-test01/measure">445</beacon_url>
+             */
+            NSDictionary *v = [tracking getVConfigParams];
+            NSLog(@"%@", [v debugDescription]);
+            XCTAssertTrue([@"v" isEqual:[v valueForKey:@"tag_type"] ]);
+            XCTAssertTrue([@"10192881" isEqual:[v valueForKey:@"a"] ]);
+            XCTAssertTrue([@"androidtv" isEqual:[v valueForKey:@"dcos"] ]);
+            XCTAssertNil([v valueForKey:@"config_url"]);
+            XCTAssertTrue([@"false" isEqual:[v valueForKey:@"disabled"] ]);
+            XCTAssertTrue([@"5" isEqual:[v valueForKey:@"config_timeout"] ]);
+            XCTAssertTrue([@"5" isEqual:[v valueForKey:@"beacon_timeout"] ]);
+            XCTAssertTrue([@"https://panelstg.interactive-circle.jp/sdk-test01/measure" isEqual:[v objectForKey:@"beacon_url"] ]);
+            
+            [expectation fulfill];
+        }
+        
+    } withOptFlg:YES withOutsideConfigURL:nil];
+    
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error, @"has error.");
+    }];
+}
+
+#pragma mark (void)setConfig:(NSDictionary *)config;
 
 /**
  目的：設定ファイルの一部だけを上書きできているかを確認する
@@ -2852,19 +3406,13 @@
         
         // 前提：デフォルトの設定ファイルに"vr_tagid2"に"1002"という文字列を上書きしている
         // 想定："vr_tagid2"に"1002"が入っており、設定値が全て正確に入っているかをを確認
-        XCTAssertTrue([[config objectForKey:@"vr_tagid1"] isEqualToString:@"9997"]);
+        XCTAssertTrue([[config objectForKey:@"vr_tagid1"] isEqualToString:@"9999"]);
         XCTAssertTrue([[config objectForKey:@"vr_tagid2"] isEqualToString:@"1002"]);
-        XCTAssertTrue([[config objectForKey:@"max_que_recs"] isEqualToString:@"10000"]);
         XCTAssertNil([config objectForKey:@"config_url"]);
-        XCTAssertTrue([[config objectForKey:@"debug_log"] isEqualToString:@"true"]);
         XCTAssertTrue([[config objectForKey:@"disabled"] isEqualToString:@"false"]);
-        XCTAssertTrue([[config objectForKey:@"polling"] isEqualToString:@"true"]);
-        XCTAssertTrue([[config objectForKey:@"polling_start"] isEqualToString:@"true"]);
-        XCTAssertTrue([[config objectForKey:@"polling_interval"] isEqualToString:@"2"]);
         XCTAssertTrue([[config objectForKey:@"config_timeout"] isEqualToString:@"5"]);
         XCTAssertTrue([[config objectForKey:@"beacon_timeout"] isEqualToString:@"5"]);
-        XCTAssertTrue([[config objectForKey:@"expired_time_beacon_log"] isEqualToString:@"100"]);
-        XCTAssertTrue([[config objectForKey:@"beacon_url"] isEqualToString:@"https://panelstg.interactive-circle.jp/ver01/measure"]);
+        XCTAssertTrue([[config objectForKey:@"beacon_url"] isEqualToString:@"https://panelstg.interactive-circle.jp/sdk-test01/measure"]);
         
         [expectation fulfill];
         
@@ -2893,19 +3441,13 @@
         
         // 前提：デフォルトの設定ファイルに"vr_tagid2"に空文字で上書きしている
         // 想定："vr_tagid2"に空文字を許容していないので、変更されていないかをを確認
-        XCTAssertTrue([[config objectForKey:@"vr_tagid1"] isEqualToString:@"9997"]);
-        XCTAssertTrue([[config objectForKey:@"vr_tagid2"] isEqualToString:@"1001"]);
-        XCTAssertTrue([[config objectForKey:@"max_que_recs"] isEqualToString:@"10000"]);
+        XCTAssertTrue([[config objectForKey:@"vr_tagid1"] isEqualToString:@"9999"]);
+        XCTAssertTrue([[config objectForKey:@"vr_tagid2"] isEqualToString:@"9997"]);
         XCTAssertNil([config objectForKey:@"config_url"]);
-        XCTAssertTrue([[config objectForKey:@"debug_log"] isEqualToString:@"true"]);
         XCTAssertTrue([[config objectForKey:@"disabled"] isEqualToString:@"false"]);
-        XCTAssertTrue([[config objectForKey:@"polling"] isEqualToString:@"true"]);
-        XCTAssertTrue([[config objectForKey:@"polling_start"] isEqualToString:@"true"]);
-        XCTAssertTrue([[config objectForKey:@"polling_interval"] isEqualToString:@"2"]);
         XCTAssertTrue([[config objectForKey:@"config_timeout"] isEqualToString:@"5"]);
         XCTAssertTrue([[config objectForKey:@"beacon_timeout"] isEqualToString:@"5"]);
-        XCTAssertTrue([[config objectForKey:@"expired_time_beacon_log"] isEqualToString:@"100"]);
-        XCTAssertTrue([[config objectForKey:@"beacon_url"] isEqualToString:@"https://panelstg.interactive-circle.jp/ver01/measure"]);
+        XCTAssertTrue([[config objectForKey:@"beacon_url"] isEqualToString:@"https://panelstg.interactive-circle.jp/sdk-test01/measure"]);
         
         [expectation fulfill];
         
@@ -2933,20 +3475,122 @@
 
         // 前提：デフォルトの設定ファイルにnilの配列で上書きしている
         // 想定：設定値が全て正確に入っているかをを確認
-        XCTAssertTrue([[config objectForKey:@"vr_tagid1"] isEqualToString:@"9997"]);
-        XCTAssertTrue([[config objectForKey:@"vr_tagid2"] isEqualToString:@"1001"]);
-        XCTAssertTrue([[config objectForKey:@"max_que_recs"] isEqualToString:@"10000"]);
+        XCTAssertTrue([[config objectForKey:@"vr_tagid1"] isEqualToString:@"9999"]);
+        XCTAssertTrue([[config objectForKey:@"vr_tagid2"] isEqualToString:@"9997"]);
         XCTAssertNil([config objectForKey:@"config_url"]);
-        XCTAssertTrue([[config objectForKey:@"debug_log"] isEqualToString:@"true"]);
         XCTAssertTrue([[config objectForKey:@"disabled"] isEqualToString:@"false"]);
-        XCTAssertTrue([[config objectForKey:@"polling"] isEqualToString:@"true"]);
-        XCTAssertTrue([[config objectForKey:@"polling_start"] isEqualToString:@"true"]);
-        XCTAssertTrue([[config objectForKey:@"polling_interval"] isEqualToString:@"2"]);
         XCTAssertTrue([[config objectForKey:@"config_timeout"] isEqualToString:@"5"]);
         XCTAssertTrue([[config objectForKey:@"beacon_timeout"] isEqualToString:@"5"]);
-        XCTAssertTrue([[config objectForKey:@"expired_time_beacon_log"] isEqualToString:@"100"]);
-        XCTAssertTrue([[config objectForKey:@"beacon_url"] isEqualToString:@"https://panelstg.interactive-circle.jp/ver01/measure"]);
+        XCTAssertTrue([[config objectForKey:@"beacon_url"] isEqualToString:@"https://panelstg.interactive-circle.jp/sdk-test01/measure"]);
 
+        [expectation fulfill];
+
+
+    } withOptFlg:YES withOutsideConfigURL:nil];
+
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error, @"has error.");
+    }];
+}
+
+
+#pragma mark (void)setVConfig:(NSDictionary *)config;
+
+/**
+ 目的：設定ファイルの一部だけを上書きできているかを確認する
+ */
+- (void)testSetVConfigNormal {
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSetVConfigNormal"];
+    VrInteractiveData *data = [VrInteractiveData sharedInstance];
+    __block VrInteractiveTracking *tracking;
+    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
+        
+        NSDictionary *override = @{@"dcos":@"ios"};
+        [tracking setVConfig:override];
+        
+        NSDictionary *config = [tracking getVConfigParams];
+        
+        NSLog(@"%@", [config debugDescription]);
+        
+        // 前提：デフォルトの設定ファイルに"dcos"に"ios"という文字列を上書きしている
+        // 想定："dcos"に"ios"が入っており、設定値が全て正確に入っているかをを確認
+        XCTAssertTrue([[config objectForKey:@"a"] isEqualToString:@"10192881"]);
+        XCTAssertTrue([[config objectForKey:@"dcos"] isEqualToString:@"ios"]);
+        XCTAssertNil([config objectForKey:@"config_url"]);
+        XCTAssertTrue([[config objectForKey:@"disabled"] isEqualToString:@"false"]);
+        XCTAssertTrue([[config objectForKey:@"config_timeout"] isEqualToString:@"5"]);
+        XCTAssertTrue([[config objectForKey:@"beacon_timeout"] isEqualToString:@"5"]);
+        XCTAssertTrue([[config objectForKey:@"beacon_url"] isEqualToString:@"https://panelstg.interactive-circle.jp/sdk-test01/measure"]);
+        
+        [expectation fulfill];
+        
+        
+    } withOptFlg:YES withOutsideConfigURL:nil];
+    
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error, @"has error.");
+    }];
+}
+
+
+/**
+ 目的：設定ファイルの一部だけを値が空文字でも上書きできているかを確認する
+ */
+- (void)testSetVConfigIrregularEmpty {
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSendBeaconNormal"];
+    VrInteractiveData *data = [VrInteractiveData sharedInstance];
+    __block VrInteractiveTracking *tracking;
+    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
+        
+        NSDictionary *override = @{@"dcos":@""};
+        [tracking setVConfig:override];
+        
+        NSDictionary *config = [tracking getVConfigParams];
+        
+        // 前提：デフォルトの設定ファイルに"dcos"に空文字で上書きしている
+        // 想定："dcos"に空文字を許容していないので、変更されていないかをを確認
+        XCTAssertTrue([[config objectForKey:@"a"] isEqualToString:@"10192881"]);
+        XCTAssertTrue([[config objectForKey:@"dcos"] isEqualToString:@""]);
+        XCTAssertNil([config objectForKey:@"config_url"]);
+        XCTAssertTrue([[config objectForKey:@"disabled"] isEqualToString:@"false"]);
+        XCTAssertTrue([[config objectForKey:@"config_timeout"] isEqualToString:@"5"]);
+        XCTAssertTrue([[config objectForKey:@"beacon_timeout"] isEqualToString:@"5"]);
+        XCTAssertTrue([[config objectForKey:@"beacon_url"] isEqualToString:@"https://panelstg.interactive-circle.jp/sdk-test01/measure"]);
+        
+        [expectation fulfill];
+        
+        
+    } withOptFlg:YES withOutsideConfigURL:nil];
+    
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error, @"has error.");
+    }];
+}
+
+
+/**
+ 目的：設定ファイルの一部だけをnullの辞書で上書きしても変更されないかを確認する
+ */
+- (void)testSetVConfigIrregularNull {
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSendBeaconNormal"];
+    VrInteractiveData *data = [VrInteractiveData sharedInstance];
+    __block VrInteractiveTracking *tracking;
+    tracking = [data withClass:self withAppName:@"test_app_name" withEventName:@"test_event_name" withMonitorId:@"test_monitor_id" finishInitBlock:^(BOOL result) {
+
+        [tracking setVConfig:nil];
+
+        NSDictionary *config = [tracking getVConfigParams];
+
+        // 前提：デフォルトの設定ファイルにnilの配列で上書きしている
+        // 想定：設定値が全て正確に入っているかをを確認
+        XCTAssertTrue([[config objectForKey:@"a"] isEqualToString:@"10192881"]);
+        XCTAssertTrue([[config objectForKey:@"dcos"] isEqualToString:@"androidtv"]);
+        XCTAssertNil([config objectForKey:@"config_url"]);
+        XCTAssertTrue([[config objectForKey:@"disabled"] isEqualToString:@"false"]);
+        XCTAssertTrue([[config objectForKey:@"config_timeout"] isEqualToString:@"5"]);
+        XCTAssertTrue([[config objectForKey:@"beacon_timeout"] isEqualToString:@"5"]);
+        XCTAssertTrue([[config objectForKey:@"beacon_url"] isEqualToString:@"https://panelstg.interactive-circle.jp/sdk-test01/measure"]);
+        
         [expectation fulfill];
 
 
@@ -3063,19 +3707,14 @@
         
         // 前提：デフォルトの設定ファイルに"vr_tagid2"に"1002"という文字列を上書きしている
         // 想定："vr_tagid2"に"1002"が入っており、設定値が全て正確に入っているかをを確認
-        XCTAssertTrue([[config objectForKey:@"vr_tagid1"] isEqualToString:@"9997"]);
+        XCTAssertTrue([[config objectForKey:@"vr_tagid1"] isEqualToString:@"9999"]);
         XCTAssertTrue([[config objectForKey:@"vr_tagid2"] isEqualToString:@"1002"]);
-        XCTAssertTrue([[config objectForKey:@"max_que_recs"] isEqualToString:@"10000"]);
         XCTAssertNil([config objectForKey:@"config_url"]);
-        XCTAssertTrue([[config objectForKey:@"debug_log"] isEqualToString:@"true"]);
         XCTAssertTrue([[config objectForKey:@"disabled"] isEqualToString:@"false"]);
-        XCTAssertTrue([[config objectForKey:@"polling"] isEqualToString:@"true"]);
-        XCTAssertTrue([[config objectForKey:@"polling_start"] isEqualToString:@"true"]);
-        XCTAssertTrue([[config objectForKey:@"polling_interval"] isEqualToString:@"2"]);
         XCTAssertTrue([[config objectForKey:@"config_timeout"] isEqualToString:@"5"]);
         XCTAssertTrue([[config objectForKey:@"beacon_timeout"] isEqualToString:@"5"]);
-        XCTAssertTrue([[config objectForKey:@"expired_time_beacon_log"] isEqualToString:@"100"]);
-        XCTAssertTrue([[config objectForKey:@"beacon_url"] isEqualToString:@"https://panelstg.interactive-circle.jp/ver01/measure"]);
+        XCTAssertTrue([[config objectForKey:@"beacon_url"] isEqualToString:@"https://panelstg.interactive-circle.jp/sdk-test01/measure"]);
+        
         
         [expectation fulfill];
         
@@ -3103,20 +3742,15 @@
         NSDictionary *config = [tracking configParams];
         
         // 前提：デフォルトの設定ファイルに"vr_tagid2"に"1002"という文字列を上書きしている
-        // 想定："vr_tagid2"に"1002"が入っており、"polling_interval"に"3"が入っている、かつ、その他の設定値が全て正確に入っているかをを確認
-        XCTAssertTrue([[config objectForKey:@"vr_tagid1"] isEqualToString:@"9997"]);
+        // 想定："vr_tagid2"に"1002"が入っており、かつ、その他の設定値が全て正確に入っているかをを確認
+        XCTAssertTrue([[config objectForKey:@"vr_tagid1"] isEqualToString:@"9999"]);
         XCTAssertTrue([[config objectForKey:@"vr_tagid2"] isEqualToString:@"1002"]);
-        XCTAssertTrue([[config objectForKey:@"max_que_recs"] isEqualToString:@"10000"]);
         XCTAssertNil([config objectForKey:@"config_url"]);
-        XCTAssertTrue([[config objectForKey:@"debug_log"] isEqualToString:@"true"]);
         XCTAssertTrue([[config objectForKey:@"disabled"] isEqualToString:@"false"]);
-        XCTAssertTrue([[config objectForKey:@"polling"] isEqualToString:@"true"]);
-        XCTAssertTrue([[config objectForKey:@"polling_start"] isEqualToString:@"true"]);
-        XCTAssertTrue([[config objectForKey:@"polling_interval"] isEqualToString:@"3"]);
         XCTAssertTrue([[config objectForKey:@"config_timeout"] isEqualToString:@"5"]);
         XCTAssertTrue([[config objectForKey:@"beacon_timeout"] isEqualToString:@"5"]);
-        XCTAssertTrue([[config objectForKey:@"expired_time_beacon_log"] isEqualToString:@"100"]);
-        XCTAssertTrue([[config objectForKey:@"beacon_url"] isEqualToString:@"https://panelstg.interactive-circle.jp/ver01/measure"]);
+        XCTAssertTrue([[config objectForKey:@"beacon_url"] isEqualToString:@"https://panelstg.interactive-circle.jp/sdk-test01/measure"]);
+        
         
         [expectation fulfill];
         

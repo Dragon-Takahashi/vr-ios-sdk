@@ -14,7 +14,7 @@
 
 @end
 
-NSString *const VR_TRACKING_SDK_VERSION = @"VrTrackingSDK6.0";
+NSString *VR_TRACKING_SDK_VERSION = @"VrTrackingSDK6.0";
 
 @implementation VQueryParameter
 

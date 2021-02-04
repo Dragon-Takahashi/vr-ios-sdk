@@ -12,5 +12,5 @@
 @interface ConfigFileProviderStub : ConfigFileProvider
 + (void)initConfig;
 - (NSString *)getLocalConfigFilePath:(NSString *)fileName;
-- (ConfigFile*) loadConfig:(NSString*) identity;
+//- (id <Config>) loadConfig:(NSString*) identity;
 @end

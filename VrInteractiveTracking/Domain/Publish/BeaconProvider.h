@@ -25,30 +25,18 @@ typedef void (^FinishSendBeaconBlock) (BOOL result);
  @param baseUrl 上書き用URL
  @param spec QuerySpec
  @param config 設定ファイル
- @param forceValue 強制上書き用の情報
  @param isOK 更新状態
  @param finishBlock コールバック
  @return 追加結果
  */
-- (BOOL) addWithQuerySpec:(NSString *)baseUrl spec:(QuerySpec *)spec configFile:(ConfigFile *)config forceValue:(QueryParameters *)forceValue state:(BOOL)isOK finishBlock:(FinishSendBeaconBlock )finishBlock;
-
-/**
- ダイレクトURL用のビーコン追加
-
- @param directUrl ダイレクトURL
- @param config 設定ファイル
- @param isOK 更新状態
- @param finishBlock コールバック
- @return 追加結果
- */
-- (BOOL) addDirect:(NSString*) directUrl configFile:(ConfigFile *)config state:(BOOL)isOK finishBlock:(FinishSendBeaconBlock )finishBlock;
+- (BOOL) addWithQuerySpec:(NSString *)baseUrl spec:(QuerySpec *)spec configFile:(id <Config>)config state:(BOOL)isOK finishBlock:(FinishSendBeaconBlock )finishBlock;
 
 /**
  更新ファイル反映（ファイル更新コールバック後に実行）
 
  @param configFile 設定ファイル
  */
-- (void) sendQueue:(ConfigFile *)configFile;
+- (void) sendQueue:(id <Config>)configFile;
 
 /**
  ビーコン送信

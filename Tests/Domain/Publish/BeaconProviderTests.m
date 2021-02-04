@@ -25,18 +25,15 @@
 
 @interface BeaconProviderTests : XCTestCase
 //@property (nonatomic) ConfigFileProvider *configFileProvider;
+@property (nonatomic) NSString *wrongURL;
 @end
 
 @implementation BeaconProviderTests
 
 - (void)setUp {
     [super setUp];
-//    _configFileProvider = [ConfigFileProvider new];
-//    _configFileProvider.configFileList = [NSMutableDictionary dictionary];
-//    _configFileProvider.configStatusList = [NSMutableDictionary dictionary];
-//    _configFileProvider.configQue = [NSMutableArray array];
-//    _configFileProvider.isRunning = NO;
-//    [_configFileProvider setConfig:[[self normalConfig] getElements]];
+    
+    _wrongURL = @"https://www.e-agency.co.jp/takahashi.html";
 }
 
 - (void)tearDown {
@@ -46,9 +43,6 @@
 - (QuerySpec *)emptyQuerySpec {
     return [QuerySpec new];
 }
-//- (ConfigFileProvider *)normalConfigFileProvider {
-//    return _configFileProvider;
-//}
 - (ConfigFile *)normalConfig {
     // 設定ファイルの内容を定義
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
@@ -75,15 +69,6 @@
 - (QueryParameters *)emptyForceValue {
     return [QueryParameters new];
 }
-//- (void)setConfigStatusWithIdentity:(NSString *)identity status:(BOOL) isRunning {
-//    NSString *status;
-//    if (isRunning) {
-//        status = @"YES";
-//    }else {
-//        status = @"NO";
-//    }
-//    [_configFileProvider.configStatusList setObject:status forKey:identity];
-//}
 - (NSString *)directURL {
     return @"https://panelstg.interactive-circle.jp/ver01/measure?test_key1=test_value1";
 }
@@ -106,20 +91,19 @@
  Addの正常系テスト（設定ファイル設定終了時）
  */
 - (void)testAddWithQuerySpecRunningNormal {
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSendQueueNoDataNormal"];
     // 初期化
-//    BeaconProvider *provider = [[BeaconProvider alloc] initWithConfigFileProvider:[self normalConfigFileProvider]];
     BeaconProvider *provider = [BeaconProvider new];
     
-    // 更新状態の変更
-//    [self setConfigStatusWithIdentity:@"default" status:YES];
-    
     // キューを追加
-    [provider addWithQuerySpec:nil spec:[self emptyQuerySpec] configFile:[self normalConfig] forceValue:[self emptyForceValue] state:YES finishBlock:^(BOOL result) {
-//        XCTAssertTrue(result);
+    [provider addWithQuerySpec:nil spec:[self emptyQuerySpec] configFile:[self normalConfig] state:YES finishBlock:^(BOOL result) {
+        XCTAssertTrue(result);
+        [expectation fulfill];
     }];
     
-    // TODO 引数にコールバックを入れる予定なので、そのコールバックから送信完了の通知をテスト予定
-    
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error, @"has error.");
+    }];
 }
 
 /**
@@ -127,38 +111,12 @@
  */
 - (void)testAddWithQuerySpecStandByNormal {
     // 初期化
-//    BeaconProvider *provider = [[BeaconProvider alloc] initWithConfigFileProvider:[self normalConfigFileProvider]];
     BeaconProvider *provider = [BeaconProvider new];
     
-    // 更新状態の変更
-//    [self setConfigStatusWithIdentity:@"test_default" status:YES];
-    
     // キューを追加
-    [provider addWithQuerySpec:nil spec:[self emptyQuerySpec] configFile:[self normalConfig] forceValue:[self emptyForceValue] state:NO finishBlock:nil];
+    [provider addWithQuerySpec:nil spec:[self emptyQuerySpec] configFile:[self normalConfig] state:NO finishBlock:nil];
     
     XCTAssertTrue([provider.queue count] == 1);
-    
-}
-
-#pragma mark addDirect:(NSString*) directUrl
-
-/**
- Addの正常系テスト（設定ファイル設定終了時）
- */
-- (void)testAddDirectRunningNormal {
-    // 初期化
-//    BeaconProvider *provider = [[BeaconProvider alloc] initWithConfigFileProvider:[self normalConfigFileProvider]];
-    BeaconProvider *provider = [BeaconProvider new];
-    
-    // 更新状態の変更
-//    [self setConfigStatusWithIdentity:@"test_default" status:NO];
-    
-    // キューを追加
-    [provider addDirect:[self directURL] configFile:[self normalConfig] state:true finishBlock:^(BOOL result) {
-        // 正しく送信されたことを確認
-        XCTAssertTrue(result);
-    }];
-    
     
 }
 
@@ -167,14 +125,10 @@
  */
 - (void)testAddDirectStandByNormal {
     // 初期化
-//    BeaconProvider *provider = [[BeaconProvider alloc] initWithConfigFileProvider:[self normalConfigFileProvider]];
     BeaconProvider *provider = [BeaconProvider new];
     
-    // 更新状態の変更
-//    [self setConfigStatusWithIdentity:@"test_default" status:YES];
-    
     // キューを追加
-    [provider addWithQuerySpec:nil spec:[self emptyQuerySpec] configFile:[self normalConfig] forceValue:[self emptyForceValue] state:NO finishBlock:nil];
+    [provider addWithQuerySpec:nil spec:[self emptyQuerySpec] configFile:[self normalConfig] state:NO finishBlock:nil];
     
     // Queueが１つあることを確認
     XCTAssertTrue([provider.queue count] == 1);
@@ -186,23 +140,24 @@
  Queueの送信処理の正常系テスト（QueueCountが1以上の場合）
  */
 - (void)testSendQueueNoDataNormal {
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testSendQueueNoDataNormal"];
+    
     // 初期化
-//    BeaconProvider *provider = [[BeaconProvider alloc] initWithConfigFileProvider:[self normalConfigFileProvider]];
     BeaconProvider *provider = [BeaconProvider new];
     
-    // 更新状態の変更
-//    [self setConfigStatusWithIdentity:@"test_default" status:NO];
-    
     // キューを追加
-    [provider addWithQuerySpec:nil spec:[self emptyQuerySpec] configFile:[self normalConfig] forceValue:[self emptyForceValue] state:NO finishBlock:^(BOOL result) {
+    [provider addWithQuerySpec:nil spec:[self emptyQuerySpec] configFile:[self normalConfig] state:NO finishBlock:^(BOOL result) {
         // コールバックでテスト
-//        XCTAssertTrue(result);
+        XCTAssertTrue(result);
+        [expectation fulfill];
     }];
     
     // 送信（エラーが起きないことを確認）
     [provider sendQueue:[self normalConfig]];
     
-    
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error, @"has error.");
+    }];
 }
 
 /**
@@ -210,22 +165,16 @@
  */
 - (void)testSendQueueOneDataNormal {
     // 初期化
-//    BeaconProvider *provider = [[BeaconProvider alloc] initWithConfigFileProvider:[self normalConfigFileProvider]];
     BeaconProvider *provider = [BeaconProvider new];
-    
-    // 更新状態の変更
-//    [self setConfigStatusWithIdentity:@"test_default" status:YES];
     
     // キューを追加
     ConfigFile *config = [self normalConfig];
     NSLog(@"addqueue config = %@", [config getIdentity]);
-    [provider addWithQuerySpec:nil spec:[self emptyQuerySpec] configFile:config forceValue:[self emptyForceValue] state:NO finishBlock:nil];
+    [provider addWithQuerySpec:nil spec:[self emptyQuerySpec] configFile:config state:NO finishBlock:nil];
     
     // Queueが１つあることを確認
     XCTAssertTrue([provider.queue count] == 1);
     
-    // 更新状態の変更
-//    [self setConfigStatusWithIdentity:@"test_default" status:NO];
     // 送信
     [provider sendQueue:[self normalConfig]];
     
@@ -239,31 +188,28 @@
 
 /**
  popの正常系テスト（）
- このメソッドは外部から叩かれることがないのでprivateで問題ないか確認
+ このメソッドは外部から叩かれることがないのでprivateで影響がないか確認
  */
 - (void)testPopNoDataNormal {
+    
+    __weak XCTestExpectation *expectation = [self expectationWithDescription:@"testPopNoDataNormal"];
     // 初期化
-//    BeaconProvider *provider = [[BeaconProvider alloc] initWithConfigFileProvider:[self normalConfigFileProvider]];
     BeaconProvider *provider = [BeaconProvider new];
     
     // URI生成（ダイレクトURLを使用）
-    URI *uri = [[URI alloc] initWithDirectURL:[self directURL] configFile:[self normalConfig] finishBlock:^(BOOL result) {
+    URI *uri = [[URI alloc] initWithQuerySpec:_wrongURL spec:[self emptyQuerySpec] configFile:[self normalConfig] finishBlock:^(BOOL result) {
         // 正しく送信されたことを確認
-//        XCTAssertTrue(result);
+        XCTAssertFalse(result);
+        [expectation fulfill];
     }];
     
     // 送信
     [provider pop:uri];
     
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError * _Nullable error) {
+        XCTAssertNil(error, @"has error.");
+    }];
     
 }
-
-
-#pragma mark getBeaconQue
-/**
- 新SDKではbeaconlogCountがなくなったので使用しないかと思いますが、要確認。
- */
-
-
 
 @end

@@ -319,6 +319,48 @@
 }
 
 
+/**
+ Vタグ拡張フィールド初期化
+ 
+ @param appName アプリ名
+ */
+- (void)clearAllVValue:(NSString *)appName {
+    @try {
+        [_adapter clearAllVValue];
+    } @catch (NSException *exception) {
+        DLog(@"%@", [exception reason]);
+    }
+}
+
+/**
+ Vタグ拡張フィールド一括設定
+ 
+ @param vValues 拡張フィールド用のビルダー
+ */
+- (void)setVValue:(void (^)(VValues *))vValues {
+    @try {
+        [_adapter setVValue:vValues];
+    } @catch (NSException *exception) {
+        DLog(@"%@", [exception reason]);
+    }
+}
+
+/**
+ Vタグ拡張フィールド取得
+ 
+ @param fieldName 拡張フィールド名
+ @return 拡張フィールドの値
+ */
+- (NSString *)getVValue:(NSString *)fieldName {
+    @try {
+        return [_adapter getVValue:fieldName];
+    } @catch (NSException *exception) {
+        DLog(@"%@", [exception reason]);
+    }
+    return nil;
+}
+
+
 #pragma mark - SendBeacon
 
 /**
@@ -445,72 +487,6 @@
     }
 }
 
-/**
- * ビーコンを送信する（フルURL）
- *
- * @param directUrl 送信する最終URL
- */
-- (void)sendBeaconDirect:(NSString *)directUrl {
-    [self sendBeaconDirect:directUrl identity:VR_LIB_DEFAULT_LOCAL_FILE_IDENTITY finishBlock:nil];
-}
-
-/**
- ビーコンを送信する（フルURL）（コールバック有）
-
- @param directUrl 送信する最終URL
- @param finishBlock コールバック
- */
-- (void)sendBeaconDirect:(NSString *)directUrl finishBlock:(FinishSendBeaconBlock)finishBlock {
-    [self sendBeaconDirect:directUrl identity:VR_LIB_DEFAULT_LOCAL_FILE_IDENTITY finishBlock:finishBlock];
-}
-
-/**
- * ビーコンを送信する（フルURL）（identity有）
- *
- * @param directUrl 送信する最終URL
- * @param identity Identity
- */
-- (void)sendBeaconDirect:(NSString *)directUrl identity:(NSString *)identity {
-    [self sendBeaconDirect:directUrl identity:identity finishBlock:nil];
-}
-
-/**
- * ビーコンを送信する（フルURL）（identity有）（コールバック有）
- *
- * @param directUrl 送信する最終URL
- * @param identity Identity
- * @param finishBlock コールバック
- */
-- (void)sendBeaconDirect:(NSString *)directUrl identity:(NSString *)identity finishBlock:(FinishSendBeaconBlock)finishBlock {
-    @try {
-        URLValidator *validator = [[URLValidator alloc] initWithURL:directUrl handler:[URLValidationHandler new]];
-        [validator validate];
-        if ([validator.handler errors]) {
-            DLog(@"%@", validator.handler.toString);
-            @throw [VRIException exceptionWithMessage:@"url is invalid."];
-        }
-        [_adapter sendBeaconDirect:directUrl identity:identity finishBlock:finishBlock];
-    } @catch (NSException *exception) {
-        DLog(@"%@", [exception reason]);
-        if (finishBlock) {
-            finishBlock(NO);
-        }
-    }
-}
-
-/**
- * 強制的に適用するビーコンのパラメータを設定
- *
- * @param forceValue 次回実行するsendBeaconの値を上書きするパラメーター群
- */
-- (void)setForceBeaconURLStringOnce:(NSDictionary*) forceValue {
-    @try {
-        [_adapter setForceBeaconURLStringOnce:forceValue];
-    } @catch (NSException *exception) {
-        DLog(@"%@", [exception reason]);
-    }
-}
-
 
 #pragma mark - Opt
 
@@ -626,12 +602,21 @@
 }
 
 /**
- * 設定ファイルの定義値を返す（デフォルト）
+ * VRタグ用の設定ファイルの定義値を返す（デフォルト）
  *
  * @return 設定ファイルの定義値
  */
 - (NSDictionary *)configParams {
-    return [self configParams:nil];
+    return [self configParams:VR_LIB_DEFAULT_LOCAL_FILE_IDENTITY];
+}
+
+/**
+ * Vタグ用の設定ファイルの定義値を返す（デフォルト）
+ *
+ * @return 設定ファイルの定義値
+ */
+- (NSDictionary *)getVConfigParams {
+    return [self configParams:VR_LIB_DEFAULT_LOCAL_V_FILE_IDENTITY];
 }
 
 /**
@@ -651,9 +636,14 @@
 }
 
 
-// 設定ファイルを書き込む（デフォルト）
+// VRタグ用の設定ファイルを書き込む（デフォルト）
 - (void)setConfig:(NSDictionary *)config {
     [self setConfig:config identity:VR_LIB_DEFAULT_LOCAL_FILE_IDENTITY];
+}
+
+// Vタグ用の設定ファイルを書き込む（デフォルト）
+- (void)setVConfig:(NSDictionary *)config {
+    [self setConfig:config identity:VR_LIB_DEFAULT_LOCAL_V_FILE_IDENTITY];
 }
 
 /**

@@ -133,6 +133,35 @@
     return [_strategy optValueByString:optValue];
 }
 
+/**
+ Vタグ拡張フィールド初期化
+ 
+ @param appName アプリ名
+ */
+- (void)clearAllVValue {
+    [_strategy clearAllVValue];
+}
+
+/**
+ Vタグ拡張フィールド一括設定
+ 
+ @param vValues 拡張フィールド用のビルダー
+ */
+- (void)setVValue:(void (^)(VValues *))vValues {
+    [_strategy setVValue:vValues];
+}
+
+/**
+ Vタグ拡張フィールド取得
+ 
+ @param fieldName 拡張フィールド名
+ @return 拡張フィールドの値
+ */
+- (NSString *)getVValue:(NSString *)fieldName {
+    return [_strategy getVValue:fieldName];
+}
+
+
 
 #pragma mark - SendBeacon
 
@@ -146,25 +175,6 @@
     [_strategy sendBeaconWithEventName:beaconSpec];
 }
 
-/**
- ビーコンを送信する（フルURL）
- 追加メソッド
-
- @param directUrl 送信する最終URL
- */
-- (void)sendBeaconDirect:(NSString *)directUrl identity:(NSString *)identity finishBlock:(FinishSendBeaconBlock)finishBlock {
-    [_strategy sendBeaconDirect:directUrl identity:identity finishBlock:finishBlock];
-}
-
-/**
- 強制的に適用するビーコンのパラメータを設定
- 追加メソッド
-
- @param forceValue 次回実行するsendBeaconの値を上書きするパラメーター群
- */
-- (void)setForceBeaconURLStringOnce:(NSMutableDictionary*) forceValue {
-    [_strategy setForceBeaconURLStringOnce:forceValue];
-}
 
 #pragma mark - Opt
 

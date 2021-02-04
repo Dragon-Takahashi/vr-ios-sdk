@@ -20,15 +20,13 @@
     if (self) {
         _handler = handler;
         _config = config;
-        
-        [self validate];
+
+//        [self validate];
     }
     return self;
 }
 
 - (void)validate {
-    [self isCheckedVrTagId1];
-    [self isCheckedVrTagId2];
     [self isCheckedDisabled];
     [self isCheckedConfigTimeout];
     [self isCheckedBeaconTimeout];
@@ -36,22 +34,8 @@
     [self isCheckedBeaconURL];
 }
 
-
-- (void)isCheckedVrTagId1 {
-    if ([_config.getVr_TagId1 length] == 0) {
-        [_handler handleError:@"The vr_tagid1 is empty"];
-    }
-}
-
-- (void)isCheckedVrTagId2 {
-    if ([_config.getVr_TagId2 length] == 0) {
-        [_handler handleError:@"The vr_tagid2 is empty"];
-    }
-}
-
 - (void)isCheckedDisabled {
-    // true/false以外の文字列が入った場合の例外処理を入れますか？
-    // それとも、falseに丸めこみますか？
+    // do nothing.
 }
 
 - (void)isCheckedConfigTimeout {

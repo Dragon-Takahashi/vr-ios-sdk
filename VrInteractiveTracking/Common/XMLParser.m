@@ -97,6 +97,7 @@ didStartElement:(NSString *)elementName
   qualifiedName:(NSString *)qName
      attributes:(NSDictionary *)attributeDict{
     
+    // 確認用
 //    DLog(@"要素の開始タグを読み込んだ:%@",elementName);
     
     // config(s)タグは読み込まない
@@ -113,21 +114,25 @@ didStartElement:(NSString *)elementName
     parseElement = elementName;
     parseDict = attributeDict;
     
+    if ([parseElement isEqualToString:@"beacon_url"]) {
+        DLog(@"beacon_url default = %@",[parseDict objectForKey:@"default"]);
+        parseElementDic[parseElement] = [parseDict objectForKey:@"default"];
+    }
+    
 }
 
 //デリゲートメソッド(タグ以外のテキストを読み込んだ時)
 - (void) parser:(NSXMLParser *)parser foundCharacters:(NSString *)string{
     
-//    DLog(@"要素のテキストを読み込んだ:%@",string);
+    // 確認用
+    DLog(@"要素[%@]のテキストを読み込んだ:%@", parseElement ,string);
     
     // 開始タグ~終了タグの文字列以外は弾く
     if (parseElement.length == 0) {
         return;
     }
     
-    if ([parseElement isEqualToString:@"beacon_url"]) {
-        parseElementDic[parseElement] = [parseDict objectForKey:@"default"];
-    }else {
+    if (![parseElement isEqualToString:@"beacon_url"]) {
         parseElementDic[parseElement] = string;
     }
     
@@ -142,6 +147,7 @@ didStartElement:(NSString *)elementName
    namespaceURI:(NSString *)namespaceURI
   qualifiedName:(NSString *)qName{
     
+    // 確認用
 //    DLog(@"要素の終了タグを読み込んだ:%@",elementName);
     
     if ([elementName isEqualToString:@"config"]) {
@@ -160,7 +166,7 @@ didStartElement:(NSString *)elementName
 -(void) parserDidEndDocument:(NSXMLParser *)parser{
     
     // 確認用
-    DLog(@"parse result : %@", [parseResult description]);
+//    DLog(@"parse result : %@", [parseResult debugDescription]);
     
     DLog(@"解析終了");
     
@@ -180,6 +186,17 @@ didStartElement:(NSString *)elementName
 
 
 - (ConfigFile *)elementToConfigFileWithIdentity:(NSString *)identity filePath:(NSString *)filePath elements:(NSMutableDictionary *)elements {
+    
+    // 確認用
+//    DLog(@"elementToConfigFileWithIdentity");
+//    DLog(@"identity = %@",identity);
+//    DLog(@"filePath = %@",filePath);
+//    DLog(@"element = %@",elements.debugDescription);
+    
+    if (![elements objectForKey:@"tag_type"]) {
+        elements[@"tag_type"] = kVR;
+    }
+    
     ConfigFile *configFile = [[ConfigFile alloc] initWithParams:[elements copy]];
     configFile.identity = identity;
     configFile.filePath = filePath;

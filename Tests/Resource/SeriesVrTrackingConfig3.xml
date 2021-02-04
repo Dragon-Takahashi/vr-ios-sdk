@@ -21,6 +21,7 @@
       <beacon_url default="https://panelstg.interactive-circle.jp/sdk-test01/measure">445</beacon_url>
   </config>
   <config>
+      <identity>test2</identity>
       <vr_tagid1>8888</vr_tagid1>
       <vr_tagid2>0003</vr_tagid2>
       <config_url></config_url>
@@ -28,6 +29,27 @@
       <config_timeout>5</config_timeout>
       <beacon_timeout>5</beacon_timeout>
       <beacon_url default="https://panelstg.interactive-circle.jp/sdk-test01/measure">445</beacon_url>
+  </config>
+  <config>
+      <identity>testv1</identity>
+      <tag_type>v</tag_type>
+      <a>10300792</a>
+      <dcos>android</dcos>
+      <config_url>https://s3-ap-northeast-1.amazonaws.com/s3-vrlinc-stg-static-content-storage/test/SDK/vrTrackingVConfig.xml</config_url>
+      <disabled>false</disabled>
+      <config_timeout>5</config_timeout>
+      <beacon_timeout>5</beacon_timeout>
+      <beacon_url default="https://panelstg.interactive-circle.jp/ver01/measure"></beacon_url>
+  </config>
+  <config>
+      <tag_type>v</tag_type>
+      <a>10300792</a>
+      <dcos>android</dcos>
+      <config_url>https://s3-ap-northeast-1.amazonaws.com/s3-vrlinc-stg-static-content-storage/test/SDK/vrTrackingVConfig.xml</config_url>
+      <disabled>false</disabled>
+      <config_timeout>5</config_timeout>
+      <beacon_timeout>5</beacon_timeout>
+      <beacon_url default="https://panelstg.interactive-circle.jp/ver01/measure"></beacon_url>
   </config>
 </configs>
 

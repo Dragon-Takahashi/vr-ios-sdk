@@ -24,21 +24,10 @@ typedef void (^FinishSendBeaconBlock) (BOOL result);
  @param baseUrl 上書き用URL
  @param spec QuerySpec
  @param configFile 設定ファイル
- @param forceValue 強制上書き情報
  @param finishBlock コールバック
  @return self
  */
-- (instancetype) initWithQuerySpec:(NSString *)baseUrl spec:(QuerySpec *)spec configFile:(ConfigFile *)configFile forceValue:(QueryParameters *)forceValue finishBlock:(FinishSendBeaconBlock )finishBlock;
-
-/**
- イニシャライザ
-
- @param directUrl ダイレクトURL
- @param config 設定ファイル
- @param finishBlock コールバック
- @return self
- */
-- (instancetype) initWithDirectURL:(NSString *)directUrl configFile:(ConfigFile *)config finishBlock:(FinishSendBeaconBlock )finishBlock;
+- (instancetype) initWithQuerySpec:(NSString *)baseUrl spec:(QuerySpec *)spec configFile:(id <Config>)configFile finishBlock:(FinishSendBeaconBlock )finishBlock;
 
 /**
  インスタンス生成フラグ取得
@@ -52,7 +41,7 @@ typedef void (^FinishSendBeaconBlock) (BOOL result);
 
  @param configFile 設定ファイル
  */
--(void) setConfigFile:(ConfigFile *)configFile;
+-(void) setConfigFile:(id <Config>)configFile;
 
 /**
  URL取得

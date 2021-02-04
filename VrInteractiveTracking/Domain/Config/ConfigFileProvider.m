@@ -8,7 +8,7 @@
 
 #import "ConfigFileProvider.h"
 
-#import "ConfigValidator.h"
+#import "VrConfigValidator.h"
 #import "ConfigSetterValidator.h"
 #import "ConfigQueParams.h"
 #import "ConfigValueAdapter.h"
@@ -177,31 +177,23 @@
     [xmlParser parseXML:filePath identity:identity date:date isRemoteFile:isRemoteFile callback:^(NSMutableArray *configFileArray, BOOL isRemoteFile) {
 
         BOOL hasRemote = NO;
-        for (ConfigFile *configFile in configFileArray) {
+        for (id <Config> config in configFileArray) {
 
             @try {
                 // 正常ファイルか判断
-                ConfigValidator *validator = [[ConfigValidator alloc] initWithValidationHandler:[ConfigValidationHandler new] config:configFile];
-                configFile.isNormal = ![[validator handler] errors];
-                NSLog(@"Validate result = %@", configFile.isNormal?@"YES":@"NO");
+                [[[TagType new] of:config.getTagType] validate:config handler:[ConfigValidationHandler new]];
                 
-                if (![[validator handler] errors]) {
-                    // リストに存在しなければリストに追加、あれば上書き
-                    [_configFileList setObject:configFile forKey:[configFile getIdentity]];
-                }else {
-                    //            NSLog(@"XML parse error in parseXMLWithFilePath %@",[[validator handler] toString]);
-                    @throw [VRIException exceptionWithMessage:[[validator handler] toString]];
-                }
+                // リストに存在しなければリストに追加、あれば上書き
+                [_configFileList setObject:config forKey:[config getIdentity]];
                 
                 
                 // ローカル
                 if (!isRemoteFile) {
                     NSLog(@"End Local file");
                     // config_urlの値に値があれば取得する
-                    if (![self isCheckedConfigUrl:configFile] || !configFile.isNormal) {
-                        NSLog(@"1");
+                    if (![self isCheckedConfigUrl:config] || !config.isNormal) {
+                        DLog(@"config is not valid.");
                     } else {
-                        NSLog(@"2");
                         hasRemote = YES;
                         // リモート設定ファイルを取得
                         ConfigQueParams *param = [ConfigQueParams new];
@@ -209,25 +201,24 @@
                         if ([identity isEqualToString:VR_LIB_DEFAULT_LOCAL_FILE_IDENTITY] && [_outsideConfigURL length] != 0) {
                             param.filePath = _outsideConfigURL;
                         }else {
-                            param.filePath = configFile.getConfig_Url;
+                            param.filePath = config.getConfig_Url;
                         }
-                        NSLog(@"3");
                         
-                        [_configFileList setObject:configFile forKey:[configFile getIdentity]];
+                        [_configFileList setObject:config forKey:[config getIdentity]];
                         
                         [self initConfig:param];
                     }
                 }
                 // リモート
                 else {
-                    [_configFileList setObject:configFile forKey:[configFile getIdentity]];
+                    [_configFileList setObject:config forKey:[config getIdentity]];
                 }
             } @catch (NSException *exception) {
                 DLog(@"%@", [exception reason]);
                 // 何もないと困るので、最低限isNormalがFalseの設定ファイルをセット
-                if (![_configFileList objectForKey:[configFile getIdentity]]) {
-                    configFile.isNormal = NO;
-                    [_configFileList setObject:configFile forKey:[configFile getIdentity]];
+                if (![_configFileList objectForKey:[config getIdentity]]) {
+                    config.isNormal = NO;
+                    [_configFileList setObject:config forKey:[config getIdentity]];
                 }
             }
         }
@@ -252,13 +243,13 @@
 /**
  * ローカルファイルにサーバーの設定ファイルがあれば parseXM を改めて呼び出す
  *
- * @param configFile ローカルの設定ファイル
+ * @param config ローカルの設定ファイル
  *
  */
-- (BOOL) isCheckedConfigUrl:(ConfigFile *) configFile {
+- (BOOL) isCheckedConfigUrl:(id <Config>) config {
     
     // config_urlが空文字か判断
-    if ([configFile.getConfig_Url length] == 0) {
+    if ([config.getConfig_Url length] == 0) {
         NSLog(@"config_url is empty");
         return NO;
     }
@@ -424,7 +415,8 @@
     if (!identity) {
         fixedIdentity = VR_LIB_DEFAULT_LOCAL_FILE_IDENTITY;
     }
-    return [_configFileList objectForKey:fixedIdentity];
+    
+    return [_configFileList objectForKey:fixedIdentity] != nil;
 }
 
 /**

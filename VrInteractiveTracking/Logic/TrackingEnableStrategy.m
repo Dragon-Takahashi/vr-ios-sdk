@@ -8,22 +8,10 @@
 
 #import "TrackingEnableStrategy.h"
 
-#import "SendAcceptor.h"
-#import "VrQueryParameter.h"
-#import "../HouseKeeper/HouseKeeper.h"
-#import "../Domain/Counter.h"
-#import "../Domain/UUID.h"
-#import "../Domain/Opt.h"
-#import "../Domain/Config/ConfigFileProvider.h"
-#import "../Domain/Config/ConfigMediator.h"
-#import "../Domain/Model/QuerySpec.h"
-#import "../Logic/VrOptValidator.h"
-#import "../Domain/Publish/BeaconProvider.h"
-#import "../Domain/ReplaceConfig.h"
-
-
 NSString *const VR_LIB_DEFAULT_LOCAL_FILE_IDENTITY = @"default";
+NSString *const VR_LIB_DEFAULT_LOCAL_V_FILE_IDENTITY = @"default-v";
 NSString *const VR_LIB_DEFAULT_FILE_NAME = @"vrTrackingConfig";
+NSString *const VR_LIB_DEFAULT_V_FILE_NAME = @"vrTrackingVConfig";
 
 @interface TrackingEnableStrategy()
 
@@ -35,14 +23,15 @@ NSString *const VR_LIB_DEFAULT_FILE_NAME = @"vrTrackingConfig";
 
 @property (nonatomic, copy) VrInteractiveTrackingSpec *trackingSpec;
 @property (nonatomic, copy) VrInteractiveBeaconSpec * beaconSpec;
-@property (nonatomic) QuerySpec *querySpec;
+@property (nonatomic) QuerySpec *vrQuerySpec;
+@property (nonatomic) QuerySpec *vQuerySpec;
 @property (nonatomic) ConfigFileProvider *configFileProvider;
 @property (nonatomic) BeaconProvider *beaconProvider;
-@property (nonatomic) QueryParameters *forceValue;
 @property (nonatomic) SendAcceptor *acceptor;
 @property (nonatomic) NSMutableArray *replaceConfigQueue;
 @property (nonatomic) ConfigMediator *loadBlockManager;
 @property (nonatomic) VrQueryParameter *vrParameter;
+@property (nonatomic) VQueryParameter *vParameter;
 
 @property (nonatomic) SessionID *sessionID;
 
@@ -76,8 +65,10 @@ NSString *const VR_LIB_DEFAULT_FILE_NAME = @"vrTrackingConfig";
         _replaceConfigQueue = [NSMutableArray array];
         _acceptor = [SendAcceptor new];
         [_acceptor updateWithIdentity:VR_LIB_DEFAULT_LOCAL_FILE_IDENTITY state:NO];
+        [_acceptor updateWithIdentity:VR_LIB_DEFAULT_LOCAL_V_FILE_IDENTITY state:NO];
         _loadBlockManager = [ConfigMediator new];
         _vrParameter = [VrQueryParameter new];
+        _vParameter = [VQueryParameter new];
         _sessionID = SessionID.new;
         
         NSLog(@"initWithAppName start 1");
@@ -108,7 +99,7 @@ NSString *const VR_LIB_DEFAULT_FILE_NAME = @"vrTrackingConfig";
                   }
                   
                   // コールバック
-                  if ([identity isEqualToString:VR_LIB_DEFAULT_LOCAL_FILE_IDENTITY] && _finishInitBlock) {
+                  if ([_acceptor isOkWithIdentity:VR_LIB_DEFAULT_LOCAL_FILE_IDENTITY] && [_acceptor isOkWithIdentity:VR_LIB_DEFAULT_LOCAL_V_FILE_IDENTITY] && _finishInitBlock) {
                       NSLog(@"default callback");
                       _finishInitBlock(YES);
                       _finishInitBlock = nil;
@@ -132,6 +123,7 @@ NSString *const VR_LIB_DEFAULT_FILE_NAME = @"vrTrackingConfig";
                 
                 // ローカルファイルをパース
                 [_configFileProvider addConfigWithIdentity:VR_LIB_DEFAULT_LOCAL_FILE_IDENTITY fileName:VR_LIB_DEFAULT_FILE_NAME];
+                [_configFileProvider addConfigWithIdentity:VR_LIB_DEFAULT_LOCAL_V_FILE_IDENTITY fileName:VR_LIB_DEFAULT_V_FILE_NAME];
                 
                 
                 NSLog(@"initWithAppName end 3");
@@ -198,11 +190,9 @@ NSString *const VR_LIB_DEFAULT_FILE_NAME = @"vrTrackingConfig";
 
 /**
  拡張フィールド用変数の初期化
-（引数を除去済み）
  */
 - (void)clearAllVrOptValueWithAppName {
-    // QueryParametersをクリア
-    [[_querySpec getQueryParameters] clear];
+    [_vrQuerySpec clearAllParameters];
 }
 
 /**
@@ -213,10 +203,10 @@ NSString *const VR_LIB_DEFAULT_FILE_NAME = @"vrTrackingConfig";
  @return 結果(YES = 成功, NO = 失敗)
  */
 - (BOOL)setVrOptValue:(NSString *)optValue forOptKey:(NSString *)optKey {
-    [self querySpecInit];
+    [self vrQuerySpecInit];
     // デフォルトの拡張フィールドに設定する
     NSLog(@"setVrOptValue_1 key=%@, value=%@", optKey, optValue);
-    [[_querySpec getQueryParameters] add:optKey value:optValue];
+    [[_vrQuerySpec getQueryParameters] add:optKey value:optValue];
     NSLog(@"setVrOptValue_2 key=%@, value=%@", optKey, optValue);
     // 結果を返却
 //    return [[[[_querySpec getQueryParameters] getValue:optKey] value] isEqualToString:optValue];
@@ -230,26 +220,60 @@ NSString *const VR_LIB_DEFAULT_FILE_NAME = @"vrTrackingConfig";
  @param builder 拡張フィールド用の変数番号1〜9を設定できるビルダー
  */
 - (void)setVrOptValue:(void (^)(OptValues *)) builder {
-    [self querySpecInit];
+    [self vrQuerySpecInit];
     
     // ビルダー生成
     OptValues *optValues = [OptValues new];
     builder(optValues);
     
     // 追加
-    [_querySpec addParametersWithBuilder:optValues];
+    [_vrQuerySpec addParametersWithBuilder:optValues];
 }
 
 /**
  拡張フィールド用変数を取得する
 
- 
  @param optValue 拡張フィールド用の変数
  @return 拡張フィールド用の値
  */
 - (NSString *)optValueByString:(NSString *)optValue {
-    QueryParameter *qp = [[_querySpec getQueryParameters] getValue:optValue];
+    QueryParameter *qp = [[_vrQuerySpec getQueryParameters] getValue:optValue];
     NSLog(@"optValueByString key=%@, value=%@", optValue, qp.value);
+    if (qp) {
+        return qp.value;
+    }else {
+        return nil;
+    }
+}
+
+/**
+ Vタグ拡張フィールド初期化
+ */
+- (void)clearAllVValue{
+    [_vQuerySpec clearAllParameters];
+}
+
+/**
+ Vタグ拡張フィールド一括設定
+ 
+ @param vValues 拡張フィールド用のビルダー
+ */
+- (void)setVValue:(void (^)(VValues *))vValues {
+    [self vQuerySpecInit];
+    VValues *builder = [VValues new];
+    vValues(builder);
+    [[_vQuerySpec getQueryParameters] addAll:[builder build]];
+}
+
+/**
+ Vタグ拡張フィールド取得
+ 
+ @param fieldName 拡張フィールド名
+ @return 拡張フィールドの値
+ */
+- (NSString *)getVValue:(NSString *)fieldName {
+    QueryParameter *qp = [[_vQuerySpec getQueryParameters] getValue:fieldName];
+    DLog(@"getVValue key=%@, value=%@", fieldName, qp.value);
     if (qp) {
         return qp.value;
     }else {
@@ -270,60 +294,54 @@ NSString *const VR_LIB_DEFAULT_FILE_NAME = @"vrTrackingConfig";
     
     @try {
         _beaconSpec = beaconSpec;
-        
-        // QuerySpecクラスのインスタンスを作成
-        [self querySpecInit];
-        
-        // ForceValueクラスのインスタンスを作成
-        [self forceValueInit];
-        
-        // 引数群をQuerySpecに格納
-//        [self addCommonParameters:beaconSpec.eventName monitorId:beaconSpec.monitorId];
-        [[_querySpec getQueryParameters] addAllWithQueryParameters:[_vrParameter toQueryParametersWithVrInteractiveTrackingSpec:_trackingSpec beaconSpec:_beaconSpec]];
-        
-        // キューに登録
-        if ([_configFileProvider hasConfigFileWithIdentity:beaconSpec.identity]) {
-            [_beaconProvider addWithQuerySpec:beaconSpec.url
-                   spec:_querySpec
-             configFile:[_configFileProvider loadConfig:beaconSpec.identity]
-             forceValue:_forceValue
-                  state:[_acceptor isOkWithIdentity:beaconSpec.identity]
-            finishBlock:beaconSpec.finishSendBeaconBlock];
-        }else if(beaconSpec.finishSendBeaconBlock){
-            beaconSpec.finishSendBeaconBlock(NO);
+        id<Config> config = [_configFileProvider loadConfig:beaconSpec.identity];
+        if ([kVR isEqual:[config getTagType]]) {
+            
+            // QuerySpecクラスのインスタンスを作成
+            [self vrQuerySpecInit];
+            
+            // 引数群をQuerySpecに格納
+            [[_vrQuerySpec getQueryParameters] addAllWithQueryParameters:[_vrParameter toQueryParametersWithVrInteractiveTrackingSpec:_trackingSpec beaconSpec:_beaconSpec]];
+            
+            // キューに登録
+            if ([_configFileProvider hasConfigFileWithIdentity:beaconSpec.identity]) {
+                [_beaconProvider addWithQuerySpec:beaconSpec.url
+                       spec:_vrQuerySpec
+                 configFile:[_configFileProvider loadConfig:beaconSpec.identity]
+                      state:[_acceptor isOkWithIdentity:beaconSpec.identity]
+                finishBlock:beaconSpec.finishSendBeaconBlock];
+            }else if(beaconSpec.finishSendBeaconBlock){
+                beaconSpec.finishSendBeaconBlock(NO);
+            }
+        }else {
+            // QuerySpecクラスのインスタンスを作成
+            [self vQuerySpecInit];
+            
+            // 引数群をQuerySpecに格納
+            [[_vQuerySpec getQueryParameters] addAllWithQueryParameters:[_vParameter toQueryParametersWithVrInteractiveTrackingSpec:_trackingSpec beaconSpec:_beaconSpec sessionID:_sessionID]];
+            
+            // キューに登録
+            if ([_configFileProvider hasConfigFileWithIdentity:beaconSpec.identity]) {
+                [_beaconProvider addWithQuerySpec:beaconSpec.url
+                       spec:_vQuerySpec
+                 configFile:[_configFileProvider loadConfig:beaconSpec.identity]
+                      state:[_acceptor isOkWithIdentity:beaconSpec.identity]
+                finishBlock:beaconSpec.finishSendBeaconBlock];
+            }else if(beaconSpec.finishSendBeaconBlock){
+                beaconSpec.finishSendBeaconBlock(NO);
+            }
         }
+        
 
     } @catch (NSException *exception) {
         @throw exception;
     } @finally {
         // 一時データの削除
-        _querySpec = nil;
-        _forceValue = nil;
+        _vrQuerySpec = nil;
+        _vQuerySpec = nil;
     }
 }
 
-/**
- ビーコンを送信する（フルURL）
- 追加メソッド
- 
- @param directUrl 送信する最終URL
- */
-- (void)sendBeaconDirect:(NSString *)directUrl identity:(NSString *)identity finishBlock:(FinishSendBeaconBlock)finishBlock {
-    [_beaconProvider addDirect:directUrl configFile:[_configFileProvider loadConfig:identity] state:[_acceptor isOkWithIdentity:identity] finishBlock:finishBlock];
-}
-
-/**
- 強制的に適用するビーコンのパラメータを設定
- 追加メソッド
- 
- @param forceValue 次回実行するsendBeaconの値を上書きするパラメーター群
- */
-- (void)setForceBeaconURLStringOnce:(NSMutableDictionary*) forceValue {
-    // 変数の確認
-    [self forceValueInit];
-    // 変数に格納
-    [_forceValue addAll:forceValue];
-}
 
 #pragma mark - Opt
 
@@ -341,7 +359,7 @@ NSString *const VR_LIB_DEFAULT_FILE_NAME = @"vrTrackingConfig";
  */
 - (BOOL)setOptOut{
     // オプトアウト
-    return [Opt out:_querySpec beaconQue:[_beaconProvider getBeaconQue]];
+    return [Opt out:_vrQuerySpec beaconQue:[_beaconProvider getBeaconQue]];
     
 }
 
@@ -422,20 +440,20 @@ NSString *const VR_LIB_DEFAULT_FILE_NAME = @"vrTrackingConfig";
 #pragma mark - private methods
 
 /**
- QuerySpecが無ければ新規生成する
+ VrQuerySpecが無ければ新規生成する
  */
-- (void)querySpecInit {
-    if (_querySpec.parameters.params.count == 0) {
-        _querySpec = [QuerySpec new];
+- (void)vrQuerySpecInit {
+    if (_vrQuerySpec.parameters.params.count == 0) {
+        _vrQuerySpec = [QuerySpec new];
     }
 }
 
 /**
- 強制的に適用するビーコンパラメータの初期化
+ VQuerySpecが無ければ新規生成する
  */
-- (void)forceValueInit {
-    if (_forceValue.params.count == 0) {
-        _forceValue = [QueryParameters new];
+- (void)vQuerySpecInit {
+    if (_vQuerySpec.parameters.params.count == 0) {
+        _vQuerySpec = [QuerySpec new];
     }
 }
 

@@ -68,6 +68,31 @@
     return nil;
 }
 
+/**
+ Vタグ拡張フィールド初期化
+ */
+- (void)clearAllVValue{
+    // 何もしない
+}
+
+/**
+ Vタグ拡張フィールド一括設定
+ 
+ @param vValues 拡張フィールド用のビルダー
+ */
+- (void)setVValue:(void (^)(VValues *))vValues {
+    // 何もしない
+}
+
+/**
+ Vタグ拡張フィールド取得
+ 
+ @param fieldName 拡張フィールド名
+ @return 拡張フィールドの値
+ */
+- (NSString *)getVValue:(NSString *)fieldName {
+    return nil;
+}
 
 #pragma mark - SendBeacon
 
@@ -77,17 +102,6 @@
     if (beaconSpec.finishSendBeaconBlock) {
         beaconSpec.finishSendBeaconBlock(NO);
     }
-}
-// ビーコンを送信する（フルURL）
-- (void)sendBeaconDirect:(NSString *)directUrl identity:(NSString *)identity finishBlock:(FinishSendBeaconBlock)finishBlock {
-    // 何もしない
-    if (finishBlock) {
-        finishBlock(NO);
-    }
-}
-// 強制的に適用するビーコンのパラメータを設定
-- (void)setForceBeaconURLStringOnce:(NSDictionary*) forceValue {
-    // 何もしない
 }
 
 

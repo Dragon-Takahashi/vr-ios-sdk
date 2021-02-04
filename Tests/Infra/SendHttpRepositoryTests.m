@@ -10,6 +10,11 @@
 #import "SendHttpRepository.h"
 #import "EventIdentity.h"
 
+#import "../../VrInteractiveTracking/Domain/Publish/URI.h"
+#import "../../VrInteractiveTracking/Domain/Config/ConfigFile.h"
+#import "../../VrInteractiveTracking/Domain/Model/QuerySpec.h"
+
+
 @interface SendHttpRepositoryTests : XCTestCase
 @property (nonatomic) NSString *wrongURL;
 @property (nonatomic) NSString *rightURL;
@@ -38,7 +43,7 @@
     
     @try {
         // BeaconEvent生成
-        URI *uri = [[URI alloc] initWithQuerySpec:_rightURL spec:[self emptyQuerySpec] configFile:[self normalConfig] forceValue:[self emptyForceValue] finishBlock:^(BOOL result) {
+        URI *uri = [[URI alloc] initWithQuerySpec:_rightURL spec:[self emptyQuerySpec] configFile:[self normalConfig] finishBlock:^(BOOL result) {
             NSLog(@"testRightSendCallback callback");
             
             // コールバックテスト
@@ -64,63 +69,13 @@
     }
 }
 
-// 通信成功時のコールバックテスト
-- (void)testRightSendCallbackDirect {
-    dispatch_semaphore_t sem = dispatch_semaphore_create(0);
-    
-    @try {
-        // BeaconEvent生成
-        URI *uri = [[URI alloc] initWithDirectURL:_rightURL configFile:[self normalConfig] finishBlock:nil];
-        BeaconEvent *beaconEvent = [[BeaconEvent alloc] initWithParam:[EventIdentity new] uri:uri eventName:@"RUNNING"];
-        
-        // Callback生成
-        BeaconCallback callback = ^(NSString *url) {
-            NSLog(@"testRightSendCallback callback");
-            XCTAssertTrue([url isEqualToString:_rightURL]);
-            
-            // 待機条件の解除
-            dispatch_semaphore_signal(sem);
-            
-        };
-        
-        // 呼び出し
-        [SendHttpRepository send:beaconEvent callback:callback];
-    } @catch (NSException *exception) {
-        NSLog(@"%@", [exception reason]);
-        dispatch_semaphore_signal(sem);
-        XCTFail(@"%@", [exception reason]);
-    }
-
-    dispatch_time_t timeout = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 15);
-    if (dispatch_semaphore_wait(sem, timeout)) {
-        dispatch_semaphore_signal(sem);
-        XCTFail(@"Timeout");
-    }
-}
-
-// 通信成功時の通信結果テスト
-- (void)testRightSendResponse {
-//    // BeaconEvent生成
-//    URI *uri = [[URI alloc] initWithDirectURL:_rightURL];
-//    BeaconEvent *beaconEvent = [[BeaconEvent alloc] initWithParam:[EventIdentity new] uri:uri eventName:@"RUNNING"];
-//
-//    // Callback生成
-//    BeaconCallback callback = ^(NSString *url) {};
-//
-//    // 呼び出し
-//    [SendHttpRepository send:beaconEvent callback:callback];
-//
-//    // 返り値テスト
-//    XCTAssertTrue([[[response getStatus] getStatus] isEqualToString:@"200"]);
-}
-
 // 通信失敗時のコールバックテスト
 - (void)testWrongSendCallback {
     dispatch_semaphore_t sem = dispatch_semaphore_create(0);
     
     @try {
         // BeaconEvent生成
-        URI *uri = [[URI alloc] initWithQuerySpec:_wrongURL spec:[self emptyQuerySpec] configFile:[self normalConfig] forceValue:[self emptyForceValue] finishBlock:^(BOOL result) {
+        URI *uri = [[URI alloc] initWithQuerySpec:_wrongURL spec:[self emptyQuerySpec] configFile:[self normalConfig] finishBlock:^(BOOL result) {
             NSLog(@"testRightSendCallback callback");
             
             // コールバックテスト
@@ -153,12 +108,12 @@
     
     @try {
         // BeaconEvent生成
-        URI *uri = [[URI alloc] initWithDirectURL:_wrongURL configFile:[self normalConfig] finishBlock:nil];
+        URI *uri = [[URI alloc] initWithQuerySpec:_wrongURL spec:[self wrongQuerySpec] configFile:[self normalConfig] finishBlock:nil];
         BeaconEvent *beaconEvent = [[BeaconEvent alloc] initWithParam:[EventIdentity new] uri:uri eventName:@"RUNNING"];
         
         // Callback生成
         BeaconCallback callback = ^(NSString *url) {
-            XCTAssertTrue([url isEqualToString:_wrongURL]);
+            XCTAssertTrue([url hasPrefix:_wrongURL]);
             
             dispatch_semaphore_signal(sem);
         };
@@ -181,7 +136,7 @@
 // 通信失敗時の通信結果テスト
 - (void)testWrongSendResponse {
     // BeaconEvent生成
-    URI *uri = [[URI alloc] initWithDirectURL:_wrongURL configFile:[self normalConfig] finishBlock:nil];
+    URI *uri = [[URI alloc] initWithQuerySpec:_wrongURL spec:[self emptyQuerySpec] configFile:[self normalConfig] finishBlock:nil];
     BeaconEvent *beaconEvent = [[BeaconEvent alloc] initWithParam:[EventIdentity new] uri:uri eventName:@"RUNNING"];
     
     // Callback生成
@@ -201,6 +156,16 @@
 
 - (QuerySpec *)emptyQuerySpec {
     return [QuerySpec new];
+}
+- (QuerySpec *)rightQuerySpec {
+    QuerySpec *spec = [QuerySpec new];
+    [[spec getQueryParameters] add:_rightURL value:@"beacon_url"];
+    return spec;
+}
+- (QuerySpec *)wrongQuerySpec {
+    QuerySpec *spec = [QuerySpec new];
+    [[spec getQueryParameters] add:_wrongURL value:@"beacon_url"];
+    return spec;
 }
 - (ConfigFile *)normalConfig {
     // 設定ファイルの内容を定義
@@ -223,10 +188,5 @@
     
     return [[ConfigFile alloc] initWithParams:dic];
 }
-
-- (QueryParameters *)emptyForceValue {
-    return [QueryParameters new];
-}
-
 
 @end

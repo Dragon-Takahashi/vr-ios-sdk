@@ -9,6 +9,7 @@
 #import <XCTest/XCTest.h>
 
 #import "SendType.h"
+#import "../../../VrInteractiveTracking/Domain/Publish/URI.h"
 
 @interface SendTypeTests : XCTestCase
 
@@ -31,7 +32,7 @@
     NSMutableDictionary *dic = [@{@"disabled":@"false",
                                  @"beacon_timeout":@"15"}
                                 mutableCopy];
-    return [[URI alloc] initWithDirectURL:@"https://panelstg.interactive-circle.jp/ver01/measure?test1=value1" configFile:[[ConfigFile alloc] initWithParams:dic] finishBlock:nil];
+    return [[URI alloc] initWithQuerySpec:@"test" spec:[QuerySpec new] configFile:nil finishBlock:nil];
 }
 
 #pragma mark init

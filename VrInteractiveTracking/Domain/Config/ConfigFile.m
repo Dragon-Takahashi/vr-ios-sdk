@@ -9,15 +9,20 @@
 #import "ConfigFile.h"
 
 // 設定ファイルのタグ定数
+NSString *const CONFIG_KEY_TAG_TYPE = @"tag_type";
 NSString *const CONFIG_KEY_IDENTITY = @"identity";
 NSString *const CONFIG_KEY_TAG1 = @"vr_tagid1";
 NSString *const CONFIG_KEY_TAG2 = @"vr_tagid2";
+NSString *const CONFIG_KEY_A = @"a";
+NSString *const CONFIG_KEY_DCOS = @"dcos";
 NSString *const CONFIG_KEY_CONFIG_URL = @"config_url";
 NSString *const CONFIG_KEY_DISABLED = @"disabled";
 NSString *const CONFIG_KEY_CONFIG_TIMEOUT = @"config_timeout";
 NSString *const CONFIG_KEY_BEACON_TIMEOUT = @"beacon_timeout";
 NSString *const CONFIG_KEY_BEACON_URL = @"beacon_url";
 NSString *const CONFIG_KEY_BEACON_URL_DEFAULT = @"default";
+
+
 
 @interface ConfigFile()
 @property (nonatomic) NSMutableDictionary *params;
@@ -59,22 +64,27 @@ NSString *const CONFIG_KEY_BEACON_URL_DEFAULT = @"default";
 - (void)setParams:(NSMutableDictionary *)params {
     if (params) {
         _params = params;
-        [self parseParam:params];
+        if ([ @"v" isEqual: [params objectForKey:CONFIG_KEY_TAG_TYPE]]) {
+            [self parseVParam:params];
+        }else {
+            [self parseParam:params];
+        }
+        
     }else {
         _params = [NSMutableDictionary dictionary];
     }
 }
 
 /**
- * 設定ファイルの値を格納した配列をパースし、各変数へ格納する
+ * 設定ファイルの値を格納した配列をパースし、各変数へ格納する（VRタグ用）
  *
  * @param params 設定ファイルの値を格納した配列
  *
  */
 - (void) parseParam:(NSMutableDictionary*) params {
-    // TODO 各変数へ値をぶち込んでいく
-    
+    _tagType = @"vr";
     for (NSString *key in params) {
+        DLog(@"start : %@", key);
         if ([key isEqualToString:CONFIG_KEY_IDENTITY]) {
             _identity = [params objectForKey:CONFIG_KEY_IDENTITY];
         }else if ([key isEqualToString:CONFIG_KEY_TAG1]) {
@@ -96,6 +106,42 @@ NSString *const CONFIG_KEY_BEACON_URL_DEFAULT = @"default";
                 _beacon_url = [[params objectForKey:CONFIG_KEY_BEACON_URL] objectForKey:CONFIG_KEY_BEACON_URL_DEFAULT];
             }
         }
+        DLog(@"end : %@", key);
+    }
+}
+
+/**
+ * 設定ファイルの値を格納した配列をパースし、各変数へ格納する（Vタグ用）
+ *
+ * @param params 設定ファイルの値を格納した配列
+ *
+ */
+- (void) parseVParam:(NSMutableDictionary*) params {
+    _tagType = @"v";
+    for (NSString *key in params) {
+        DLog(@"start : %@", key);
+        if ([key isEqualToString:CONFIG_KEY_IDENTITY]) {
+            _identity = [params objectForKey:CONFIG_KEY_IDENTITY];
+        }else if ([key isEqualToString:CONFIG_KEY_A]) {
+            _a = [params objectForKey:CONFIG_KEY_A];
+        }else if ([key isEqualToString:CONFIG_KEY_DCOS]) {
+            _dcos = [params objectForKey:CONFIG_KEY_DCOS];
+        }else if ([key isEqualToString:CONFIG_KEY_CONFIG_URL]) {
+            _config_Url = [params objectForKey:CONFIG_KEY_CONFIG_URL];
+        }else if ([key isEqualToString:CONFIG_KEY_DISABLED]) {
+            _disable = [self castStringForBool:[params objectForKey:CONFIG_KEY_DISABLED]];
+        }else if ([key isEqualToString:CONFIG_KEY_CONFIG_TIMEOUT]) {
+            _config_timeout = [params objectForKey:CONFIG_KEY_CONFIG_TIMEOUT];
+        }else if ([key isEqualToString:CONFIG_KEY_BEACON_TIMEOUT]) {
+            _beacon_timeout = [params objectForKey:CONFIG_KEY_BEACON_TIMEOUT];
+        }else if ([key isEqualToString:CONFIG_KEY_BEACON_URL]) {
+            if ([[params objectForKey:CONFIG_KEY_BEACON_URL] isKindOfClass:[NSString class]]) {
+                _beacon_url =[params objectForKey:CONFIG_KEY_BEACON_URL];
+            }else {
+                _beacon_url = [[params objectForKey:CONFIG_KEY_BEACON_URL] objectForKey:CONFIG_KEY_BEACON_URL_DEFAULT];
+            }
+        }
+        DLog(@"end : %@", key);
     }
 }
 

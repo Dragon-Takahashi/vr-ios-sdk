@@ -105,7 +105,7 @@
  */
 - (BOOL) clear{
     
-    [_params removeAllObjects];
+    _params = [NSMutableArray array];
     
     if (_params.count == 0) {
         return YES;

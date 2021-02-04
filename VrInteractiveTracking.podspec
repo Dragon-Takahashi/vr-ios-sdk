@@ -19,7 +19,7 @@ Pod::Spec.new do |spec|
 
   spec.prefix_header_file = 'VrInteractiveTracking/Supporting Files/VrInteractiveTracking-Prefix.pch'
 
-  spec.source_files  = "VrInteractiveTracking/**/*.{h,m}"
+  spec.source_files = 'Library/*.h'
   spec.preserve_paths = 'Library/*.a'
   spec.public_header_files = "library/*.h"
   spec.library = "VrInteractiveTracking"

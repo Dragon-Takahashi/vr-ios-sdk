@@ -17,8 +17,6 @@ Pod::Spec.new do |spec|
   spec.ios.deployment_target = "9.0"
   spec.tvos.deployment_target = "9.0"
 
-  # spec.prefix_header_file = 'VrInteractiveTracking/Supporting Files/VrInteractiveTracking-Prefix.pch'
-
   spec.source_files = 'VrInteractiveTracking/Library/*.h'
   spec.preserve_paths = 'VrInteractiveTracking/Library/*.a'
   spec.public_header_files = "VrInteractiveTracking/library/*.h"

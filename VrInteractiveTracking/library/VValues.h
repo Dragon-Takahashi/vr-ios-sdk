@@ -20,6 +20,8 @@
 @property (nonatomic, copy) NSString *ref;
 @property (nonatomic, copy) NSString *url;
 @property (nonatomic, copy) NSString *pf;
+@property (nonatomic, copy) NSString *site;
+@property (nonatomic, copy) NSString *pc;
 @property (nonatomic, copy) NSString *pcf;
 @property (nonatomic, copy) NSString *pcs;
 @property (nonatomic, copy) NSString *pct;
@@ -33,7 +35,7 @@
 @property (nonatomic, copy) NSString *metrics;
 @property (nonatomic, copy) NSString *senderid;
 @property (nonatomic, copy) NSString *senderuuid;
-@property (nonatomic, copy) NSString *snederdcos;
+@property (nonatomic, copy) NSString *senderdcos;
 @property (nonatomic, copy) NSString *speed;
 @property (nonatomic, copy) NSString *screen;
 @property (nonatomic, copy) NSString *p;

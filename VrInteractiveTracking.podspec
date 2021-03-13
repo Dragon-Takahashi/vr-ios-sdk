@@ -20,7 +20,7 @@ Pod::Spec.new do |spec|
   spec.source_files = 'VrInteractiveTracking/Library/*.h'
   spec.preserve_paths = 'VrInteractiveTracking/Library/*.a'
   spec.public_header_files = "VrInteractiveTracking/library/*.h"
-  spec.library = "VrInteractiveTracking"
+  spec.library = "VrInteractiveDataV6"
 
   spec.xcconfig  =  { 'LIBRARY_SEARCH_PATHS' => '"$(PODS_ROOT)/VrInteractiveTracking/VrInteractiveTracking/Library"' }
 end

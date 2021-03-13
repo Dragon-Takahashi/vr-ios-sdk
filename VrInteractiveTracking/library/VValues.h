@@ -22,7 +22,6 @@
 @property (nonatomic, copy) NSString *pf;
 @property (nonatomic, copy) NSString *site;
 @property (nonatomic, copy) NSString *pc;
-@property (nonatomic, copy) NSString *pcf;
 @property (nonatomic, copy) NSString *pcs;
 @property (nonatomic, copy) NSString *pct;
 @property (nonatomic, copy) NSString *etime;

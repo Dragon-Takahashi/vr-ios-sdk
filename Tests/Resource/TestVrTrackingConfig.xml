@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <identity>test_config</identity>
+    <vr_tagid1>9997</vr_tagid1>
+    <vr_tagid2>1002</vr_tagid2>
+    <max_que_recs>10000</max_que_recs>
+    <config_url></config_url>
+    <debug_log>true</debug_log>
+    <disabled>false</disabled>
+    <polling>true</polling>
+    <polling_start>true</polling_start>
+    <polling_interval>2</polling_interval>
+    <config_timeout>5</config_timeout>
+    <beacon_timeout>5</beacon_timeout>
+    <expired_time_beacon_log>2147483646</expired_time_beacon_log>
+    <beacon_url default="https://panelstg.interactive-circle.jp/ver01/measure">
+    </beacon_url>
+</config>

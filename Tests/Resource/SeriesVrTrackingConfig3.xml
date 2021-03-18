@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configs>
+  <config>
+      <identity>default</identity>
+      <vr_tagid1>6666</vr_tagid1>
+      <vr_tagid2>0001</vr_tagid2>
+      <config_url></config_url>
+      <disabled>false</disabled>
+      <config_timeout>5</config_timeout>
+      <beacon_timeout>5</beacon_timeout>
+      <beacon_url default="https://panelstg.interactive-circle.jp/sdk-test01/measure">445</beacon_url>
+  </config>
+  <config>
+      <identity>test1</identity>
+      <vr_tagid1>7777</vr_tagid1>
+      <vr_tagid2>0002</vr_tagid2>
+      <config_url></config_url>
+      <disabled>false</disabled>
+      <config_timeout>5</config_timeout>
+      <beacon_timeout>5</beacon_timeout>
+      <beacon_url default="https://panelstg.interactive-circle.jp/sdk-test01/measure">445</beacon_url>
+  </config>
+  <config>
+      <vr_tagid1>8888</vr_tagid1>
+      <vr_tagid2>0003</vr_tagid2>
+      <config_url></config_url>
+      <disabled>false</disabled>
+      <config_timeout>5</config_timeout>
+      <beacon_timeout>5</beacon_timeout>
+      <beacon_url default="https://panelstg.interactive-circle.jp/sdk-test01/measure">445</beacon_url>
+  </config>
+</configs>
+

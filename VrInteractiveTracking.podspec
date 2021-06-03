@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name         = "VrInteractiveTracking"
-  spec.version      = "5.2.1"
+  spec.version      = "6.0.0"
   spec.summary      = "VrInteractiveTracking"
 
   spec.description  = <<-DESC
@@ -17,9 +17,10 @@ Pod::Spec.new do |spec|
   spec.ios.deployment_target = "9.0"
   spec.tvos.deployment_target = "9.0"
 
-  spec.prefix_header_file = 'VrInteractiveTracking/Supporting Files/VrInteractiveTracking-Prefix.pch'
+  spec.source_files = 'VrInteractiveTracking/Library/*.h'
+  spec.preserve_paths = 'VrInteractiveTracking/Library/*.a'
+  spec.public_header_files = "VrInteractiveTracking/library/*.h"
+  spec.library = "VrInteractiveDataV6"
 
-  spec.source_files  = "VrInteractiveTracking/**/*.{h,m}"
-  spec.public_header_files = "VrInteractiveTracking/**/*.h"
-
+  spec.xcconfig  =  { 'LIBRARY_SEARCH_PATHS' => '"$(PODS_ROOT)/VrInteractiveTracking/VrInteractiveTracking/Library"' }
 end

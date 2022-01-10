@@ -33,6 +33,26 @@
 @property (nonatomic, copy) NSString *vr_opt18;
 @property (nonatomic, copy) NSString *vr_opt19;
 @property (nonatomic, copy) NSString *vr_opt20;
+@property (nonatomic, copy) NSString *vr_opt21;
+@property (nonatomic, copy) NSString *vr_opt22;
+@property (nonatomic, copy) NSString *vr_opt23;
+@property (nonatomic, copy) NSString *vr_opt24;
+@property (nonatomic, copy) NSString *vr_opt25;
+@property (nonatomic, copy) NSString *vr_opt26;
+@property (nonatomic, copy) NSString *vr_opt27;
+@property (nonatomic, copy) NSString *vr_opt28;
+@property (nonatomic, copy) NSString *vr_opt29;
+@property (nonatomic, copy) NSString *vr_opt30;
+@property (nonatomic, copy) NSString *vr_opt31;
+@property (nonatomic, copy) NSString *vr_opt32;
+@property (nonatomic, copy) NSString *vr_opt33;
+@property (nonatomic, copy) NSString *vr_opt34;
+@property (nonatomic, copy) NSString *vr_opt35;
+@property (nonatomic, copy) NSString *vr_opt36;
+@property (nonatomic, copy) NSString *vr_opt37;
+@property (nonatomic, copy) NSString *vr_opt38;
+@property (nonatomic, copy) NSString *vr_opt39;
+@property (nonatomic, copy) NSString *vr_opt40;
 
 /**
  要素取得

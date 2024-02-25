@@ -21,9 +21,9 @@ Pod::Spec.new do |spec|
     'VrInteractiveTracking/Resources/*.[mh]',
     'VrInteractiveTracking/Library/*.h'
   ]
-  spec.resource_bundles = {
-    "#{spec.module_name}_Privacy" => 'VrInteractiveTracking/Resources/PrivacyInfo.xcprivacy'
-  }
+  # spec.resource_bundles = {
+  #   "#{spec.module_name}_Privacy" => 'VrInteractiveTracking/Resources/PrivacyInfo.xcprivacy'
+  # }
   spec.preserve_paths = 'VrInteractiveTracking/Library/*.a'
   spec.public_header_files = "VrInteractiveTracking/library/*.h"
   spec.library = "VrInteractiveDataV6"

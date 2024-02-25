@@ -381,6 +381,14 @@ typedef void (^FinishLoadBlock) (BOOL result);
 - (NSString *)getSessionID;
 
 
+/**
+ * Vタグパラメータa(アカウントID)設定
+ * @param identity 設定ファイル識別子
+ * @param a アカウントID
+ */
+- (void)setA:(NSString *)a identity:(NSString *)identity;
+
+
 #pragma mark - Deprecated methods
 
 // ポーリング有効化

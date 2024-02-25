@@ -17,7 +17,13 @@ Pod::Spec.new do |spec|
   spec.ios.deployment_target = "9.0"
   spec.tvos.deployment_target = "9.0"
 
-  spec.source_files = 'VrInteractiveTracking/Library/*.h'
+  spec.source_files = [
+    'VrInteractiveTracking/Resources/*.[mh]',
+    'VrInteractiveTracking/Library/*.h'
+  ]
+  spec.resource_bundles = {
+    "#{spec.module_name}_Privacy" => 'VrInteractiveTracking/Resources/PrivacyInfo.xcprivacy'
+  }
   spec.preserve_paths = 'VrInteractiveTracking/Library/*.a'
   spec.public_header_files = "VrInteractiveTracking/library/*.h"
   spec.library = "VrInteractiveDataV6"
